@@ -4,21 +4,25 @@
 
 int main()
 {
-    std::string file_name = "Input file.txt";
+    std::string input_file_name = "Input file.txt";
 
     std::ifstream inputFile;
-    inputFile.open(file_name);
+    inputFile.open(input_file_name);
 
     if (!inputFile.is_open())
     {
+        std::cout << "Can't open '" << input_file_name << "' file!";
         return 1;
     }
 
+    std::string output_file = "Write file.txt";
+
     std::ofstream outFile;
-    outFile.open("Write file.txt");
+    outFile.open(output_file);
 
     if (!outFile.is_open())
     {
+        std::cout << "Can't open '" << output_file << "' file!";
         return 2;
     }
 
