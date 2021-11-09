@@ -5,7 +5,7 @@
 bool continueInput()
 {
     std::string str;
-    std::cout << "Continue? y/n: ";
+    std::cout << "Continue? y/n: "; // TODO никакого пользовательского ввода быть не должно, все из атрибутов командной строки при запуске
     std::getline(std::cin, str);
 
     if (str == "n")
@@ -25,7 +25,7 @@ bool continueInput()
     }
 }
 
-int main()
+int main() // TODO Ожидал тут увидеть как ты парсишь атрибуты и извлекаешь имена файлов оттуда 
 {
     std::string output_file = "Write file.txt";
     std::ofstream outFile;
@@ -41,8 +41,10 @@ int main()
     bool check;
     std::string line;
 
-    std::cout << "Enter file name: ";
-
+    std::cout << "Enter file name: "; // TODO Я хотел, чтобы имена файлов передавались как атрибуты командной строки int main(int argc, char* argv[])
+                                      // и я ожидал это увидеть в файле file_concatenation.cpp в другом проекте, а не здесь.
+                                      // так что откатывай свой коммит (научись это делать через VSCode)
+                                      // и делай эту задачу в file_concatenation.cpp через получение имен файлов из аргументов
     while (std::getline(std::cin, input_file))
     {
         inputFile.open(input_file);
