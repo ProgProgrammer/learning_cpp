@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 
+// how to use:
+// file_concatenation.exe Input_file.txt Input_file2.txt Input_file3.txt
+
 int main(int argc, char* argv[])
 {
     std::string output_file = "Write file.txt";
@@ -13,12 +16,11 @@ int main(int argc, char* argv[])
     {
         std::string line;
 
-        std::ifstream inFile;
-
         for (int i = 0; i < argc; i++)
         {
             if (i > 0)
             {
+                std::ifstream inFile;
                 inFile.open(argv[i]);
                 if (inFile.is_open())
                 {
