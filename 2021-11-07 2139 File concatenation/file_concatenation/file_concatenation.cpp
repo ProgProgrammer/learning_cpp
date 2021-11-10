@@ -19,9 +19,7 @@ int main(int argc, char* argv[])
         {
             if (i > 0)
             {
-                std::string str = argv[i];
-                std::cout << typeid(str).name() << std::endl;
-                inFile.open(str);
+                inFile.open(argv[i]);
                 if (inFile.is_open())
                 {
                     while (std::getline(inFile, line))
@@ -31,7 +29,7 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    std::cout << "Can't open '" << str << "' file.";
+                    std::cout << "Can't open '" << argv[i] << "' file.";
                     return 2;
                 }
                 inFile.close();
