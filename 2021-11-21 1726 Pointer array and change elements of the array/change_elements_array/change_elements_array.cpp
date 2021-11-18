@@ -7,7 +7,7 @@ int main()
     const int num = 3;
     int arr[num] = { 1, 2, 3 };
 
-    changeArray(&arr[0], &arr[num], num);
+    changeArray(arr, arr + num, num);
 
     return 0;
 }
