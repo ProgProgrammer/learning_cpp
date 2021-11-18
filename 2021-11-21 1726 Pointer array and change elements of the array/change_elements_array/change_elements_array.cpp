@@ -14,9 +14,7 @@ int main()
 
 void changeArray(int* begin, int* end, const int num)
 {
-    int* arr = begin;
-
-    for (; arr != end; arr++)
+    for (int* arr = begin; arr != end; arr++)
     {
         *arr = num;
     }
