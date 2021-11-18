@@ -1,7 +1,7 @@
 #include <iostream>
 #include <array>
 
-std::array* changeArr(int* arr, const int n)
+std::array* changeArr(int* arr, const int n) // правильный тип возврата, наверное, std::array<int, 3> *, либо нужно писать шаблон
 {
     for (int i = 0; i < n; i++)
     {
@@ -35,7 +35,9 @@ int main()
 
     std::cout << std::endl << "Function = " << std::endl;
 
-    std::array<int, num> * arr2 = changeArr(arr, num);
+    std::array<int, num> * arr2 = changeArr(arr, num);  // std::array<int, num> * - это название полного типа (который возвращается), такой же должен быть в 4 строке
+                                                        // num = 3 разворачивается при компиляции, так что правильный тип будет такой: std::array<int, 3> *
+                                                        // ты не правильно передаешь первый аргумент. Ты передаешь туда std::array<int, num>, а там ожидается int *
 
     std::cout << std::endl << "Result = " << std::endl;
 
