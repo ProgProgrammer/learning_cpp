@@ -1,23 +1,25 @@
 #include <iostream>
 #include <array>
 
-std::array* changeArr(int* arr, const int n)
+const int num = 3;
+
+std::array<int, num>* changeArr(std::array<int, num> * arr, const int n)
 {
     for (int i = 0; i < n; i++)
     {
-        std::cout << arr[i] << std::endl;
+        std::cout << *arr[i] << std::endl;  // error
     }
 
     std::cout << std::endl;
 
     for (int i = 0; i < n; i++)
     {
-        arr[i] = i;
+        *arr[i] = i;                        // error
     }
 
     for (int i = 0; i < n; i++)
     {
-        std::cout << arr[i] << std::endl;
+        std::cout << *arr[i] << std::endl;  // error
     }
 
     return arr;
@@ -25,7 +27,6 @@ std::array* changeArr(int* arr, const int n)
 
 int main()
 {
-    const int num = 3;
     std::array<int, num> arr = { 1, 2, 3 };
 
     for (int i = 0; i < num; i++)
@@ -35,7 +36,7 @@ int main()
 
     std::cout << std::endl << "Function = " << std::endl;
 
-    std::array<int, num> * arr2 = changeArr(arr, num);
+    std::array<int, num> arr2 = *(changeArr(&arr, num));
 
     std::cout << std::endl << "Result = " << std::endl;
 
