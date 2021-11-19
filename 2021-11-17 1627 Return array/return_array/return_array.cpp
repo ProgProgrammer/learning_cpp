@@ -3,7 +3,7 @@
 
 const int num = 3;
 
-std::array<int, num> changeArr(std::array<int, num> * arr, const int n)
+std::array<int, num> changeArr(std::array<int, num>* arr, const int n)
 {
     std::array<int, num> a_arr = *arr;
 
