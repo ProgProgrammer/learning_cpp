@@ -7,19 +7,19 @@ std::array<int, num>* changeArr(std::array<int, num> * arr, const int n)
 {
     for (int i = 0; i < n; i++)
     {
-        std::cout << arr[i] << std::endl;  // error
+        std::cout << *arr[i] << std::endl;  // error
     }
 
     std::cout << std::endl;
 
     for (int i = 0; i < n; i++)
     {
-        arr[i] = i;                        // error
+        *arr[i] = i;                        // error
     }
 
     for (int i = 0; i < n; i++)
     {
-        std::cout << arr[i] << std::endl;  // error
+        std::cout << *arr[i] << std::endl;  // error
     }
 
     return arr;
