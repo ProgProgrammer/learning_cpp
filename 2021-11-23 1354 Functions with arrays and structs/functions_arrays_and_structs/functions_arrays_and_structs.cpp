@@ -9,8 +9,8 @@ struct student {
     int ooplevel;
 };
 
-int getinfo(student pa[], int n)
-{
+int getinfo(student pa[], int n) // pa - имя не очень - не читаемо, проходится смотреть вниз в код метода, чтобы понять, что значит эта переменная
+{                                // лушче, чтобы по названию переменной сразу было понятно что это такое, я бы назвал studentsArray или просто students
     std::string str;
     int i;
 
@@ -21,8 +21,8 @@ int getinfo(student pa[], int n)
 
         if (std::getline(std::cin, str) && str.length() != 0)
         {
-            strcpy_s(pa[i].fullname, 30, str.c_str());
-        }
+            strcpy_s(pa[i].fullname, 30, str.c_str());  // на заметку - тут ограничение в 30 символов. Наверное это нормально для твоей задачи, 
+        }                                               // в другом коде может потребоваться неограниченное количество символов.
         else
         {
             break;
@@ -30,8 +30,8 @@ int getinfo(student pa[], int n)
 
         std::cout << "Entered hobby student: ";
 
-        if (std::getline(std::cin, str))
-        {
+        if (std::getline(std::cin, str))    // Что будет, если пользователь введет не верный hobby. Ветки else нет, программа продолжит дальше пытаться считывтать.
+        {                                   // Это так и должно быть?
             strcpy_s(pa[i].hobby, 30, str.c_str());
         }
 
