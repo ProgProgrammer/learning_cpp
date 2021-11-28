@@ -15,7 +15,7 @@ int main()
 
     std::cout << *ps << std::endl;
 
-    delete[] ps; // освобождение памяти
+    delete ps; // освобождение памяти
 
     return 0;
 }
