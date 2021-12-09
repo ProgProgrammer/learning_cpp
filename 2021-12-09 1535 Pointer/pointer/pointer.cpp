@@ -9,17 +9,15 @@ struct stringy
 char * set(stringy& box, char* testing)
 {
     int size = strlen(testing);
-    char* const str_ch = new char[size];
-    std::cout << strlen(testing) << std::endl;
-    std::cout << strlen(str_ch) << std::endl;
+    char* const str_ch = new char[size + 1];
 
     for (int i = 0; i < strlen(testing); i++)
     {
         str_ch[i] = testing[i];
     }
 
+    str_ch[size] = '\0';
     box.str = str_ch;
-    std::cout << strlen(box.str) << std::endl;
     box.ct = strlen(testing) - 1;
 
     return str_ch;
@@ -27,8 +25,6 @@ char * set(stringy& box, char* testing)
 
 void show(const stringy& box, const int n = 1)
 {
-    std::cout << strlen(box.str) << std::endl;
-
     for (int i = 0; i < n; i++)
     {
         std::cout << box.str << std::endl;
