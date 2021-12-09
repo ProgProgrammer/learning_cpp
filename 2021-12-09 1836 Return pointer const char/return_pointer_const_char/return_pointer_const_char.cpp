@@ -19,7 +19,7 @@ T1 maxn(const T1* arr, const T2 n)
 template <class T>
 const char* maxn(const char* arr[], const T n)
 {
-    unsigned int maxSize = strlen(arr[0]);
+    int maxSize = strlen(arr[0]);
 
     for (int i = 0; i < n; i++)
     {
