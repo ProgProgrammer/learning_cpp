@@ -6,7 +6,7 @@ struct stringy
     int ct;
 };
 
-auto set(stringy& box, char* testing)
+char * set(stringy& box, char* testing)
 {
     int size = strlen(testing);
     char* const str_ch = new char[size];
