@@ -17,7 +17,7 @@ T1 maxn(const T1* arr, const T2 n)
 }
 
 template <class T>
-const char* maxn(const char* arr[], const T n)
+auto maxn(const char* arr[], const T n)
 {
     T maxSize = strlen(arr[0]);
 
@@ -29,10 +29,7 @@ const char* maxn(const char* arr[], const T n)
         }
     }
 
-    std::cout << maxSize << std::endl;
-    std::cout << arr[maxSize] << std::endl;
-
-    return arr[maxSize];
+    return &arr[maxSize];
 }
 
 int main()
