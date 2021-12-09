@@ -49,7 +49,10 @@ int main()
                     "Media Failure\n"
     };
 
-    std::cout << maxn(str_arr, 4) << std::endl;
+    auto pointer = maxn(str_arr, 4);
+
+    std::cout << pointer << std::endl;
+    std::cout << *pointer << std::endl;
 
     return 0;
 }
