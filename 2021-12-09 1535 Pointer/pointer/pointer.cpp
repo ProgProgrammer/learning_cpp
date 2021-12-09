@@ -52,14 +52,14 @@ int main()
     show(beany);
     show(beany, 2);
 
+    delete[] pointer;
+
     testing[0] = 'D';
     testing[1] = 'u';
 
     show(testing);
     show(testing, 3);
     show("Done!");
-
-    delete[] pointer;
 
     return 0;
 }
