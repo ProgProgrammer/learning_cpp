@@ -46,7 +46,7 @@ int main()
 
 	std::cout << std::endl << "Calling new and placement new a second time:" << std::endl;
 
-	double* pd3, * pd4;
+	decltype(pd1) pd3, pd4;
 	pd3 = new double[N];
 	pd4 = new (buffer) double[N];
 
