@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 const int BUF = 512;
 const int N = 5;
@@ -72,13 +73,20 @@ int main()
 	delete[] pd1;
 	delete[] pd3;
 
+	std::string str = "";
+
 	for (int i = 0; i < BUF; i++)
 	{
+
+		str += buffer[i];
+
 		std::cout << double(buffer[i]);
 
 		if ((i + 1) % sizeof(double) == 0)
 		{
-			std::cout << std::endl;
+			std::cout << " = " << str << std::endl;
+
+			str = "";
 		}
 	}
 }
