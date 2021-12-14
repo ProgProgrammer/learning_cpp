@@ -84,7 +84,7 @@ int main()
 
 		if ((i + 1) % sizeof(double) == 0)
 		{
-			std::cout << " = " << str << std::endl;
+			std::cout << " = " << str << " " << std::stod(str) << std::endl;
 
 			str = "";
 		}
