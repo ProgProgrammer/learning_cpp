@@ -33,11 +33,6 @@ int main()
 	pd1 = new double[N];
 	pd2 = new (buffer) double[N];
 
-	for (int i = 0; i < N; i++)
-	{
-		pd2[i] = pd1[i] = 1000 + 20.0 * i;
-	}
-
 	inPut(pd1, pd2, 20.0);
 
 	std::cout << "Memory addresses:" << std::endl << "heap: " << pd1 << " static: " << &buffer << std::endl;
@@ -84,7 +79,7 @@ int main()
 
 		if ((i + 1) % sizeof(double) == 0)
 		{
-			std::cout << " = " << str << " " << std::stod(str) << std::endl;
+			std::cout << " = " << str << std::endl;
 
 			str = "";
 		}
