@@ -6,6 +6,9 @@
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компил€ции выходить не будет (устаревша€ функци€ inet_addr())
 
+SOCKET connections[100];
+int counter = 0;
+
 namespace message
 {
     struct sendmessage
@@ -18,10 +21,24 @@ namespace message
     {
         send(newConnection, str.c_str(), str.length(), NULL);
     }
-}
 
-SOCKET connections[100];
-int count = 0;
+    void ClientHandler(int index)
+    {
+        char msg[256] = "";
+        int count = 0;
+
+        while (recv(connections[index], msg, sizeof(msg), NULL))
+        {
+            for (int i = 0; i < counter; i++) {
+                if (i == index) {
+                    continue;
+                }
+
+                send(connections[i], msg, sizeof(msg), NULL);
+            }
+        }
+    }
+}
 
 int main(int argc, char * argv[] )
 {
@@ -76,16 +93,25 @@ int main(int argc, char * argv[] )
         }
         else
         {
-            std::cout << "Client connected." << std::endl;
-            std::cout << "Enter your name: ";
+            std::cout << "Client #" << i + 1 << " connected." << std::endl; 
+            
+            char msg[256] = "Welcome to the chat!";
+            send(newConnection, msg, sizeof(msg), NULL);
 
-            message::sendmessage str_mes;
+            connections[i] = newConnection;
+            counter++;
+
+            CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::ClientHandler, (LPVOID)(i), NULL, NULL);
+
+            /*std::cout << "Enter your name: ";
+
+            message::sendmessage str_mes;*/
 
             /*char name[256] = "Hello, world!";
             
             send(newConnection, name, sizeof(name), NULL);*/
 
-            std::getline(std::cin, str_mes.name);
+            /*std::getline(std::cin, str_mes.name);
 
             std::cout << "Start correspondence:" << std::endl;
 
@@ -95,11 +121,8 @@ int main(int argc, char * argv[] )
                 message::sendm(newConnection, str_mes.message);
 
                 std::cout << std::endl;
-            }
+            }*/
         }
-
-        connections[i] = newConnection;
-        count++;
     }
 
     system("pause");
