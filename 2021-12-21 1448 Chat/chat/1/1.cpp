@@ -6,37 +6,40 @@
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компил€ции выходить не будет (устаревша€ функци€ inet_addr())
 
-SOCKET connections[100];
+static SOCKET connections[100];
 int counter = 0;
 
 namespace message
 {
-    struct sendmessage
+    void sendm(SOCKET newConnection, char * msg, int msg_size)
     {
-        std::string name;
-        std::string message;
-    };
-
-    void sendm(SOCKET newConnection, std::string str)
-    {
-        send(newConnection, str.c_str(), str.length(), NULL);
+        send(newConnection, (char*)&msg_size, sizeof(int), NULL);
+        send(newConnection, msg, msg_size, NULL);
     }
 
     void ClientHandler(int index)
     {
-        char msg[256] = "";
+        int msg_size;
         int count = 0;
 
-        while (recv(connections[index], msg, sizeof(msg), NULL))
+        while (true)
         {
+            recv(connections[index], (char*)&msg_size, sizeof(int), NULL);
+
+            char* msg = new char[msg_size];
+            msg[msg_size] = '\0';
+
+            recv(connections[index], msg, msg_size, NULL);
+
             for (int i = 0; i < counter; i++) {
                 if (i == index) {
                     continue;
                 }
 
-                send(connections[i], msg, sizeof(msg), NULL);
-                memset(msg, 0, 255);
+                sendm(connections[i], msg, msg_size);
             }
+
+            delete [] msg;
         }
     }
 }
@@ -96,13 +99,32 @@ int main(int argc, char * argv[] )
         {
             std::cout << "Client #" << i + 1 << " connected." << std::endl; 
             
-            char msg[256] = "Welcome to the chat! Press enter to start a dialogue.";
-            send(newConnection, msg, sizeof(msg), NULL);
+            std::string msg = "Welcome to the chat! Press enter to start a dialogue.";
+            int msg_size = msg.size();
+            char* str = new char[msg_size];
+
+            strcpy(str, msg.c_str());
+
+            str[msg_size] = '\0';
+
+            std::cout << str << std::endl;
+
+            message::sendm(connections[i], str, msg_size);
+
+            std::cout << "str2" << std::endl;
+
+            delete[] str;
+
+            std::cout << "str3" << std::endl;
 
             connections[i] = newConnection;
             counter++;
 
+            std::cout << "str4" << std::endl;
+
             CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::ClientHandler, (LPVOID)(i), NULL, NULL);
+
+            std::cout << "str5" << std::endl;
         }
     }
 

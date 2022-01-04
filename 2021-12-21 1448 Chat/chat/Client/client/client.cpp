@@ -5,7 +5,7 @@
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компил€ции выходить не будет (устаревша€ функци€ inet_addr())
 
-SOCKET connection;
+static SOCKET connection;
 
 namespace message
 {
@@ -17,19 +17,30 @@ namespace message
 
     void sendm(SOCKET newConnection, std::string str)
     {
+        int msg_size = str.size();
+        send(newConnection, (char*)&msg_size, sizeof(int), NULL);
         send(newConnection, str.c_str(), str.length(), NULL);
     }
 
     void ClientHandler()
     {
-        char msg[256] = "";
+        int msg_size;
         int count = -1;
 
-        while (recv(connection, msg, sizeof(msg), NULL))
+        while (true)
         {
+            recv(connection, (char*)&msg_size, sizeof(int), NULL);
+
             count++;
 
+            char * msg = new char[msg_size];
+            msg[msg_size] = '\0';
+
+            recv(connection, msg, msg_size, NULL);
+
             std::cout << msg << std::endl;
+
+            delete[] msg;
 
             if (count % 2 == 0)
             {
