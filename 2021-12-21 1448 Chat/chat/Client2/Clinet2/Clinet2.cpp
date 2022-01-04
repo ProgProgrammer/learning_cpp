@@ -27,10 +27,8 @@ namespace message
         int msg_size;
         int count = -1;
 
-        while (true)
+        while (recv(connection, (char*)&msg_size, sizeof(int), NULL))
         {
-            recv(connection, (char*)&msg_size, sizeof(int), NULL);
-
             count++;
 
             char* msg = new char[msg_size];
