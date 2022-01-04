@@ -103,26 +103,6 @@ int main(int argc, char * argv[] )
             counter++;
 
             CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::ClientHandler, (LPVOID)(i), NULL, NULL);
-
-            /*std::cout << "Enter your name: ";
-
-            message::sendmessage str_mes;*/
-
-            /*char name[256] = "Hello, world!";
-            
-            send(newConnection, name, sizeof(name), NULL);*/
-
-            /*std::getline(std::cin, str_mes.name);
-
-            std::cout << "Start correspondence:" << std::endl;
-
-            while (std::getline(std::cin, str_mes.message))
-            {
-                message::sendm(newConnection, str_mes.name);
-                message::sendm(newConnection, str_mes.message);
-
-                std::cout << std::endl;
-            }*/
         }
     }
 
