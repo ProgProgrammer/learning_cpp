@@ -1,4 +1,4 @@
-#pragma comment(lib, "ws2_32.lib")  // для получения оступа к некоторым функциям
+#pragma comment(lib, "ws2_32.lib")  // для получения доступа к некоторым функциям
 #include <iostream>
 #include <winsock2.h>  // библиотека для работы с сетью
 #include <string>
