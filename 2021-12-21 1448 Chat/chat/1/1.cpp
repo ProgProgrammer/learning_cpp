@@ -35,6 +35,7 @@ namespace message
                 }
 
                 send(connections[i], msg, sizeof(msg), NULL);
+                memset(msg, 0, 255);
             }
         }
     }
@@ -95,7 +96,7 @@ int main(int argc, char * argv[] )
         {
             std::cout << "Client #" << i + 1 << " connected." << std::endl; 
             
-            char msg[256] = "Welcome to the chat!";
+            char msg[256] = "Welcome to the chat! Press enter to start a dialogue.";
             send(newConnection, msg, sizeof(msg), NULL);
 
             connections[i] = newConnection;

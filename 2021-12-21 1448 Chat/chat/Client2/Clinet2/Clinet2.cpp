@@ -31,8 +31,6 @@ namespace message
 
             std::cout << msg << std::endl;
 
-            msg[0] = '\0';
-
             if (count % 2 == 0)
             {
                 std::cout << std::endl;
