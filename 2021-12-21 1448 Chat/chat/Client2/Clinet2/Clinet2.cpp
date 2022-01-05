@@ -97,8 +97,6 @@ int main(int argc, char* argv[])
 
         message::sendm(connection, str_mes.all_t);
 
-        str_mes.all_t = "";
-
         std::cout << std::endl;
 
         Sleep(10);
