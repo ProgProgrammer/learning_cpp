@@ -31,8 +31,8 @@ namespace message
         {
             count++;
 
-            char * msg = new char[msg_size];
-            msg[msg_size] = '\0';
+            char* msg = new char[msg_size];
+            msg[msg_size - 1] = '\0';
 
             recv(connection, msg, msg_size, NULL);
 
@@ -92,11 +92,13 @@ int main(int argc, char* argv[])
     message::sendmessage str_mes;
 
     std::getline(std::cin, str_mes.name);
+    str_mes.name = "\t" + str_mes.name;
 
     std::cout << "Start correspondence:" << std::endl;
 
     while (std::getline(std::cin, str_mes.message))
     {
+        str_mes.message = "\t" + str_mes.message;
         message::sendm(connection, str_mes.name);
         message::sendm(connection, str_mes.message);
 
