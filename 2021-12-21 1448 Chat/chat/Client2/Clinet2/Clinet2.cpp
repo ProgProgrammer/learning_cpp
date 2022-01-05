@@ -13,6 +13,7 @@ namespace message
     {
         std::string name;
         std::string message;
+        std::string all_t;
     };
 
     void sendm(SOCKET newConnection, std::string str)
@@ -39,12 +40,6 @@ namespace message
             std::cout << msg << std::endl;
 
             delete[] msg;
-
-            if (count % 2 == 0)
-            {
-                std::cout << std::endl;
-                count = 0;
-            }
         }
     }
 }
@@ -92,15 +87,17 @@ int main(int argc, char* argv[])
     message::sendmessage str_mes;
 
     std::getline(std::cin, str_mes.name);
-    str_mes.name = "\t" + str_mes.name;
 
     std::cout << "Start correspondence:" << std::endl;
 
     while (std::getline(std::cin, str_mes.message))
     {
-        str_mes.message = "\t" + str_mes.message;
-        message::sendm(connection, str_mes.name);
-        message::sendm(connection, str_mes.message);
+        str_mes.all_t = "\t" + str_mes.name + "\n";
+        str_mes.all_t = str_mes.all_t + "\t" + str_mes.message + "\n";
+
+        message::sendm(connection, str_mes.all_t);
+
+        str_mes.all_t = "";
 
         std::cout << std::endl;
 

@@ -97,7 +97,7 @@ int main(int argc, char * argv[] )
         {
             std::cout << "Client #" << i + 1 << " connected." << std::endl; 
             
-            std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.";
+            std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
             int msg_size = msg.size();
             char* str = new char[msg_size + 1];
             str[msg_size] = '\0';
