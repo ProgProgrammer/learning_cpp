@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
                                                                    // sizeof(addr) - сообщает функции размер структуры sockaddr
     {
         std::cout << "Error: failed connect to server." << std::endl;
+        closesocket(connection);  // удаление соединения
         WSACleanup();  // деинициализация библиотеки WINSOCK и освобождения используемых этим приложением ресурсов
         std::cin.get();
 
