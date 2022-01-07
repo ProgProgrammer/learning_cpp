@@ -28,14 +28,14 @@ namespace message
         int msg_size;
         int count = -1;
 
-        while (recv(connection, (char*)&msg_size, sizeof(int), NULL))
+        while (recv(connection, (char*)&msg_size, sizeof(int), NULL))  // функция для получения данных
         {
             count++;
 
             char* msg = new char[msg_size];
             msg[msg_size - 1] = '\0';
 
-            recv(connection, msg, msg_size, NULL);
+            recv(connection, msg, msg_size, NULL);  // функция для получения данных
 
             std::cout << msg << std::endl;
 
@@ -69,7 +69,11 @@ int main(int argc, char* argv[])
 
     connection = socket(domain, SOCK_STREAM, NULL);
 
-    if (connect(connection, (SOCKADDR*)&addr, sizeof(addr)) != 0)  // connect() - функция для соединения с сервером
+    if (connect(connection, (SOCKADDR*)&addr, sizeof(addr)) != 0)  // connect() - функция для соединения с сервером, где
+                                                                   // connection - дескриптор сокета, возращенный функцией socket
+                                                                   // (SOCKADDR*)&addr - указатель на структуру "sockaddr", содержащую в себе
+                                                                   // адрес и порт удаленного узла с которым устанавливается соединение
+                                                                   // sizeof(addr) - сообщает функции размер структуры sockaddr
     {
         std::cout << "Error: failed connect to server." << std::endl;
 
@@ -93,7 +97,7 @@ int main(int argc, char* argv[])
     while (std::getline(std::cin, str_mes.message))
     {
         str_mes.all_t = "\t" + str_mes.name + "\n";
-        str_mes.all_t = str_mes.all_t + "\t" + str_mes.message + "\n";
+        str_mes.all_t = str_mes.all_t + "\t" + str_mes.message + "\n\a";
 
         message::sendm(connection, str_mes.all_t);
 

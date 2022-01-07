@@ -13,20 +13,20 @@ namespace message
 {
     void sendm(SOCKET newConnection, char * msg, int msg_size)
     {
-        send(newConnection, (char*)&msg_size, sizeof(int), NULL);
-        send(newConnection, msg, msg_size, NULL);
+        send(newConnection, (char*)&msg_size, sizeof(int), NULL);  // функция для отправки данных
+        send(newConnection, msg, msg_size, NULL);                  // функция для отправки данных
     }
 
     void ClientHandler(int index)
     {
         int msg_size;
 
-        while (recv(connections[index], (char*)&msg_size, sizeof(int), NULL))
+        while (recv(connections[index], (char*)&msg_size, sizeof(int), NULL))  // функция для получения данных
         {
             char* msg = new char[msg_size + 1];
             msg[msg_size] = '\0';
 
-            recv(connections[index], msg, msg_size, NULL);
+            recv(connections[index], msg, msg_size, NULL);  // функция для получения данных
 
             for (int i = 0; i < counter; i++) {
                 if (i == index) 
@@ -58,7 +58,7 @@ int main(int argc, char * argv[] )
 
     SOCKADDR_IN addr;  // нужна для хранения интернет протоколов и адреса
 
-    int domain = AF_INET;
+    int domain = AF_INET;  // семейство используемых протоколов. В данном случае, AF_INET.
     //unsigned char buf[sizeof(struct in6_addr)];
 
     //addr.sin_addr.s_addr = inet_pton(domain, "127.0.0.1", buf);
@@ -68,8 +68,9 @@ int main(int argc, char * argv[] )
 
     SOCKET sListen = socket(domain, SOCK_STREAM, NULL);  // создание сокета и с названием sListen, которому присовоен результат
                                                           // выполнения фунции socket с параметрами: AF_INET - семейство протоколов AF_INET
-                                                          // SOCK_STREAM - протокол, устанавливающий соединение
-                                                          // NULL - третий параметр не нужен.
+                                                          // SOCK_STREAM - протокол, устанавливающий соединение (потоковый тип создаваемого сокета)
+                                                          // NULL - при таком значении выбор транспортного протокола происходит по умолчанию.
+                                                          // TCP - для потоковых сокетов, как здесь.
     
     int size_addr = sizeof(addr);
 
@@ -79,15 +80,16 @@ int main(int argc, char * argv[] )
                                                // (SOCKADDR*)&addr - указатель на структуру SOCKADDR
                                                // sf_addr - размер структуры SOCKADDR
 
-    listen(sListen, SOMAXCONN);  // sListen - сокет, по которому функция определит, по каком порту нужно начать прослушивание
-                                 // SOMAXCONN - максимальное количество запросов, ожидающих обработки
+    listen(sListen, SOMAXCONN);  // listen() - функция ожидания подключений.
+                                 // sListen - сокет, по которому функция определит, по каком порту нужно начать прослушивание.
+                                 // SOMAXCONN - максимальное количество запросов, ожидающих обработки. По-умолчанию, равен 128.
                                  // можно написать точное количество запросов, например 3. В этом случае встанут в очередь 3 запроса, а остальные получат ошибку
 
     SOCKET newConnection;  // создан новый сокет
 
     for (int i = 0; i < 100; i++)
     {
-        newConnection = accept(sListen, (SOCKADDR*)&addr, &size_addr);  // это функция, которая используется сервером для принятия связи на сокет
+        newConnection = accept(sListen, (SOCKADDR*)&addr, &size_addr);  // извлечение запросов на соединение из очереди
 
         if (newConnection == 0)
         {
