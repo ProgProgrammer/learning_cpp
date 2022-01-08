@@ -6,11 +6,19 @@
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
+static HANDLE hThreadArray[100];
 static SOCKET connections[100];
 int counter = 0;
 
 namespace message
 {
+    struct mess
+    {
+        SOCKET sListen;
+        SOCKADDR_IN addr;
+        int size_addr;
+    };
+
     void sendm(SOCKET newConnection, char * msg, int msg_size)
     {
         send(newConnection, (char*)&msg_size, sizeof(int), NULL);  // функция для отправки данных
@@ -41,59 +49,56 @@ namespace message
         }
     }
 
-    void closeAllSockets()
+    void createConnections(mess * m1)
     {
-        std::cout << "Connections:" << std::endl;
+        SOCKET newConnection;  // создан новый сокет
 
-        for (int i = 0; i < counter; i++)
+        while ((newConnection = accept(m1->sListen, (SOCKADDR*)&m1->addr, &m1->size_addr)) && counter < 100)
         {
-            if (connections[i] > 0)
+            if (newConnection == 0)
             {
-                std::cout << "1. " << connections[i] << std::endl;
-                closesocket(connections[i]);
-                std::cout << "2. " << connections[i] << std::endl;
+                std::cout << "Error connection." << std::endl;
+            }
+            else
+            {
+                std::cout << "Client #" << counter + 1 << " connected." << std::endl;
+
+                std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
+                int msg_size = msg.size();
+                char* str = new char[msg_size + 1];
+                str[msg_size] = '\0';
+
+                strcpy(str, msg.c_str());
+
+                message::sendm(newConnection, str, msg_size + 1);
+
+                delete[] str;
+
+                connections[counter] = newConnection;
+
+                hThreadArray[counter] = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::ClientHandler, (LPVOID)(counter), NULL, NULL);
+
+                counter++;
             }
         }
     }
 
-    void actions(int n)
+    void closeAllSockets()
     {
-        std::string str;
-        int num;
-
-        while (std::getline(std::cin, str))
+        for (int i = 0; i < counter; i++)
         {
-            if (str == "cl_all_cons")
+            if (connections[i] > 0 && closesocket(connections[i]) == 0)
             {
-                closeAllSockets();
-
-                std::cout << "All connections are closed." << std::endl;
-
-                str = "";
+                connections[i] = 0;
             }
-            else if (str == "cl_con")
-            {
-                std::cout << "Enter the connection number: ";
-                std::cin >> num;
+        }
+    }
 
-                if (num > 0 && closesocket(connections[num - 1]) == 0)
-                {
-                    std::cout << "Connection #" << num << " is closed." << std::endl;
-
-                    str = "";
-                }
-                else
-                {
-                    std::cout << "There is no such connection." << std::endl;
-                }
-            }
-            else if (str == "close_app")
-            {
-                if (counter > 0)
-                {
-                    closeAllSockets();
-                }
-            }
+    void closeHandles()
+    {
+        for (int i = 0; i < counter; i++)
+        {
+            CloseHandle(hThreadArray[i]);
         }
     }
 }
@@ -127,7 +132,7 @@ int main(int argc, char * argv[] )
                                                           // SOCK_STREAM - протокол, устанавливающий соединение (потоковый тип создаваемого сокета)
                                                           // NULL - при таком значении выбор транспортного протокола происходит по умолчанию.
                                                           // TCP - для потоковых сокетов, как здесь.
-    
+
     int size_addr = sizeof(addr);
 
     bind(sListen, (SOCKADDR*)&addr, size_addr);  // функция, для привязки адреса сокету.
@@ -141,41 +146,56 @@ int main(int argc, char * argv[] )
                                  // SOMAXCONN - максимальное количество запросов, ожидающих обработки. По-умолчанию, равен 128.
                                  // можно написать точное количество запросов, например 3. В этом случае встанут в очередь 3 запроса, а остальные получат ошибку
 
-    SOCKET newConnection;  // создан новый сокет
-
     std::cout << "To close all connections, type the word \"cl_all_cons\" and \"Enter\" keys." << std::endl;
     std::cout << "To close all connections, type the word \"cl_con\" and \"Enter\", and then enter the connection number." << std::endl;
     std::cout << "To exit the application, type the word \"close_app\" and press the \"Enter\" key." << std::endl << std::endl;
 
-    CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::actions, (LPVOID)(0), NULL, NULL);
+    message::mess* m1 = new message::mess;
+    
+    m1->sListen = sListen;
+    m1->addr = addr;
+    m1->size_addr = size_addr;
 
-    for (int i = 0; i < 100; i++)
+    CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::createConnections, m1, NULL, NULL);
+
+    std::string str;
+    int num;
+
+    while (std::getline(std::cin, str))
     {
-        newConnection = accept(sListen, (SOCKADDR*)&addr, &size_addr);  // извлечение запросов на соединение из очереди
-
-        if (newConnection == 0)
+        if (str == "cl_all_cons")
         {
-            std::cout << "Error connection." << std::endl;
+            message::closeAllSockets();
+            message::closeHandles();
+
+            counter = 0;
+
+            std::cout << "All connections are closed." << std::endl;
         }
-        else
+        else if (str == "cl_con")
         {
-            std::cout << "Client #" << i + 1 << " connected." << std::endl; 
-            
-            std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
-            int msg_size = msg.size();
-            char* str = new char[msg_size + 1];
-            str[msg_size] = '\0';
+            std::cout << "Enter the connection number: ";
+            std::cin >> num;
 
-            strcpy(str, msg.c_str());
+            if (num > 0 && closesocket(connections[num - 1]) == 0)
+            {
+                CloseHandle(hThreadArray[num - 1]);
+            }
+            else
+            {
+                std::cout << "There is no such connection." << std::endl;
+            }
+        }
+        else if (str == "close_app")
+        {
+            if (counter > 0)
+            {
+                message::closeAllSockets();
+                message::closeHandles();
+            }
 
-            message::sendm(newConnection, str, msg_size + 1);
-
-            delete [] str;
-
-            connections[i] = newConnection;
-            counter++;
-
-            CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::ClientHandler, (LPVOID)(i), NULL, NULL);
+            std::cout << "The program has ended." << std::endl;
+            WSACleanup();
         }
     }
 
