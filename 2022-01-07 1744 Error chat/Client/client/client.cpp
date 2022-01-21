@@ -5,15 +5,15 @@
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
-static SOCKET connection;
+static SOCKET CONNECTION;
 
-namespace message
+namespace message_namespace
 {
-    struct sendmessage
+    struct Message
     {
         std::string name;
         std::string message;
-        std::string all_t;
+        std::string all_message;
     };
 
     void sendm(SOCKET newConnection, std::string str)
@@ -28,14 +28,14 @@ namespace message
         int msg_size;
         int count = -1;
 
-        while (recv(connection, (char*)&msg_size, sizeof(int), NULL))  // функция для получения данных
+        while (recv(CONNECTION, (char*)&msg_size, sizeof(int), NULL))  // функция для получения данных
         {
             count++;
 
             char* msg = new char[msg_size];
             msg[msg_size - 1] = '\0';
 
-            recv(connection, msg, msg_size, NULL);  // функция для получения данных
+            recv(CONNECTION, msg, msg_size, NULL);  // функция для получения данных
 
             std::cout << msg << std::endl;
 
@@ -48,10 +48,10 @@ int main(int argc, char* argv[])
 {
     // WSAStartup - функция, для загрузки библиотеки
 
-    WSAData wasData;
+    WSAData wsaData;
 
     WORD DLLVersion = MAKEWORD(2, 1);
-    int res = WSAStartup(DLLVersion, &wasData);
+    int res = WSAStartup(DLLVersion, &wsaData);
 
     if (res != 0)
     {
@@ -67,16 +67,16 @@ int main(int argc, char* argv[])
     addr.sin_port = htons(1111);
     addr.sin_family = domain;
 
-    connection = socket(domain, SOCK_STREAM, NULL);
+    CONNECTION = socket(domain, SOCK_STREAM, NULL);
 
-    if (connect(connection, (SOCKADDR*)&addr, sizeof(addr)) != 0)  // connect() - функция для соединения с сервером, где
+    if (connect(CONNECTION, (SOCKADDR*)&addr, sizeof(addr)) != 0)  // connect() - функция для соединения с сервером, где
                                                                    // connection - дескриптор сокета, возращенный функцией socket
                                                                    // (SOCKADDR*)&addr - указатель на структуру "sockaddr", содержащую в себе
                                                                    // адрес и порт удаленного узла с которым устанавливается соединение
                                                                    // sizeof(addr) - сообщает функции размер структуры sockaddr
     {
         std::cout << "Error: failed connect to server." << std::endl;
-        closesocket(connection);  // удаление соединения
+        closesocket(CONNECTION);  // удаление соединения
         WSACleanup();  // деинициализация библиотеки WINSOCK и освобождения используемых этим приложением ресурсов
         std::cin.get();
 
@@ -85,13 +85,13 @@ int main(int argc, char* argv[])
 
     std::cout << "Connected." << std::endl;
 
-    CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message::ClientHandler, NULL, NULL, NULL);
+    CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::ClientHandler, NULL, NULL, NULL);
 
     std::cin.get();
 
     std::cout << "Enter your name: ";
 
-    message::sendmessage str_mes;
+    message_namespace::Message str_mes;
 
     std::getline(std::cin, str_mes.name);
 
@@ -99,10 +99,10 @@ int main(int argc, char* argv[])
 
     while (std::getline(std::cin, str_mes.message))
     {
-        str_mes.all_t = "\t" + str_mes.name + "\n";
-        str_mes.all_t = str_mes.all_t + "\t" + str_mes.message + "\n\a";
+        str_mes.all_message = "\t" + str_mes.name + "\n";
+        str_mes.all_message = str_mes.all_message + "\t" + str_mes.message + "\n\a";
 
-        message::sendm(connection, str_mes.all_t);
+        message_namespace::sendm(CONNECTION, str_mes.all_message);
 
         std::cout << std::endl;
 
