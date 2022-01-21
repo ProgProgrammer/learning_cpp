@@ -88,7 +88,7 @@ namespace message_namespace
         }
     }
 
-    void closeHandles()
+    void closeAllHandles()
     {
         for (int i = 0; i < CLIENT_COUNTER; i++)
         {
@@ -160,7 +160,7 @@ int main(int argc, char * argv[] )
         if (command == "cl_all_cons")
         {
             message_namespace::closeAllSockets();
-            message_namespace::closeHandles();
+            message_namespace::closeAllHandles();
 
             CLIENT_COUNTER = 0;
 
@@ -185,7 +185,7 @@ int main(int argc, char * argv[] )
             if (CLIENT_COUNTER > 0)
             {
                 message_namespace::closeAllSockets();
-                message_namespace::closeHandles();
+                message_namespace::closeAllHandles();
             }
 
             std::cout << "The program has ended." << std::endl;
