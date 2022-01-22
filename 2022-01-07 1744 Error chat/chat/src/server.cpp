@@ -7,9 +7,8 @@
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
 const int MAX_CLIENT_COUNT = 100;
-static HANDLE CLIENT_THREADS[MAX_CLIENT_COUNT];  // массив потоков
+static HANDLE CLIENT_THREADS[MAX_CLIENT_COUNT];   // массив потоков
 static SOCKET CLIENT_SOCKETS[MAX_CLIENT_COUNT];   // массив сокетов
-bool SERVER_CONNECTION_ERROR_OCCURED = false;
 bool FLAG_STOP_CLIENT[MAX_CLIENT_COUNT] = {false};
 
 namespace message_namespace
@@ -87,15 +86,15 @@ namespace message_namespace
 
         FLAG_STOP_CLIENT[client_index] = false;
         CloseHandle(CLIENT_THREADS[client_index]); // BUG. It can be unsafe. But it is easiest way to implement.
+        closesocket(CLIENT_SOCKETS[client_index]);
         CLIENT_SOCKETS[client_index] = 0;
     }
 
     void createConnections(ConnectionParams & params)
     {
         SOCKET newConnection;  // создан новый сокет
-
-        int client_index = 0;
-        while ((newConnection = accept(params.sListen, (SOCKADDR*)&params.addr, &params.size_addr)) && client_index < MAX_CLIENT_COUNT)
+        
+        while ((newConnection = accept(params.sListen, (SOCKADDR*)&params.addr, &params.size_addr)))
         {
             if (newConnection == 0)
             {
@@ -103,22 +102,38 @@ namespace message_namespace
             }
             else
             {
-                std::cout << "Client #" << client_index << " connected." << std::endl;
-
-                std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
-
-                bool success = sendMessage(newConnection, msg.c_str(), msg.size() + 1);
-                if(!success)
+                int available_client_index = -1;
+                for(int client_index = 0; client_index < MAX_CLIENT_COUNT; client_index++)
                 {
-                    std::cout << "Thread " << __func__ << ": sendMessage return false\n";
-                    break;                    
+                    if(CLIENT_SOCKETS[client_index] == 0)
+                    {
+                        available_client_index = client_index;
+                        break;
+                    }
                 }
-                
-                CLIENT_SOCKETS[client_index] = newConnection;
 
-                CLIENT_THREADS[client_index] = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)clientHandler, (LPVOID)(client_index), NULL, NULL);
+                if(available_client_index >= 0)
+                {
+                    std::cout << "Client #" << available_client_index << " connected." << std::endl;
 
-                client_index++;
+                    std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
+
+                    bool success = sendMessage(newConnection, msg.c_str(), msg.size() + 1);
+                    if(!success)
+                    {
+                        std::cout << "Thread " << __func__ << ": sendMessage return false\n";
+                        break;                    
+                    }
+                    
+                    CLIENT_SOCKETS[available_client_index] = newConnection;
+
+                    CLIENT_THREADS[available_client_index] = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)clientHandler, (LPVOID)(available_client_index), NULL, NULL);
+                }
+                else
+                {
+                    std::cout << "Reached limit of connected clients\n";
+                    closesocket(newConnection);
+                }
             }
         }
     }
