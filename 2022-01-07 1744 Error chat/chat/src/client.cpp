@@ -6,6 +6,7 @@
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
 static SOCKET CONNECTION;
+bool CLIENT_CONNECTION_ERROR_OCCURED = false;
 
 namespace message_namespace
 {
@@ -16,26 +17,53 @@ namespace message_namespace
         std::string all_message;
     };
 
-    void sendm(SOCKET newConnection, std::string str)
+    bool sendMessage(SOCKET newConnection, std::string str)
     {
         int msg_size = str.size();
-        send(newConnection, (char*)&msg_size, sizeof(int), NULL);
-        send(newConnection, str.c_str(), str.length(), NULL);
+        int result = send(newConnection, (char*)&msg_size, sizeof(int), NULL);
+        if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+        {
+            std::cout << "Thread " << __func__ << ": send return error=" << result << "\n";
+            CLIENT_CONNECTION_ERROR_OCCURED = true;
+            return false;
+        }
+        result = send(newConnection, str.c_str(), str.length(), NULL);
+        if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+        {
+            std::cout << "Thread " << __func__ << ": send return error=" << result << "\n";
+            CLIENT_CONNECTION_ERROR_OCCURED = true;
+            return false;
+        }
+
+        return true;
     }
 
-    void ClientHandler()
+    void clientHandler()
     {
         int msg_size;
         int count = -1;
 
-        while (recv(CONNECTION, (char*)&msg_size, sizeof(int), NULL))  // функция для получения данных
+        while (int result = recv(CONNECTION, (char*)&msg_size, sizeof(int), NULL))  // получаем РАЗМЕР СООБЩЕНИЯ
         {
+            if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+            {
+                std::cout << "Thread " << __func__ << ": recv return error=" << result << "\n";
+                CLIENT_CONNECTION_ERROR_OCCURED = true;
+                break;
+            }
+
             count++;
 
             char* msg = new char[msg_size];
             msg[msg_size - 1] = '\0';
 
-            recv(CONNECTION, msg, msg_size, NULL);  // функция для получения данных
+            result = recv(CONNECTION, msg, msg_size, NULL);  // получаем САМО СООБЩЕНИЕ
+            if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+            {
+                std::cout << "Thread " << __func__ << ": recv return error=" << result << "\n";
+                CLIENT_CONNECTION_ERROR_OCCURED = true;
+                break;
+            }
 
             std::cout << msg << std::endl;
 
@@ -85,7 +113,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Connected." << std::endl;
 
-    CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::ClientHandler, NULL, NULL, NULL);
+    HANDLE thread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::clientHandler, NULL, NULL, NULL);
 
     std::cin.get();
 
@@ -102,12 +130,20 @@ int main(int argc, char* argv[])
         str_mes.all_message = "\t" + str_mes.name + "\n";
         str_mes.all_message = str_mes.all_message + "\t" + str_mes.message + "\n\a";
 
-        message_namespace::sendm(CONNECTION, str_mes.all_message);
+        bool success = message_namespace::sendMessage(CONNECTION, str_mes.all_message);
+        if(!success || CLIENT_CONNECTION_ERROR_OCCURED)
+        {
+            CLIENT_CONNECTION_ERROR_OCCURED = true;
+            break;
+        }
 
         std::cout << std::endl;
 
         Sleep(10);
     }
+    
+    Sleep(100); // wait few ms to be sure that second thread is done
+    CloseHandle(thread);
 
     system("pause");
 

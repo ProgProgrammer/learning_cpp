@@ -6,9 +6,11 @@
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
-static HANDLE CLIENT_THREADS[100];  // массив потоков
-static SOCKET CLIENT_CONNECTIONS[100];   // массив сокетов
-int CLIENT_COUNTER = 0;
+const int MAX_CLIENT_COUNT = 100;
+static HANDLE CLIENT_THREADS[MAX_CLIENT_COUNT];  // массив потоков
+static SOCKET CLIENT_SOCKETS[MAX_CLIENT_COUNT];   // массив сокетов
+bool SERVER_CONNECTION_ERROR_OCCURED = false;
+bool FLAG_STOP_CLIENT[MAX_CLIENT_COUNT] = {false};
 
 namespace message_namespace
 {
@@ -19,42 +21,81 @@ namespace message_namespace
         int size_addr;
     };
 
-    void sendm(SOCKET newConnection, const char * msg, int msg_size)
+    bool sendMessage(SOCKET newConnection, const char * msg, int msg_size)
     {
-        send(newConnection, (char*)&msg_size, sizeof(int), NULL);  // функция для отправки данных (размер данных)
-        send(newConnection, msg, msg_size, NULL);                  // функция для отправки данных (само сообщение)
+        int result = send(newConnection, (char*)&msg_size, sizeof(int), NULL);  // отправляем РАЗМЕР СООБЩЕНИЯ (в виде однобайтового числа)
+        if(result < 0)
+        {
+            std::cout << "Thread " << __func__ << ": send(message size) returns error=" << result << "\n";
+            return false;
+        }
+
+        result = send(newConnection, msg, msg_size, NULL);                  // затем отправляем САМО СООБЩЕНИЕ указанного на предыдущем шаге размера
+        if(result < 0)
+        {
+            std::cout << "Thread " << __func__ << ": send(message data) returns error=" << result << "\n";
+            return false;
+        }
+
+        return true;
     }
 
-    void ClientHandler(int client_index)
+    void clientHandler(int client_index)
     {
         int msg_size;
 
-        while (recv(CLIENT_CONNECTIONS[client_index], (char*)&msg_size, sizeof(int), NULL))  // функция для получения данных
+        while (int result = recv(CLIENT_SOCKETS[client_index], (char*)&msg_size, sizeof(int), NULL))  // функция для получения РАЗМЕРА СООБЩЕНИЯ
         {
-            char* msg = new char[msg_size + 1];
-            msg[msg_size] = '\0';
+            if(FLAG_STOP_CLIENT[client_index] == true)
+            {
+                std::cout << "Thread " << __func__ << "Request to stop client #" << client_index << "\n";
+                break;
+            }
 
-            recv(CLIENT_CONNECTIONS[client_index], msg, msg_size, NULL);  // функция для получения данных
+            if(result < 0)
+            {
+                std::cout << "Thread " << __func__ << " client_index=" << client_index << ": recv return error=" << result << "\n";
+                break;
+            }
 
-            for (int i = 0; i < CLIENT_COUNTER; i++)
+            std::string msg_buffer(msg_size + 1, '\0');
+            char* pRawString = &msg_buffer[0];
+            
+            result = recv(CLIENT_SOCKETS[client_index], pRawString, msg_size, NULL);  // функция для получения САМОГО СООБЩЕНИЯ размера полученного выше
+            if(result < 0)
+            {
+                std::cout << "Thread " << __func__ << " client_index=" << client_index << ": recv return error=" << result << "\n";
+                break;
+            }
+            
+            // отправка сообщения всем клиентам кроме отправителя
+            for (int i = 0; i < MAX_CLIENT_COUNT; i++)
             {
                 if (i == client_index)
                 {
                     continue;
                 }
 
-                sendm(CLIENT_CONNECTIONS[i], msg, msg_size + 1);
+                bool success = sendMessage(CLIENT_SOCKETS[i], pRawString, msg_size + 1);
+                if(!success)
+                {
+                    std::cout << "Thread " << __func__ << " client_index=" << client_index << ": sendMessage return false\n";
+                    break;
+                }
             }
-
-            delete [] msg;
         }
+
+        FLAG_STOP_CLIENT[client_index] = false;
+        CloseHandle(CLIENT_THREADS[client_index]); // BUG. It can be unsafe. But it is easiest way to implement.
+        CLIENT_SOCKETS[client_index] = 0;
     }
 
     void createConnections(ConnectionParams & params)
     {
         SOCKET newConnection;  // создан новый сокет
 
-        while ((newConnection = accept(params.sListen, (SOCKADDR*)&params.addr, &params.size_addr)) && CLIENT_COUNTER < 100)
+        int client_index = 0;
+        while ((newConnection = accept(params.sListen, (SOCKADDR*)&params.addr, &params.size_addr)) && client_index < MAX_CLIENT_COUNT)
         {
             if (newConnection == 0)
             {
@@ -62,37 +103,23 @@ namespace message_namespace
             }
             else
             {
-                std::cout << "Client #" << CLIENT_COUNTER + 1 << " connected." << std::endl;
+                std::cout << "Client #" << client_index << " connected." << std::endl;
 
                 std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
 
-                message_namespace::sendm(newConnection, msg.c_str(), msg.size() + 1);
+                bool success = sendMessage(newConnection, msg.c_str(), msg.size() + 1);
+                if(!success)
+                {
+                    std::cout << "Thread " << __func__ << ": sendMessage return false\n";
+                    break;                    
+                }
+                
+                CLIENT_SOCKETS[client_index] = newConnection;
 
-                CLIENT_CONNECTIONS[CLIENT_COUNTER] = newConnection;
+                CLIENT_THREADS[client_index] = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)clientHandler, (LPVOID)(client_index), NULL, NULL);
 
-                CLIENT_THREADS[CLIENT_COUNTER] = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::ClientHandler, (LPVOID)(CLIENT_COUNTER), NULL, NULL);
-
-                CLIENT_COUNTER++;
+                client_index++;
             }
-        }
-    }
-
-    void closeAllSockets()
-    {
-        for (int i = 0; i < CLIENT_COUNTER; i++)
-        {
-            if (CLIENT_CONNECTIONS[i] > 0 && closesocket(CLIENT_CONNECTIONS[i]) == 0)
-            {
-                CLIENT_CONNECTIONS[i] = 0;
-            }
-        }
-    }
-
-    void closeAllHandles()
-    {
-        for (int i = 0; i < CLIENT_COUNTER; i++)
-        {
-            CloseHandle(CLIENT_THREADS[i]);
         }
     }
 }
@@ -140,9 +167,13 @@ int main(int argc, char * argv[] )
                                  // SOMAXCONN - максимальное количество запросов, ожидающих обработки. По-умолчанию, равен 128.
                                  // можно написать точное количество запросов, например 3. В этом случае встанут в очередь 3 запроса, а остальные получат ошибку
 
-    std::cout << "To close all connections, type the word \"cl_all_cons\" and \"Enter\" keys." << std::endl;
-    std::cout << "To close all connections, type the word \"cl_con\" and \"Enter\", and then enter the connection number." << std::endl;
-    std::cout << "To exit the application, type the word \"close_app\" and press the \"Enter\" key." << std::endl << std::endl;
+    const std::string cmd_close_all = "cl_all_cons";
+    const std::string cmd_close_connection_by_num = "cl_con";
+    const std::string cmd_close_app = "close_app";
+
+    std::cout << "To close all connections, type the word \"" << cmd_close_all << "\" and \"Enter\" keys." << std::endl;
+    std::cout << "To close all connections, type the word \"" << cmd_close_connection_by_num << "\" and \"Enter\", and then enter the connection number." << std::endl;
+    std::cout << "To exit the application, type the word \"" << cmd_close_app << "\" and press the \"Enter\" key." << std::endl << std::endl;
 
     message_namespace::ConnectionParams params;
 
@@ -150,49 +181,49 @@ int main(int argc, char * argv[] )
     params.addr = addr;
     params.size_addr = size_addr;
 
-    CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::createConnections, &params, NULL, NULL);
+    HANDLE hCreateConnectionThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::createConnections, &params, NULL, NULL);
 
     std::string command;
-    int connection_num;
 
     while (std::getline(std::cin, command))
     {
-        if (command == "cl_all_cons")
+        if (command == cmd_close_all)
         {
-            message_namespace::closeAllSockets();
-            message_namespace::closeAllHandles();
-
-            CLIENT_COUNTER = 0;
+            for(bool& client_index : FLAG_STOP_CLIENT)
+            {
+                client_index = true;
+            }
 
             std::cout << "All connections are closed." << std::endl;
         }
-        else if (command == "cl_con")
+        else if (command == cmd_close_connection_by_num)
         {
-            std::cout << "Enter the connection number: ";
-            std::cin >> connection_num;
+            std::cout << "Enter the client index[0.." << MAX_CLIENT_COUNT-1 << "]: ";
+            int client_index;
+            std::cin >> client_index;
 
-            if (connection_num > 0 && closesocket(CLIENT_CONNECTIONS[connection_num - 1]) == 0)
+            if (client_index > 0 && client_index < MAX_CLIENT_COUNT)
             {
-                CloseHandle(CLIENT_THREADS[connection_num - 1]);
+                FLAG_STOP_CLIENT[client_index] = true;
             }
             else
             {
                 std::cout << "There is no such connection." << std::endl;
             }
         }
-        else if (command == "close_app")
+        else if (command == cmd_close_app)
         {
-            if (CLIENT_COUNTER > 0)
+            for(bool& client_index : FLAG_STOP_CLIENT)
             {
-                message_namespace::closeAllSockets();
-                message_namespace::closeAllHandles();
+                client_index = true;
             }
-
-            std::cout << "The program has ended." << std::endl;
-            WSACleanup();
+            break;
         }
     }
 
+    CloseHandle(hCreateConnectionThread);
+    WSACleanup();
+    std::cout << "The program has ended." << std::endl;
     system("pause");
 
     return 0;
