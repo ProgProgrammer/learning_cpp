@@ -62,6 +62,9 @@ namespace message_namespace
             {
                 std::cout << "Thread " << __func__ << ": recv return error=" << result << "\n";
                 CLIENT_CONNECTION_ERROR_OCCURED = true;
+
+                delete[] msg;
+
                 break;
             }
 
