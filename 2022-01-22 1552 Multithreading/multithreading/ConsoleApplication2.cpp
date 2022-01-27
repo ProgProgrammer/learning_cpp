@@ -2,17 +2,17 @@
 #include <thread>
 #include <chrono>
 
-const int threads = 100;  // количество потоков
+const int threads = 100;  // РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕС‚РѕРєРѕРІ
 
 void hello(int elem, int timeout)
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds(timeout));  // тайм аут для того, чтобы показать, что многопоточность работает
+    std::this_thread::sleep_for(std::chrono::milliseconds(timeout));  // С‚Р°Р№Рј Р°СѓС‚ РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РїРѕРєР°Р·Р°С‚СЊ, С‡С‚Рѕ РјРЅРѕРіРѕРїРѕС‚РѕС‡РЅРѕСЃС‚СЊ СЂР°Р±РѕС‚Р°РµС‚
     std::cout << elem + 1 << ") Hello, world!" << std::endl;
 }
 
 int main()
 {
-    std::thread arr[threads];
+    std::thread arr[threads];  // РјР°СЃСЃРёРІ РїРѕС‚РѕРєРѕРІ
 
     for (int i = 0; i < threads; i++)
     {
