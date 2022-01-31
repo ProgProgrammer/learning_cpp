@@ -143,8 +143,7 @@ namespace message_namespace
         }
     }
 
-    template <class T, class T2>
-    void del_parallel_threads_and_connections(T& MAX_CLIENT_COUNT, T2* CLIENT_THREADS)
+    void del_parallel_threads_and_connections()
     {
         for (int client_index = 0; client_index < MAX_CLIENT_COUNT; client_index++)
         {
@@ -232,7 +231,7 @@ int main(int argc, char* argv[])
     {
         if (command == cmd_close_all)
         {
-            message_namespace::del_parallel_threads_and_connections(MAX_CLIENT_COUNT, CLIENT_THREADS);
+            message_namespace::del_parallel_threads_and_connections();
 
             std::cout << "All connections are closed." << std::endl;
         }
@@ -262,7 +261,7 @@ int main(int argc, char* argv[])
         {
             APPLICATION_STATE = false;
 
-            message_namespace::del_parallel_threads_and_connections(MAX_CLIENT_COUNT, CLIENT_THREADS);
+            message_namespace::del_parallel_threads_and_connections();
 
             if (hCreateConnectionThread.joinable())
             {
