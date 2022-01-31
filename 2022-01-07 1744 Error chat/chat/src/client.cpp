@@ -2,6 +2,7 @@
 #include <iostream>
 #include <winsock2.h>  // библиотека для работы с сетью
 #include <string>
+#include <thread>
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
@@ -21,14 +22,14 @@ namespace message_namespace
     {
         int msg_size = str.size();
         int result = send(newConnection, (char*)&msg_size, sizeof(int), NULL);
-        if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+        if (result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
         {
             std::cout << "Thread " << __func__ << ": send return error=" << result << "\n";
             CLIENT_CONNECTION_ERROR_OCCURED = true;
             return false;
         }
         result = send(newConnection, str.c_str(), str.length(), NULL);
-        if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+        if (result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
         {
             std::cout << "Thread " << __func__ << ": send return error=" << result << "\n";
             CLIENT_CONNECTION_ERROR_OCCURED = true;
@@ -45,7 +46,7 @@ namespace message_namespace
 
         while (int result = recv(CONNECTION, (char*)&msg_size, sizeof(int), NULL))  // получаем РАЗМЕР СООБЩЕНИЯ
         {
-            if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+            if ((result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED))
             {
                 std::cout << "Thread " << __func__ << ": recv return error=" << result << "\n";
                 CLIENT_CONNECTION_ERROR_OCCURED = true;
@@ -58,7 +59,7 @@ namespace message_namespace
             msg[msg_size - 1] = '\0';
 
             result = recv(CONNECTION, msg, msg_size, NULL);  // получаем САМО СООБЩЕНИЕ
-            if(result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
+            if (result <= 0 || CLIENT_CONNECTION_ERROR_OCCURED)
             {
                 std::cout << "Thread " << __func__ << ": recv return error=" << result << "\n";
                 CLIENT_CONNECTION_ERROR_OCCURED = true;
@@ -116,7 +117,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Connected." << std::endl;
 
-    HANDLE thread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::clientHandler, NULL, NULL, NULL);
+    std::thread clientThread = std::thread(message_namespace::clientHandler);
 
     std::cin.get();
 
@@ -134,7 +135,7 @@ int main(int argc, char* argv[])
         str_mes.all_message = str_mes.all_message + "\t" + str_mes.message + "\n\a";
 
         bool success = message_namespace::sendMessage(CONNECTION, str_mes.all_message);
-        if(!success || CLIENT_CONNECTION_ERROR_OCCURED)
+        if (!success || CLIENT_CONNECTION_ERROR_OCCURED)
         {
             CLIENT_CONNECTION_ERROR_OCCURED = true;
             break;
@@ -144,9 +145,13 @@ int main(int argc, char* argv[])
 
         Sleep(10);
     }
-    
+
     Sleep(100); // wait few ms to be sure that second thread is done
-    CloseHandle(thread);
+
+    if (clientThread.joinable())
+    {
+        clientThread.join();
+    }
 
     system("pause");
 

@@ -3,13 +3,16 @@
 #include <string>
 #include <winsock2.h>  // библиотека для работы с сетью
 #include <ws2tcpip.h>
+#include <thread>
 
 #pragma warning(disable: 4996)  // в этом коде эта ошибка компиляции выходить не будет (устаревшая функция inet_addr())
 
 const int MAX_CLIENT_COUNT = 100;
-static HANDLE CLIENT_THREADS[MAX_CLIENT_COUNT];   // массив потоков
+static std::thread CLIENT_THREADS[MAX_CLIENT_COUNT];   // массив потоков
 static SOCKET CLIENT_SOCKETS[MAX_CLIENT_COUNT];   // массив сокетов
-bool FLAG_STOP_CLIENT[MAX_CLIENT_COUNT] = {false};
+static unsigned int COUNTER_THREADS = 0;  // счетчик активных потоков
+bool FLAG_STOP_CLIENT[MAX_CLIENT_COUNT] = { false };
+bool APPLICATION_STATE = true;
 
 namespace message_namespace
 {
@@ -20,17 +23,17 @@ namespace message_namespace
         int size_addr;
     };
 
-    bool sendMessage(SOCKET newConnection, const char * msg, int msg_size)
+    bool sendMessage(SOCKET newConnection, const char* msg, int msg_size)
     {
         int result = send(newConnection, (char*)&msg_size, sizeof(int), NULL);  // отправляем РАЗМЕР СООБЩЕНИЯ (в виде однобайтового числа)
-        if(result < 0)
+        if (result < 0)
         {
             std::cout << "Thread " << __func__ << ": send(message size) returns error=" << result << "\n";
             return false;
         }
 
         result = send(newConnection, msg, msg_size, NULL);                  // затем отправляем САМО СООБЩЕНИЕ указанного на предыдущем шаге размера
-        if(result < 0)
+        if (result < 0)
         {
             std::cout << "Thread " << __func__ << ": send(message data) returns error=" << result << "\n";
             return false;
@@ -45,28 +48,28 @@ namespace message_namespace
 
         while (int result = recv(CLIENT_SOCKETS[client_index], (char*)&msg_size, sizeof(int), NULL))  // функция для получения РАЗМЕРА СООБЩЕНИЯ
         {
-            if(FLAG_STOP_CLIENT[client_index] == true)
+            if (FLAG_STOP_CLIENT[client_index] == true)
             {
-                std::cout << "Thread " << __func__ << "Request to stop client #" << client_index << "\n";
+                std::cout << "Thread " << __func__ << "Request to stop client #" << client_index + 1 << "\n";
                 break;
             }
 
-            if(result < 0)
+            if (result < 0)
             {
-                std::cout << "Thread " << __func__ << " client_index=" << client_index << ": recv return error=" << result << "\n";
+                std::cout << "Thread " << __func__ << " client_index=" << client_index + 1 << ": recv return error=" << result << "\n";
                 break;
             }
 
             std::string msg_buffer(msg_size + 1, '\0');
             char* pRawString = &msg_buffer[0];
-            
+
             result = recv(CLIENT_SOCKETS[client_index], pRawString, msg_size, NULL);  // функция для получения САМОГО СООБЩЕНИЯ размера полученного выше
-            if(result < 0)
+            if (result < 0)
             {
-                std::cout << "Thread " << __func__ << " client_index=" << client_index << ": recv return error=" << result << "\n";
+                std::cout << "Thread " << __func__ << " client_index=" << client_index + 1 << ": recv return error=" << result << "\n";
                 break;
             }
-            
+
             // отправка сообщения всем клиентам кроме отправителя
             for (int i = 0; i < MAX_CLIENT_COUNT; i++)
             {
@@ -76,25 +79,25 @@ namespace message_namespace
                 }
 
                 bool success = sendMessage(CLIENT_SOCKETS[i], pRawString, msg_size + 1);
-                if(!success)
+                if (!success)
                 {
-                    std::cout << "Thread " << __func__ << " client_index=" << client_index << ": sendMessage return false\n";
+                    std::cout << "Thread " << __func__ << " client_index=" << client_index + 1 << ": sendMessage return false\n";
                     break;
                 }
             }
         }
 
         FLAG_STOP_CLIENT[client_index] = false;
-        CloseHandle(CLIENT_THREADS[client_index]); // BUG. It can be unsafe. But it is easiest way to implement.
         closesocket(CLIENT_SOCKETS[client_index]);
         CLIENT_SOCKETS[client_index] = 0;
     }
 
-    void createConnections(ConnectionParams & params)
+    void createConnections(ConnectionParams& params)
     {
         SOCKET newConnection;  // создан новый сокет
-        
-        while ((newConnection = accept(params.sListen, (SOCKADDR*)&params.addr, &params.size_addr)))
+
+        while ((newConnection = accept(params.sListen, (SOCKADDR*)&params.addr, &params.size_addr)) &&
+            APPLICATION_STATE == true)
         {
             if (newConnection == 0)
             {
@@ -103,31 +106,33 @@ namespace message_namespace
             else
             {
                 int available_client_index = -1;
-                for(int client_index = 0; client_index < MAX_CLIENT_COUNT; client_index++)
+                for (int client_index = 0; client_index < MAX_CLIENT_COUNT; client_index++)
                 {
-                    if(CLIENT_SOCKETS[client_index] == 0)
+                    if (CLIENT_SOCKETS[client_index] == 0)
                     {
                         available_client_index = client_index;
                         break;
                     }
                 }
 
-                if(available_client_index >= 0)
+                if (available_client_index >= 0)
                 {
-                    std::cout << "Client #" << available_client_index << " connected." << std::endl;
+                    std::cout << "Client #" << available_client_index + 1 << " connected." << std::endl;
 
                     std::string msg = "Welcome to the chat! Press enter twice to start a dialogue.\n";
 
                     bool success = sendMessage(newConnection, msg.c_str(), msg.size() + 1);
-                    if(!success)
+                    if (!success)
                     {
                         std::cout << "Thread " << __func__ << ": sendMessage return false\n";
-                        break;                    
+                        break;
                     }
-                    
+
                     CLIENT_SOCKETS[available_client_index] = newConnection;
 
-                    CLIENT_THREADS[available_client_index] = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)clientHandler, (LPVOID)(available_client_index), NULL, NULL);
+                    CLIENT_THREADS[available_client_index] = std::thread(clientHandler, available_client_index);
+
+                    COUNTER_THREADS++;
                 }
                 else
                 {
@@ -137,9 +142,32 @@ namespace message_namespace
             }
         }
     }
+
+    template <class T, class T2>
+    void del_parallel_threads_and_connections(T& MAX_CLIENT_COUNT, T2* CLIENT_THREADS)
+    {
+        for (int client_index = 0; client_index < MAX_CLIENT_COUNT; client_index++)
+        {
+            if (COUNTER_THREADS > 0)
+            {
+                FLAG_STOP_CLIENT[client_index] = true;
+
+                if (CLIENT_THREADS[client_index].joinable())
+                {
+                    CLIENT_THREADS[client_index].join();
+
+                    COUNTER_THREADS--;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
 }
 
-int main(int argc, char * argv[] )
+int main(int argc, char* argv[])
 {
     // WSAStartup - функция, для загрузки библиотеки
     WSAData wsaData; // создание структуры
@@ -196,7 +224,7 @@ int main(int argc, char * argv[] )
     params.addr = addr;
     params.size_addr = size_addr;
 
-    HANDLE hCreateConnectionThread = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)message_namespace::createConnections, &params, NULL, NULL);
+    std::thread hCreateConnectionThread = std::thread(message_namespace::createConnections, std::ref(params));
 
     std::string command;
 
@@ -204,22 +232,26 @@ int main(int argc, char * argv[] )
     {
         if (command == cmd_close_all)
         {
-            for(bool& client_index : FLAG_STOP_CLIENT)
-            {
-                client_index = true;
-            }
+            message_namespace::del_parallel_threads_and_connections(MAX_CLIENT_COUNT, CLIENT_THREADS);
 
             std::cout << "All connections are closed." << std::endl;
         }
         else if (command == cmd_close_connection_by_num)
         {
-            std::cout << "Enter the client index[0.." << MAX_CLIENT_COUNT-1 << "]: ";
+            std::cout << "Enter the client index[1.." << MAX_CLIENT_COUNT << "]: ";
             int client_index;
             std::cin >> client_index;
 
-            if (client_index > 0 && client_index < MAX_CLIENT_COUNT)
+            if (client_index > 0 && client_index < MAX_CLIENT_COUNT + 1)
             {
-                FLAG_STOP_CLIENT[client_index] = true;
+                FLAG_STOP_CLIENT[client_index - 1] = true;
+
+                if (CLIENT_THREADS[client_index - 1].joinable())
+                {
+                    CLIENT_THREADS[client_index - 1].join();
+
+                    COUNTER_THREADS--;
+                }
             }
             else
             {
@@ -228,15 +260,19 @@ int main(int argc, char * argv[] )
         }
         else if (command == cmd_close_app)
         {
-            for(bool& client_index : FLAG_STOP_CLIENT)
+            APPLICATION_STATE = false;
+
+            message_namespace::del_parallel_threads_and_connections(MAX_CLIENT_COUNT, CLIENT_THREADS);
+
+            if (hCreateConnectionThread.joinable())
             {
-                client_index = true;
+                hCreateConnectionThread.detach();
             }
+
             break;
         }
     }
 
-    CloseHandle(hCreateConnectionThread);
     WSACleanup();
     std::cout << "The program has ended." << std::endl;
     system("pause");
