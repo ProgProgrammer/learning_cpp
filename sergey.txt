@@ -1,1 +1,4 @@
 Hello, Sergey!
+git checkout -b sergey
+git add sergey.txt
+git restore --stage sergey.txt
