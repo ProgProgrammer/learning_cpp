@@ -47,11 +47,6 @@ int main()
     for (int i = 0; i < arr_str.size(); i++)
     {
         fileManager.writeLine(arr_str[i]);
-
-        if (i + 1 == arr_str.size() && arr_str.size() % bufferLimit != 0)
-        {
-            fileManager.flash();
-        }
     }
 
     return 0;

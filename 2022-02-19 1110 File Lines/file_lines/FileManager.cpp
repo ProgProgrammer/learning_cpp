@@ -3,6 +3,11 @@
 
 FileManager::~FileManager()
 {
+    if (number_lines % m_bufferLimit == 0)
+    {
+        flash();
+    }
+
     ofFile << number_lines << " " << this << std::endl;
 
     ofFile.close();
