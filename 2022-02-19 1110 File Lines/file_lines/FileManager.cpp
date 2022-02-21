@@ -1,16 +1,10 @@
-#include <iostream>
 #include "FileManager.h"
 
 FileManager::~FileManager()
 {
-    if (number_lines % m_bufferLimit == 0)
-    {
-        flash();
-    }
+    m_ofFile << m_numberLines << " " << this << std::endl;
 
-    ofFile << number_lines << " " << this << std::endl;
-
-    ofFile.close();
+    m_ofFile.close();
 }
 
 void FileManager::setFileName(std::string file_name)
@@ -38,20 +32,23 @@ void FileManager::writeLine(std::string & str)
 
 void FileManager::flash()
 {
-    if (!ofFile.is_open())
+    if (!m_ofFile.is_open())
     {
-        ofFile.open(m_fileName);
+        m_ofFile.open(m_fileName);
     }
 
-    if (ofFile.is_open() && m_buffer.size() > 0)
+    if (m_ofFile.is_open() && m_buffer.size() > 0)
     {
         for (int i = 0; i < m_buffer.size(); i++)
         {
-            ofFile << m_buffer[i] << std::endl;
-            number_lines++;
+            m_ofFile << m_buffer[i] << std::endl;
+            m_numberLines++;
         }
 
-        ofFile << end_line << std::endl;
+        if (m_numberLines >= m_bufferLimit)
+        {
+            m_ofFile << m_endLine << std::endl;
+        }
 
         m_buffer.clear();
     }

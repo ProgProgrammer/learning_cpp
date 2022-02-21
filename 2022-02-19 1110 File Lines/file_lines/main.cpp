@@ -49,5 +49,7 @@ int main()
         fileManager.writeLine(arr_str[i]);
     }
 
+    fileManager.flash();
+
     return 0;
 }

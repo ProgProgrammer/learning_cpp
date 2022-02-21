@@ -6,10 +6,10 @@
 class FileManager
 {
 private:
-    int number_lines = 0;
-    std::string end_line = "FLASHED";
+    int m_numberLines = 0;
+    std::string m_endLine = "FLASHED";
     std::string m_fileName;
-    std::ofstream ofFile;
+    std::ofstream m_ofFile;
     int m_bufferLimit;
     std::vector<std::string> m_buffer;
 
