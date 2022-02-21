@@ -4,8 +4,6 @@
 int main()
 {
     std::string val;
-    std::string fileName = "default.txt";
-    int bufferLimit = 1;
     bool file_name = false;
     bool buffer_limit = false;
 
@@ -13,6 +11,8 @@ int main()
     std::getline(std::cin, val);
 
     FileManager fileManager;
+
+    std::string fileName = "default.txt";
 
     if (val == "y")
     {
@@ -28,6 +28,8 @@ int main()
 
     std::cout << "Do you want to enter a lines limit?(y/n) ";
     std::getline(std::cin, val);
+
+    int bufferLimit = 1;
 
     if (val == "y")
     {

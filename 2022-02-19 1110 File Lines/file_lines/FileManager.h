@@ -8,9 +8,9 @@ class FileManager
 private:
     int m_numberLines = 0;
     std::string m_endLine = "FLASHED";
-    std::string m_fileName;
+    std::string m_fileName = "default.txt";
     std::ofstream m_ofFile;
-    int m_bufferLimit;
+    int m_bufferLimit = 1;
     std::vector<std::string> m_buffer;
 
 public:
