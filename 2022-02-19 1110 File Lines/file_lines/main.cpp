@@ -4,7 +4,7 @@
 int main()
 {
     std::string val;
-    std::string fileName = "";
+    std::string fileName = "default.txt";
     int bufferLimit = 1;
     bool file_name = false;
     bool buffer_limit = false;
@@ -23,7 +23,7 @@ int main()
     }
     else
     {
-        fileManager.setFileName("default.txt");
+        fileManager.setFileName(fileName);
     }
 
     std::cout << "Do you want to enter a lines limit?(y/n) ";
@@ -38,7 +38,7 @@ int main()
     }
     else
     {
-        fileManager.setBufferLimit(1);
+        fileManager.setBufferLimit(bufferLimit);
     }
 
     std::vector<std::string> arr_str = { "line", "hello", "asdf", "bob", "qwer", "asdf", "asdfa", "kjlkj", 

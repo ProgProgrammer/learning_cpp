@@ -8,9 +8,9 @@ class FileManager
 private:
     int number_lines = 0;
     std::string end_line = "FLASHED";
-    std::string fileName;
+    std::string m_fileName;
     std::ofstream ofFile;
-    int buffer_limit;
+    int m_bufferLimit;
     std::vector<std::string> m_buffer;
 
 public:

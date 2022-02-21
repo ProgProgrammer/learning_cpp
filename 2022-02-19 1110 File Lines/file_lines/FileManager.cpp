@@ -10,17 +10,17 @@ FileManager::~FileManager()
 
 void FileManager::setFileName(std::string file_name)
 {
-    fileName = file_name;
+    m_fileName = file_name;
 }
 
 void FileManager::setBufferLimit(int buffer_lim)
 {
-    buffer_limit = buffer_lim;
+    m_bufferLimit = buffer_lim;
 }
 
 void FileManager::writeLine(std::string & str)
 {
-    if (m_buffer.size() < buffer_limit - 1)
+    if (m_buffer.size() < m_bufferLimit - 1)
     {
         m_buffer.push_back(str);
     }
@@ -35,7 +35,7 @@ void FileManager::flash()
 {
     if (!ofFile.is_open())
     {
-        ofFile.open(fileName);
+        ofFile.open(m_fileName);
     }
 
     if (ofFile.is_open() && m_buffer.size() > 0)
