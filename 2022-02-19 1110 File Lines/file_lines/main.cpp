@@ -4,19 +4,26 @@
 int main()
 {
     std::string val;
+    std::string fileName = "";
+    int bufferLimit = 1;
     bool file_name = false;
     bool buffer_limit = false;
-
-    values vals;
 
     std::cout << "Do you want to enter a file name?(y/n) ";
     std::getline(std::cin, val);
 
+    FileManager File_M;
+
     if (val == "y")
     {
         std::cout << "Enter name file: ";
-        std::getline(std::cin, vals.fileName);
+        std::getline(std::cin, fileName);
+        File_M.setFileName(fileName);
         file_name = true;
+    }
+    else
+    {
+        File_M.setFileName();
     }
 
     std::cout << "Do you want to enter a lines limit?(y/n) ";
@@ -25,40 +32,27 @@ int main()
     if (val == "y")
     {
         std::cout << "Enter line limit: ";
-        std::cin >> vals.bufferLimit;
+        std::cin >> bufferLimit;
+        File_M.setBufferLimit(bufferLimit);
         buffer_limit = true;
     }
-
-    FileManager * File_M = new FileManager(vals);
-
-    std::string str;
-    std::string action;
-
-    std::cout << "Enter line: ";
-
-    if (file_name == false || buffer_limit == true)
+    else
     {
-        std::cin.ignore();
+        File_M.setBufferLimit();
     }
 
-    while(std::getline(std::cin, str))
+    std::vector<std::string> arr_str = { "line", "hello", "asdf", "bob", "qwer", "asdf", "asdfa", "kjlkj", 
+                                        "qwer", "jojoeijrf" };
+
+    for (int i = 0; i < arr_str.size(); i++)
     {
-        File_M->writeLine(str);
+        File_M.writeLine(arr_str[i]);
 
-        std::cout << "Still want to write a line(y/n): ";
-        std::cin >> action;
-
-        if (action == "n")
+        if (i + 1 == arr_str.size() && arr_str.size() % bufferLimit != 0)
         {
-            File_M->flash();
-            break;
+            File_M.flash();
         }
-
-        std::cout << "Enter line: ";
-        std::cin.ignore();
     }
-
-    delete File_M;
 
     return 0;
 }
