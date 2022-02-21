@@ -12,18 +12,18 @@ int main()
     std::cout << "Do you want to enter a file name?(y/n) ";
     std::getline(std::cin, val);
 
-    FileManager File_M;
+    FileManager fileManager;
 
     if (val == "y")
     {
         std::cout << "Enter name file: ";
         std::getline(std::cin, fileName);
-        File_M.setFileName(fileName);
+        fileManager.setFileName(fileName);
         file_name = true;
     }
     else
     {
-        File_M.setFileName();
+        fileManager.setFileName("default.txt");
     }
 
     std::cout << "Do you want to enter a lines limit?(y/n) ";
@@ -33,12 +33,12 @@ int main()
     {
         std::cout << "Enter line limit: ";
         std::cin >> bufferLimit;
-        File_M.setBufferLimit(bufferLimit);
+        fileManager.setBufferLimit(bufferLimit);
         buffer_limit = true;
     }
     else
     {
-        File_M.setBufferLimit();
+        fileManager.setBufferLimit(1);
     }
 
     std::vector<std::string> arr_str = { "line", "hello", "asdf", "bob", "qwer", "asdf", "asdfa", "kjlkj", 
@@ -46,11 +46,11 @@ int main()
 
     for (int i = 0; i < arr_str.size(); i++)
     {
-        File_M.writeLine(arr_str[i]);
+        fileManager.writeLine(arr_str[i]);
 
         if (i + 1 == arr_str.size() && arr_str.size() % bufferLimit != 0)
         {
-            File_M.flash();
+            fileManager.flash();
         }
     }
 

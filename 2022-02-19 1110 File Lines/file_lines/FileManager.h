@@ -15,8 +15,8 @@ private:
 
 public:
     ~FileManager();
-    void setFileName(std::string file_name = "default.txt");
-    void setBufferLimit(int buffer_lim = 1);
+    void setFileName(std::string file_name);
+    void setBufferLimit(int buffer_lim);
     void writeLine(std::string & str);
     void flash();
 };
