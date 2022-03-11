@@ -31,11 +31,10 @@ MagicNumber MagicNumber::operator>>(const int & num) const
 {
     if (atoi(str_number.c_str()) < 0)
     {
-        std::string sym = "-";
-        std::string str_del = str_number;
-        str_del.erase(str_del.find("-"), 1);
+        int str_num = atoi(str_number.c_str());
+        str_num = abs(str_num);
 
-        std::string str = sym + std::to_string(num) + str_del;
+        std::string str = "-" + std::to_string(num) + std::to_string(str_num);
         checkNumber(atoi(str.c_str()));
         MagicNumber magic(atoi(str.c_str()));
 
