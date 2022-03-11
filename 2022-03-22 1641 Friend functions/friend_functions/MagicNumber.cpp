@@ -18,7 +18,7 @@ MagicNumber::MagicNumber(int num)
     str_number = std::to_string(num);
 }
 
-MagicNumber MagicNumber::operator<<(const int& num) const
+MagicNumber MagicNumber::operator<<(const int & num) const
 {
     std::string str = str_number + std::to_string(num);
     checkNumber(atoi(str.c_str()));
@@ -27,8 +27,21 @@ MagicNumber MagicNumber::operator<<(const int& num) const
     return magic;
 }
 
-MagicNumber MagicNumber::operator>>(const int& num) const
+MagicNumber MagicNumber::operator>>(const int & num) const
 {
+    if (atoi(str_number.c_str()) < 0)
+    {
+        std::string sym = "-";
+        std::string str_del = str_number;
+        str_del.erase(str_del.find("-"), 1);
+
+        std::string str = sym + std::to_string(num) + str_del;
+        checkNumber(atoi(str.c_str()));
+        MagicNumber magic(atoi(str.c_str()));
+
+        return magic;
+    }
+
     std::string str = std::to_string(num) + str_number;
     checkNumber(atoi(str.c_str()));
     MagicNumber magic(atoi(str.c_str()));
@@ -45,13 +58,13 @@ MagicNumber MagicNumber::operator+(const int & num) const
     return sum;
 }
 
-MagicNumber MagicNumber::operator-(const int& num) const
+MagicNumber MagicNumber::operator-(const int & num) const
 {
     int i_sub = atoi(str_number.c_str()) - num;
     checkNumber(i_sub);
-    MagicNumber sum(i_sub);
+    MagicNumber sub(i_sub);
 
-    return sum;
+    return sub;
 }
 
 std::ostream& operator<<(std::ostream& os, const MagicNumber& st)
