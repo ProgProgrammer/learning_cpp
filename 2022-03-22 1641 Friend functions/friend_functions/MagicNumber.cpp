@@ -39,7 +39,6 @@ MagicNumber MagicNumber::operator>>(const int& num) const
 MagicNumber MagicNumber::operator+(const int & num) const
 {
     int i_sum = atoi(str_number.c_str()) + num;
-    std::cout << i_sum << std::endl;
     checkNumber(i_sum);
     MagicNumber sum(i_sum);
 
