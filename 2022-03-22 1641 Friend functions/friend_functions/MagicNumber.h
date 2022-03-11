@@ -7,6 +7,9 @@ class MagicNumber
 {
 private:
     std::string str_number = "";
+    int min_num = SHRT_MIN;
+    int max_num = SHRT_MAX;
+    void checkNumber(int num) const;
 
 public:
     MagicNumber(int num);
