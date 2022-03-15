@@ -9,6 +9,7 @@ namespace vtd
     private:
         char* str;
         void addStr(const char* s);
+        void deleteDRAM();
 
     public:
         vstring();
@@ -16,7 +17,8 @@ namespace vtd
         ~vstring();
 
         void operator=(const char* s);
-        friend void operator>>(std::istream& is, vstring& str);
+        void operator=(const vstring& str);
+        friend void operator>>(std::istream& is, vstring& st);
         friend std::ostream& operator<<(std::ostream& os, const vstring& str);
     };
 }

@@ -21,5 +21,11 @@ int main()
     vtd::vstring vst3 = "Hi!";
     std::cout << vst3 << std::endl;
 
+    vst2 = vst3;
+    std::cout << vst2 << std::endl;
+
+    vst3 = str;
+    std::cout << vst3 << std::endl;
+
     return 0;
 }

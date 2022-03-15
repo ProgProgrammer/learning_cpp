@@ -15,7 +15,17 @@ namespace vtd
         str[length] = '\0';
     }
 
-    vstring::vstring() { str = new char[1]; strcpy(str, ""); }
+    void vstring::deleteDRAM()
+    {
+        if (std::strlen(str) > 0)
+            delete[] str;
+    }
+
+    vstring::vstring() 
+    { 
+        str = new char[1]; 
+        strcpy(str, ""); 
+    }
 
     vstring::vstring(const char* s)
     {
@@ -24,8 +34,7 @@ namespace vtd
 
     vstring::~vstring()
     {
-        if (std::strlen(str) > 0)
-            delete[] str;
+        deleteDRAM();
     }
 
     void vstring::operator=(const char* s)
@@ -33,14 +42,21 @@ namespace vtd
         addStr(s);
     }
 
-    void operator>>(std::istream& is, vstring& str)
+    void vstring::operator=(const vstring & st)
     {
-        if (std::strlen(str.str) > 0)
-            delete[] str.str;
+        deleteDRAM();
 
-        str.str = new char[std::strlen(str.str) + 1];
+        str = new char[std::strlen(st.str) + 1];
+        str = st.str;
+    }
 
-        is.getline(str.str, std::strlen(str.str + 1));
+    void operator>>(std::istream& is, vstring& st)
+    {
+        st.deleteDRAM();
+
+        st.str = new char[std::strlen(st.str) + 1];
+
+        is.getline(st.str, std::strlen(st.str + 1));
     }
 
     std::ostream& operator<<(std::ostream& os, const vstring& str)
