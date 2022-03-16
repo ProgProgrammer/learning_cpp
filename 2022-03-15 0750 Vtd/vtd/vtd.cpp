@@ -4,9 +4,9 @@ namespace vtd
 {
     void vstring::addStr(const char* s)
     {
-        int length = std::strlen(s);
-        str = new char[length + 1];
-        std::strcpy(str, s);
+        int length = strlen(s) + 1;
+        str = new char[length];
+        strcpy_s(str, length, s);
     }
 
     void vstring::deleteDRAM()
@@ -18,7 +18,7 @@ namespace vtd
     vstring::vstring() 
     { 
         str = new char[1];
-        std::strcpy(str, "");
+        strcpy_s(str, 1, "");
     }
 
     vstring::vstring(const char* s)
@@ -31,29 +31,58 @@ namespace vtd
         deleteDRAM();
     }
 
-    void vstring::operator=(const char* s)
+    void vstring::operator=(const char * s)
     {
         addStr(s);
+    }
+
+    void vstring::operator=(const std::string & str_s)
+    {
+        int length = str_s.size();
+        str = new char[length + 1];
+
+        for (int i = 0; i < length; i++)
+        {
+            str[i] = str_s[i];
+        }
+
+        str[length] = '\0';
     }
 
     void vstring::operator=(const vstring & st)
     {
         deleteDRAM();
 
-        str = new char[std::strlen(st.str) + 1];
-        std::strcpy(str, st.str);
+        int length = strlen(st.str) + 1;
+        str = new char[length];
+        strcpy_s(str, length, st.str);
     }
 
-    void operator>>(std::istream& is, vstring& st)
+    char & vstring::operator[](const int & i)
+    {
+        int length = strlen(str) - 1;
+
+        if (length > 0 && length >= i)
+        {
+            return str[i];
+        }
+    }
+
+    int vstring::size()
+    {
+        return strlen(str);
+    }
+
+    void operator>>(std::istream & is, vstring & st)
     {
         st.deleteDRAM();
 
-        st.str = new char[std::strlen(st.str) + 1];
+        st.str = new char[strlen(st.str) + 1];
 
-        is.getline(st.str, std::strlen(st.str + 1));
+        is.getline(st.str, strlen(st.str + 1));
     }
 
-    std::ostream& operator<<(std::ostream& os, const vstring& str)
+    std::ostream& operator<<(std::ostream & os, const vstring & str)
     {
         os << str.str;
 
