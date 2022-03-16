@@ -6,13 +6,7 @@ namespace vtd
     {
         int length = std::strlen(s);
         str = new char[length + 1];
-
-        for (int i = 0; i < length; i++)
-        {
-            str[i] = s[i];
-        }
-
-        str[length] = '\0';
+        std::strcpy(str, s);
     }
 
     void vstring::deleteDRAM()
@@ -23,8 +17,8 @@ namespace vtd
 
     vstring::vstring() 
     { 
-        str = new char[1]; 
-        strcpy(str, ""); 
+        str = new char[1];
+        std::strcpy(str, "");
     }
 
     vstring::vstring(const char* s)
@@ -47,7 +41,7 @@ namespace vtd
         deleteDRAM();
 
         str = new char[std::strlen(st.str) + 1];
-        str = st.str;
+        std::strcpy(str, st.str);
     }
 
     void operator>>(std::istream& is, vstring& st)
