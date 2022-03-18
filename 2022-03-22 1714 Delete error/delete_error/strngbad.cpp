@@ -12,10 +12,20 @@ StringBad::StringBad(const char* s)
     std::cout << num_strings << ": \"" << str << "\" object created" << std::endl;
 }
 
+StringBad::StringBad(const StringBad& st)
+{
+    num_strings++;
+    len = st.len;
+    str = new char[len + 1];
+    std::strcpy(str, st.str);
+
+    std::cout << num_strings << ": \"" << str << "\" object created" << std::endl;
+}
+
 StringBad::StringBad()
 {
     len = 4;
-    str = new char[4];
+    str = new char[len];
     std::strcpy(str, "C++");
     num_strings++;
 

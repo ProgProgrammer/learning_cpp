@@ -35,14 +35,12 @@ int main()
         std::cout << "headline2: " << headlinel2 << std::endl;
         std::cout << "Initialize one object to another:" << std::endl;
 
-        StringBad sailor = sports;
+        StringBad sailor(sports);
 
         std::cout << "sailor: " << sailor << std::endl;
         std::cout << "Initialize one object to another:" << std::endl;
 
-        StringBad knot;
-
-        knot = headlinel1;
+        StringBad knot(headlinel1);
 
         std::cout << "knot: " << knot << std::endl;
         std::cout << "Exiting the block." << std::endl;

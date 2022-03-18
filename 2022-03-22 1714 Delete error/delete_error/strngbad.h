@@ -11,6 +11,7 @@ private:
 
 public:
     StringBad(const char* s);
+    StringBad(const StringBad& st);
     StringBad();
     ~StringBad();
 
