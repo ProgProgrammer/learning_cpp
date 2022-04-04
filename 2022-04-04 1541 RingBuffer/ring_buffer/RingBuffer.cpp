@@ -37,8 +37,8 @@ bool RingBuffer::write(const std::string ch)
     if (start == NULL)
         start = add;
     else
-        end->next = add;
-
+        end->next = add;  // ”казатель end - посредник указател€ на экземпл€р структуры start.
+                          // Ѕез него будет возможно создать только один вложенный экземпл€р структуры.
     end = add;
 
     if (count < qsize)
