@@ -2,9 +2,7 @@
 
 int main()
 {
-    char ch{};
     RingBuffer buffer(9);  // empty with size 9
-    //char ch;
     buffer.write("a");     // a
     buffer.write("b");     // ab
     buffer.write("c");     // abc
