@@ -2,7 +2,7 @@
 
 RingBuffer::RingBuffer(unsigned int n) : qsize(n), count(0)
 {
-    start = end = nullptr;
+    start = end = NULL;
 }
 
 RingBuffer::~RingBuffer()
@@ -49,32 +49,37 @@ bool RingBuffer::write(const std::string ch)
     return true;
 }
 
-std::string RingBuffer::read()
+void RingBuffer::read()
 {
     if (start == NULL)
-        return "exception occurs";
-
-    std::string r_str = "ch = ";
-    r_str += start->str;
-
-    if (start->next != NULL)
     {
-        r_str += " buffer: ";
-        r_str += start->next->str;
+        std::cout << "exception occurs" << std::endl;
+        throw std::runtime_error("start pointer is NULL");
     }
     else
-        r_str += " buffer: empty";
-
-    Ring_buf * temp = start;
-    start = start->next;
-    delete temp;
-
-    count--;
-
-    if (count == 0)
     {
-        end = NULL;
-    }
+        std::string str = "ch = ";
+        str += start->str;
 
-    return r_str;
+        if (start->next != NULL)
+        {
+            str += ", buffer: ";
+            str += start->next->str;
+        }
+        else
+            str += " buffer: empty";
+
+        Ring_buf* temp = start;
+        start = start->next;
+        delete temp;
+
+        count--;
+
+        if (count == 0)
+        {
+            end = NULL;
+        }
+
+        std::cout << str << std::endl;
+    }
 }

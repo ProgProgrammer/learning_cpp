@@ -18,5 +18,5 @@ public:
     RingBuffer(unsigned int n);
     ~RingBuffer();
     bool write(const std::string ch);
-    std::string read();
+    void read();
 };
