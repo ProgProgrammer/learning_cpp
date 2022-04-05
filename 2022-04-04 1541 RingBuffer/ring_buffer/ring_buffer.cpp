@@ -1,14 +1,26 @@
 #include "RingBuffer.h"
 
+void show(Ring_buf & rb)
+{
+    if (rb.next != nullptr)
+        std::cout << "ch = " << rb.str << ", buffer: " << rb.next->str << std::endl;
+    else
+        std::cout << "ch = " << rb.str << ", buffer: empty" << std::endl;
+}
+
 int main()
 {
     RingBuffer buffer(9);  // empty with size 9
     buffer.write("a");     // a
     buffer.write("b");     // ab
     buffer.write("c");     // abc
-    buffer.read();    // ch = a, buffer: b
-    buffer.read();    // ch = b, buffer: ñ
-    buffer.read();    // ch = ñ, buffer: empty
+    Ring_buf rb;
+    rb = buffer.read();    // ch = a, buffer: b
+    show(rb);
+    rb = buffer.read();    // ch = b, buffer: ñ
+    show(rb);
+    rb = buffer.read();    // ch = ñ, buffer: empty
+    show(rb);
     buffer.read();    // exception occurs
     buffer.write("c");     // c
     buffer.write("q");     // q

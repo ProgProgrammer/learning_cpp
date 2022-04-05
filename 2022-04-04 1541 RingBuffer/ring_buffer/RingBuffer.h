@@ -1,14 +1,14 @@
 #pragma once
 #include <iostream>
 
+struct Ring_buf
+{
+    std::string str;
+    Ring_buf* next;
+};
+
 class RingBuffer
 {
-    struct Ring_buf
-    {
-        std::string str;
-        Ring_buf * next;
-    };
-
     Ring_buf * start;
     Ring_buf * end;
     const unsigned int qsize;
@@ -18,5 +18,5 @@ public:
     RingBuffer(unsigned int n);
     ~RingBuffer();
     void write(const std::string ch);
-    void read();
+    Ring_buf read();
 };

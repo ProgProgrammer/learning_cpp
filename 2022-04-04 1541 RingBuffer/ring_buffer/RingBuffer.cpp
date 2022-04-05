@@ -47,8 +47,10 @@ void RingBuffer::write(const std::string ch)
     }
 }
 
-void RingBuffer::read()
+Ring_buf RingBuffer::read()
 {
+    Ring_buf ret;
+
     if (start == nullptr)
     {
         std::cout << "exception occurs" << std::endl;
@@ -56,19 +58,9 @@ void RingBuffer::read()
     }
     else
     {
-        std::string str = "ch = ";
-        str += start->str;
-
-        if (start->next != nullptr)
-        {
-            str += ", buffer: ";
-            str += start->next->str;
-        }
-        else
-            str += " buffer: empty";
-
-        Ring_buf* temp = start;
+        Ring_buf * temp = start;
         start = start->next;
+        ret = *temp;
         delete temp;
 
         count--;
@@ -77,7 +69,7 @@ void RingBuffer::read()
         {
             end = nullptr;
         }
-
-        std::cout << str << std::endl;
     }
+
+    return ret;
 }
