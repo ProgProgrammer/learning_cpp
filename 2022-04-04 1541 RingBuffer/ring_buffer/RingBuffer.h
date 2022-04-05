@@ -17,6 +17,6 @@ class RingBuffer
 public:
     RingBuffer(unsigned int n);
     ~RingBuffer();
-    bool write(const std::string ch);
+    void write(const std::string ch);
     void read();
 };

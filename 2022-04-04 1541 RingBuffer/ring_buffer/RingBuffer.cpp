@@ -20,7 +20,7 @@ RingBuffer::~RingBuffer()
         delete end;
 }
 
-bool RingBuffer::write(const std::string ch)
+void RingBuffer::write(const std::string ch)
 {
     if (count == qsize)
     {
@@ -45,8 +45,6 @@ bool RingBuffer::write(const std::string ch)
     {
         count++;
     }
-
-    return true;
 }
 
 void RingBuffer::read()
