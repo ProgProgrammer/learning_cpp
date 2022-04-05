@@ -2,14 +2,14 @@
 
 RingBuffer::RingBuffer(unsigned int n) : qsize(n), count(0)
 {
-    start = end = NULL;
+    start = end = nullptr;
 }
 
 RingBuffer::~RingBuffer()
 {
     Ring_buf * temp;
 
-    while (start != NULL)
+    while (start != nullptr)
     {
         temp = start;
         start = start->next;
@@ -32,9 +32,9 @@ bool RingBuffer::write(const std::string ch)
     Ring_buf * add = new Ring_buf;
 
     add->str = ch;
-    add->next = NULL;
+    add->next = nullptr;
 
-    if (start == NULL)
+    if (start == nullptr)
         start = add;
     else
         end->next = add;  // ”казатель end - посредник указатель на экземпл€р структуры start.
@@ -51,17 +51,17 @@ bool RingBuffer::write(const std::string ch)
 
 void RingBuffer::read()
 {
-    if (start == NULL)
+    if (start == nullptr)
     {
         std::cout << "exception occurs" << std::endl;
-        throw std::runtime_error("start pointer is NULL");
+        throw std::runtime_error("start pointer is nullptr");
     }
     else
     {
         std::string str = "ch = ";
         str += start->str;
 
-        if (start->next != NULL)
+        if (start->next != nullptr)
         {
             str += ", buffer: ";
             str += start->next->str;
@@ -77,7 +77,7 @@ void RingBuffer::read()
 
         if (count == 0)
         {
-            end = NULL;
+            end = nullptr;
         }
 
         std::cout << str << std::endl;
