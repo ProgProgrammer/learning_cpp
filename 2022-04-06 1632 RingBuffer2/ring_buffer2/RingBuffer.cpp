@@ -16,7 +16,7 @@ RingBuffer::~RingBuffer()
 
 void RingBuffer::write(const char & ch)
 {
-    if (writeptr != end)
+    if (writeptr < end)
     {
         *writeptr = ch;
         writeptr = writeptr + char_size;
@@ -29,6 +29,7 @@ void RingBuffer::write(const char & ch)
         writeptr = start;
         *writeptr = ch;
         writeptr = writeptr + char_size;
+        readptr = start;
     }
 }
 
@@ -36,7 +37,7 @@ char RingBuffer::read()
 {
     char ch;
 
-    if (readptr != (start + count))
+    if (readptr < (start + count))
     {
         ch = *readptr;
         readptr = readptr + char_size;
@@ -45,6 +46,7 @@ char RingBuffer::read()
     {
         readptr = start;
         ch = *readptr;
+        readptr = readptr + char_size;
     }
 
     return ch;

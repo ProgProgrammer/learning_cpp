@@ -30,6 +30,16 @@ int main()
     std::cout << buffer.read() << std::endl;
     std::cout << buffer.read() << std::endl;
     std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
+    std::cout << buffer.read() << std::endl;
 
     return 0;
 }
