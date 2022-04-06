@@ -2,17 +2,16 @@
 
 RingBuffer::RingBuffer(int & num) : char_size(sizeof(char)), count(0)
 {
-    arr_str = new char[num + 1];
-    start = &arr_str[0];
-    writeptr = &arr_str[0];
-    readptr = &arr_str[0];
-    end = &arr_str[num];
+    start = new char[num + 1];
+    writeptr = &start[0];
+    readptr = &start[0];
+    end = &start[num];
 }
 
 RingBuffer::~RingBuffer()
 {
-    if (arr_str != nullptr)
-        delete [] arr_str;
+    if (start != nullptr)
+        delete [] start;
 }
 
 void RingBuffer::write(const char & ch)

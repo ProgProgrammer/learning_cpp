@@ -3,7 +3,6 @@
 
 class RingBuffer
 {
-    char * arr_str;
     char * start;
     char * end;
     char * writeptr;
