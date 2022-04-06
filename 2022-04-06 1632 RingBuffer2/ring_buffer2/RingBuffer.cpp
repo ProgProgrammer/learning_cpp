@@ -1,6 +1,6 @@
 #include "RingBuffer.h"
 
-RingBuffer::RingBuffer(int & num) : char_size(sizeof(char)), count(0)
+RingBuffer::RingBuffer(unsigned int & num) : char_size(sizeof(char)), count(0)
 {
     start = new char[num + 1];
     writeptr = &start[0];
@@ -33,21 +33,24 @@ void RingBuffer::write(const char & ch)
     }
 }
 
-char RingBuffer::read()
+std::string RingBuffer::read()
 {
-    char ch;
+    std::string str;
+
+    if (count <= 0)
+        return "exception occurs";
 
     if (readptr < (start + count))
     {
-        ch = *readptr;
+        str = *readptr;
         readptr = readptr + char_size;
     }
     else
     {
         readptr = start;
-        ch = *readptr;
+        str = *readptr;
         readptr = readptr + char_size;
     }
 
-    return ch;
+    return str;
 }

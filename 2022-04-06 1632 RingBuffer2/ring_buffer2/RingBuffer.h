@@ -7,12 +7,12 @@ class RingBuffer
     char * end;
     char * writeptr;
     char * readptr;
-    int count;
-    const int char_size;
+    unsigned int count;
+    const unsigned  int char_size;
 
 public:
-    RingBuffer(int & num);
+    RingBuffer(unsigned int & num);
     ~RingBuffer();
     void write(const char & ch);
-    char read();
+    std::string read();
 };

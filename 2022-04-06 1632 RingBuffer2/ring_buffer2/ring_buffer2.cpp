@@ -2,8 +2,9 @@
 
 int main()
 {
-    int n = 9;
+    unsigned int n = 9;
     RingBuffer buffer(n);  // empty with size 9
+    std::cout << buffer.read() << std::endl;
     buffer.write('a');     // a
     buffer.write('b');     // ab
     std::cout << buffer.read() << std::endl;    // ch = a, buffer: b
