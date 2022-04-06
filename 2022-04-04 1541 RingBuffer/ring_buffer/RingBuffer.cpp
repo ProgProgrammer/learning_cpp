@@ -2,16 +2,15 @@
 
 RingBuffer::RingBuffer(unsigned int n) : qsize(n), count(0)
 {
-    start = end = nullptr;
+    start = nullptr;
+    end = nullptr;
 }
 
 RingBuffer::~RingBuffer()
 {
-    Ring_buf * temp;
-
     while (start != nullptr)
     {
-        temp = start;
+        RingNode* temp = start;
         start = start->next;
         delete temp;
     }
@@ -24,21 +23,20 @@ void RingBuffer::write(const std::string ch)
 {
     if (count == qsize)
     {
-        Ring_buf * temp = start;
+        RingNode * temp = start;
         start = start->next;
         delete temp;
     }
 
-    Ring_buf * add = new Ring_buf;
-
+    RingNode * add = new RingNode;
     add->str = ch;
     add->next = nullptr;
 
     if (start == nullptr)
-        start = add;
+        start = add;     // adding first element
     else
-        end->next = add;  // ”казатель end - посредник указатель на экземпл€р структуры start.
-                          // Ѕез него будет возможно создать только один вложенный экземпл€р структуры.
+        end->next = add; // if the first element is already present the new one should be added as second
+
     end = add;
 
     if (count < qsize)
@@ -47,28 +45,23 @@ void RingBuffer::write(const std::string ch)
     }
 }
 
-Ring_buf RingBuffer::read()
+std::string RingBuffer::read()
 {
-    Ring_buf ret;
-
     if (start == nullptr)
     {
-        std::cout << "exception occurs" << std::endl;
         throw std::runtime_error("start pointer is nullptr");
     }
-    else
+
+    RingNode * temp = start;
+    start = start->next;
+    std::string ret = temp->str;
+    delete temp;
+
+    count--;
+
+    if (count == 0)
     {
-        Ring_buf * temp = start;
-        start = start->next;
-        ret = *temp;
-        delete temp;
-
-        count--;
-
-        if (count == 0)
-        {
-            end = nullptr;
-        }
+        end = nullptr;
     }
 
     return ret;

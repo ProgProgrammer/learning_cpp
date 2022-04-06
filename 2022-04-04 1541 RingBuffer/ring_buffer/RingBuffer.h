@@ -1,16 +1,16 @@
 #pragma once
 #include <iostream>
 
-struct Ring_buf
+struct RingNode
 {
     std::string str;
-    Ring_buf* next;
+    RingNode* next;
 };
 
 class RingBuffer
 {
-    Ring_buf * start;
-    Ring_buf * end;
+    RingNode * start;
+    RingNode * end;
     const unsigned int qsize;
     unsigned int count;
 
@@ -18,5 +18,5 @@ public:
     RingBuffer(unsigned int n);
     ~RingBuffer();
     void write(const std::string ch);
-    Ring_buf read();
+    std::string read();
 };
