@@ -45,10 +45,16 @@ Cd::Cd()
 Cd::~Cd()
 {
     if (performers != nullptr && strlen(performers) > 0)
+    {
         delete[] performers;
+        performers = nullptr;
+    }
 
     if (label != nullptr && strlen(label) > 0)
+    {
         delete[] label;
+        label = nullptr;
+    }
 }
 
 void Cd::Report() const
@@ -78,7 +84,10 @@ Classic::Classic() : Cd("null", "null", 0, 0)
 Classic::~Classic()
 {
     if (m_composition != nullptr && strlen(m_composition) > 0)
+    {
         delete[] m_composition;
+        m_composition = nullptr;
+    }
 }
 
 void Classic::Report() const
