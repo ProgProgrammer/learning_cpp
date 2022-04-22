@@ -70,11 +70,15 @@ Cd& Cd::operator=(const Cd& cd)
     if (this == &cd)
         return *this;
 
-    delete[] performers;
+    if (performers != nullptr)
+        delete [] performers;
+
     performers = new char[strlen(performers + 1)];
     strcpy_s(performers, strlen(cd.performers) + 1, cd.performers);
 
-    delete[] label;
+    if (label != nullptr)
+        delete [] label;
+
     label = new char[strlen(label + 1)];
     strcpy_s(label, strlen(cd.label) + 1, cd.label);
 
@@ -121,8 +125,10 @@ Classic& Classic::operator=(const Classic& cl)
         return *this;
 
     Cd::operator=(cl);
+    
+    if (m_composition != nullptr)
+        delete[] m_composition;
 
-    delete[] m_composition;
     m_composition = new char[strlen(cl.m_composition) + 1];
 
     strcpy_s(m_composition, strlen(cl.m_composition) + 1, cl.m_composition);
