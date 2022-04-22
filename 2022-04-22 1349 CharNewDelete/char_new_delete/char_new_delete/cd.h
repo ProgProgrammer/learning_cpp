@@ -15,6 +15,7 @@ public:
     Cd();
     virtual ~Cd();
     virtual void Report() const;
+    Cd& operator=(const Cd& cd);
 };
 
 class Classic : public Cd
@@ -25,6 +26,7 @@ private:
 public:
     Classic(const char* m, const char* s1, const char* s2, int n, double x);
     Classic();
-    virtual ~Classic();
+    ~Classic();
     virtual void Report() const;
+    Classic& operator=(const Classic& cl);
 };

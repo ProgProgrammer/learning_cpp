@@ -44,13 +44,13 @@ Cd::Cd()
 
 Cd::~Cd()
 {
-    if (performers != nullptr && strlen(performers) > 0)
+    if (performers != nullptr)
     {
         delete[] performers;
         performers = nullptr;
     }
 
-    if (label != nullptr && strlen(label) > 0)
+    if (label != nullptr)
     {
         delete[] label;
         label = nullptr;
@@ -63,6 +63,25 @@ void Cd::Report() const
     std::cout << "label = " << label << std::endl;
     std::cout << "selections = " << selections << std::endl;
     std::cout << "playtime = " << playtime << std::endl << std::endl;
+}
+
+Cd& Cd::operator=(const Cd& cd)
+{
+    if (this == &cd)
+        return *this;
+
+    delete[] performers;
+    performers = new char[strlen(performers + 1)];
+    strcpy_s(performers, strlen(cd.performers) + 1, cd.performers);
+
+    delete[] label;
+    label = new char[strlen(label + 1)];
+    strcpy_s(label, strlen(cd.label) + 1, cd.label);
+
+    selections = cd.selections;
+    playtime = cd.playtime;
+
+    return *this;
 }
 
 Classic::Classic(const char* m, const char* s1, const char* s2, int n, double x) : Cd(s1, s2, n, x)
@@ -83,7 +102,7 @@ Classic::Classic() : Cd("null", "null", 0, 0)
 
 Classic::~Classic()
 {
-    if (m_composition != nullptr && strlen(m_composition) > 0)
+    if (m_composition != nullptr)
     {
         delete[] m_composition;
         m_composition = nullptr;
@@ -94,4 +113,19 @@ void Classic::Report() const
 {
     std::cout << "musical composition = " << m_composition << std::endl;
     Cd::Report();
+}
+
+Classic& Classic::operator=(const Classic& cl)
+{
+    if (this == &cl)
+        return *this;
+
+    Cd::operator=(cl);
+
+    delete[] m_composition;
+    m_composition = new char[strlen(cl.m_composition) + 1];
+
+    strcpy_s(m_composition, strlen(cl.m_composition) + 1, cl.m_composition);
+
+    return *this;
 }
