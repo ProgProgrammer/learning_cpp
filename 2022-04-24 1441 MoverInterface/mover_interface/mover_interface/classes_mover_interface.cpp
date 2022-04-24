@@ -23,9 +23,9 @@ RandomMover::RandomMover(const int & c_x, const int & c_y, const int & speed) : 
 
 void RandomMover::Calculate(const int & timeStamp)
 {
-    srand(time(0));
+    srand(time(nullptr));
     int * nums[2] = {&x, &y};
-    int * num = nums[rand() % 3];
+    int * num = nums[rand() % 2];
     *num = *num + v * timeStamp;
 }
 
