@@ -5,6 +5,9 @@ LineMover::LineMover(const int & c_x, const int & c_y, const int & speed) : x(c_
 
 void LineMover::Calculate(const int & timeStamp)
 {
+    if (timeStamp < 0)
+        throw std::logic_error("timestep < 0");
+    
     x = x + v * timeStamp;
 }
 
@@ -23,6 +26,9 @@ RandomMover::RandomMover(const int & c_x, const int & c_y, const int & speed) : 
 
 void RandomMover::Calculate(const int & timeStamp)
 {
+    if (timeStamp < 0)
+        throw std::logic_error("timestep < 0");
+
     srand(time(nullptr));
     int timeDiff = timeStamp - prevTimeStamp;
     x = x + rand() * v * timeDiff;
