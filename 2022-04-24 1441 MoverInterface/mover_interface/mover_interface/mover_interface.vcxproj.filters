@@ -26,5 +26,8 @@
     <ClInclude Include="classes_mover_interface.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="class_mover_interface.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

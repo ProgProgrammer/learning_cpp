@@ -1,18 +1,6 @@
 #pragma once
 #include <iostream>
-
-class MoverInterface
-{
-private:
-    int x;
-    int y;
-    int v;
-
-public:
-    virtual void Calculate(const int & timeStamp) = 0;
-    virtual int GetX() const = 0;
-    virtual int GetY() const = 0;
-};
+#include "class_mover_interface.h"
 
 class LineMover : public MoverInterface
 {
@@ -23,9 +11,9 @@ private:
 
 public:
     LineMover(const int & c_x = 0, const int & c_y = 0, const int & speed = 0);
-    virtual void Calculate(const int & timeStamp);
-    virtual int GetX() const;
-    virtual int GetY() const;
+    virtual void Calculate(const int & timeStamp) override;
+    virtual int GetX() const override;
+    virtual int GetY() const override;
 };
 
 class RandomMover : public MoverInterface
@@ -37,7 +25,7 @@ private:
 
 public:
     RandomMover(const int & c_x = 0, const int & c_y = 0, const int & speed = 0);
-    virtual void Calculate(const int & timeStamp);
-    virtual int GetX() const;
-    virtual int GetY() const;
+    virtual void Calculate(const int & timeStamp) override;
+    virtual int GetX() const override;
+    virtual int GetY() const override;
 };
