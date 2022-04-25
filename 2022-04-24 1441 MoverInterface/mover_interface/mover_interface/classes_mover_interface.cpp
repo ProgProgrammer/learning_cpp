@@ -24,10 +24,10 @@ RandomMover::RandomMover(const int & c_x, const int & c_y, const int & speed) : 
 void RandomMover::Calculate(const int & timeStamp)
 {
     srand(time(nullptr));
-    int random_variable = rand() % 2;
-    x = x + random_variable * v * timeStamp;
-    random_variable = rand() % 2;
-    y = y + random_variable * v * timeStamp;
+    int timeDiff = timeStamp - prevTimeStamp;
+    x = x + rand() * v * timeDiff;
+    x = y + rand() * v * timeDiff;
+    prevTimeStamp = timeStamp;
 }
 
 int RandomMover::GetX() const

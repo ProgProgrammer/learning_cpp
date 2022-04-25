@@ -22,6 +22,7 @@ private:
     int x;
     int y;
     int v;
+    int prevTimeStamp = 0;
 
 public:
     RandomMover(const int & c_x = 0, const int & c_y = 0, const int & speed = 0);
