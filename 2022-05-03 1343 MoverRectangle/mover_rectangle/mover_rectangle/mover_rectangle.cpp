@@ -11,7 +11,7 @@ void main(int argc, char** argv[])
     float height_rectangle = 125;
     int x = 320;
     int y = 240;
-    int speed = 10;
+    int speed = 1;
 
     RectangleMover * rectangle_mover = new RectangleMover(x, y, speed, weight_screen, height_screen,
         weight_rectangle, height_rectangle);
