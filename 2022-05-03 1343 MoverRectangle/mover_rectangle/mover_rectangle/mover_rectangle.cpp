@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "classes_mover_interface.h"
 
-void main(int argc, char** argv[])
+int main()
 {
     int weight_screen = 640;
     int height_screen = 480;
@@ -33,13 +33,13 @@ void main(int argc, char** argv[])
 
             if (num % 2)
             {
-                rectangle_mover->Calculate(rand() % 3 - 1, "x");
+                rectangle_mover->CalculateX(rand() % 3 - 1);
                 x = rectangle_mover->GetX();
                 num++;
             }
             else
             {
-                rectangle_mover->Calculate(rand() % 3 - 1, "y");
+                rectangle_mover->CalculateY(rand() % 3 - 1);
                 y = rectangle_mover->GetY();
                 num++;
             }
@@ -59,4 +59,6 @@ void main(int argc, char** argv[])
         window.draw(rectangle); // Drawing our shape.
         window.display();
     }
+
+    return 0;
 }
