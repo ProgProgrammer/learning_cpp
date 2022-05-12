@@ -21,7 +21,10 @@
     <ClCompile Include="classes_mover_interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="time.cpp">
+    <ClCompile Include="class_projectiler_mover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +35,10 @@
     <ClInclude Include="classes_mover_interface.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="time.h">
+    <ClInclude Include="class_projectiler_mover.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

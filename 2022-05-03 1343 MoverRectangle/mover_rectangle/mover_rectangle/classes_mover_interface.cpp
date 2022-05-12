@@ -1,8 +1,8 @@
 #include "classes_mover_interface.h"
 
-RectangleMover::RectangleMover(const int & c_x, const int & c_y, const int & speed,
+RectangleMover::RectangleMover(const int & c_x, const int & c_y, const int & tS, const int & speed,
     const int & x_scr, const int & y_scr, const float & w, const float & h)
-    : x(c_x), y(c_y), v(speed), x_screen(x_scr), y_screen(y_scr), weight(w), height(h)
+    : x(c_x), y(c_y), v(speed), timeStamp(tS), x_screen(x_scr), y_screen(y_scr), weight(w), height(h)
 {
     half_weight = weight / 2;
     half_height = height / 2;
@@ -34,7 +34,16 @@ bool RectangleMover::CheckScreenY(const int & timeStamp)
     return true;
 }
 
-void RectangleMover::CalculateX(const int & timeStamp)
+void RectangleMover::CalculateXU()
+{
+    if (timeStamp != 0 && CheckScreenX(-timeStamp))
+    {
+        x = x + v * (-timeStamp);
+        std::cout << "X = " << x << std::endl;
+    }
+}
+
+void RectangleMover::CalculateXD()
 {
     if (timeStamp != 0 && CheckScreenX(timeStamp))
     {
@@ -43,7 +52,16 @@ void RectangleMover::CalculateX(const int & timeStamp)
     }
 }
 
-void RectangleMover::CalculateY(const int & timeStamp)
+void RectangleMover::CalculateYU()
+{
+    if (timeStamp != 0 && CheckScreenY(-timeStamp))
+    {
+        y = y + v * (-timeStamp);
+        std::cout << "Y = " << y << std::endl;
+    }
+}
+
+void RectangleMover::CalculateYD()
 {
     if (timeStamp != 0 && CheckScreenY(timeStamp))
     {
