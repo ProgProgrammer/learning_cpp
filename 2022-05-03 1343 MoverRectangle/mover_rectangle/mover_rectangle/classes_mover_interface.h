@@ -11,10 +11,10 @@ private:
     int timeStamp;
     int x_screen;
     int y_screen;
-    float weight;
-    float height;
-    float half_weight;
-    float half_height;
+    int weight;
+    int height;
+    int half_weight;
+    int half_height;
     bool CheckScreenX(const int & timeStamp);
     bool CheckScreenY(const int & timeStamp);
 

@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "class_mover_interface.h"
-#include "classes_mover_interface.h"
+#include "static_objects.h"
 
 class ProjectilerMover : public MoverInterface
 {
@@ -13,18 +14,25 @@ private:
     int timeStamp;
     int x_screen;
     int y_screen;
-    float weight;
-    float height;
-    float half_weight;
-    float half_height;
+    int weight;
+    int height;
+    int half_weight;
+    int half_height;
+    int begin_x;
+    int end_x;
+    int begin_y;
+    int end_y;
     sf::RenderWindow & window;
     sf::RectangleShape & projectiler;
     sf::RectangleShape & rectangle;
-    bool CheckScreenY(const int & timeStamp);
+    std::vector<StaticObjects> & stat_objs;
+    std::vector<sf::RectangleShape> & rs_objs;
+    bool CheckScreenY(const int & timeStamp) const;
+    bool checkDestroyed();
 
 public:
-    ProjectilerMover(sf::RenderWindow & window, sf::RectangleShape & projectiler, sf::RectangleShape & rct,
-        const int & c_x, const int & c_y, const int & timeStamp = 1, const int & speed = 1,
+    ProjectilerMover(sf::RenderWindow & wd, sf::RectangleShape & prj, sf::RectangleShape & rct, std::vector<StaticObjects> & st_obs,
+        std::vector<sf::RectangleShape> & rs_objs, const int & c_x, const int & c_y, const int & timeStamp = 1, const int & speed = 1,
         const int & x_scr = 640, const int & y_scr = 480, const float & w = 10, const float & h = 10);
     virtual void CalculateXU() override {}
     virtual void CalculateXD() override {}

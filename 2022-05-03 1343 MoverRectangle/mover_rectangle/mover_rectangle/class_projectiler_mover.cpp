@@ -1,11 +1,11 @@
 #include "class_projectiler_mover.h"
 #include "timer.h"
 
-ProjectilerMover::ProjectilerMover(sf::RenderWindow & wd, sf::RectangleShape & prj, sf::RectangleShape & rct,
-    const int & c_x, const int & c_y, const int & tS, const int & speed,
+ProjectilerMover::ProjectilerMover(sf::RenderWindow & wd, sf::RectangleShape & prj, sf::RectangleShape & rct, std::vector<StaticObjects> & st_obs,
+    std::vector<sf::RectangleShape> & rs_ob, const int & c_x, const int & c_y, const int & tS, const int & speed,
     const int & x_scr, const int & y_scr, const float & w, const float & h)
     : x(c_x), y(c_y), v(speed), timeStamp(tS), x_screen(x_scr), y_screen(y_scr), weight(w), height(h),
-    window(wd), projectiler(prj), rectangle(rct)
+    window(wd), projectiler(prj), rectangle(rct), stat_objs(st_obs), rs_objs(rs_ob)
 {
     half_weight = weight / 2;
     half_height = height / 2;
@@ -17,12 +17,56 @@ ProjectilerMover::ProjectilerMover(sf::RenderWindow & wd, sf::RectangleShape & p
         throw std::logic_error("wrong coordinate 'y'");
 }
 
-bool ProjectilerMover::CheckScreenY(const int & timeStamp)
+bool ProjectilerMover::CheckScreenY(const int & timeStamp) const
 {
     int num = y + v * timeStamp;
 
     if (num - half_height < 0 || num + half_height > y_screen)
         return false;
+
+    return true;
+}
+
+bool ProjectilerMover::checkDestroyed()
+{
+    for (int i = 0; i < stat_objs.size(); i++)
+    {
+        begin_x = x - weight / 2;
+        end_x = x + weight / 2;
+        begin_y = y - height / 2;
+        end_y = y + height / 2;
+
+        if (begin_x >= stat_objs[i].GetBX() && end_x <= stat_objs[i].GetEX() &&
+            begin_y >= stat_objs[i].GetBY() && end_y <= stat_objs[i].GetEY())
+        {
+            stat_objs.erase(stat_objs.begin() + i);
+
+            int milliseconds;
+
+            if (getMilliseconds() + 300 > 1000)
+                milliseconds = getMilliseconds() + 300 - 1000;
+            else
+                milliseconds = getMilliseconds() + 300;
+
+            while (getMilliseconds() != milliseconds)
+            {
+                rs_objs[i].setFillColor(sf::Color::Yellow);
+                window.clear(sf::Color::Blue);
+                window.draw(rectangle); // Drawing our shape.
+
+                for (int a = 0; a < rs_objs.size(); a++)
+                {
+                    window.draw(rs_objs[a]);
+                }
+
+                window.display();
+            }
+
+            rs_objs.erase(rs_objs.begin() + i);
+
+            return false;
+        }
+    }
 
     return true;
 }
@@ -35,11 +79,20 @@ void ProjectilerMover::CalculateYU()
         {
             y = y + v * (-timeStamp);
 
+            if (!checkDestroyed())
+                break;
+
             projectiler.setPosition(x, y);
             projectiler.setOrigin(projectiler.getSize().x / 2, projectiler.getSize().y / 2);
             window.clear(sf::Color::Blue);
             window.draw(projectiler); // Drawing our shape.
             window.draw(rectangle); // Drawing our shape.
+
+            for (int i = 0; i < rs_objs.size(); i++)
+            {
+                window.draw(rs_objs[i]);
+            }
+
             window.display();
 
             std::cout << "Y = " << y << std::endl;
