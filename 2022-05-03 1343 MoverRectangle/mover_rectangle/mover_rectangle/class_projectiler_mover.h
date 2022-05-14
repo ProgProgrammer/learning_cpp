@@ -32,8 +32,7 @@ private:
 
 public:
     ProjectilerMover(sf::RenderWindow & wd, sf::RectangleShape & prj, sf::RectangleShape & rct, std::vector<StaticObjects> & st_obs,
-        std::vector<sf::RectangleShape> & rs_objs, const int & c_x, const int & c_y, const int & timeStamp = 1, const int & speed = 1,
-        const int & x_scr = 640, const int & y_scr = 480, const float & w = 10, const float & h = 10);
+        std::vector<sf::RectangleShape> & rs_objs, const projMov & pm, const recMov & rm);
     virtual void CalculateXU() override {}
     virtual void CalculateXD() override {}
     virtual void CalculateYU() override;

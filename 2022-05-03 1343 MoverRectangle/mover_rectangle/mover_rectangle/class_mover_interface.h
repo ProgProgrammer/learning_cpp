@@ -1,5 +1,26 @@
 #pragma once
 
+struct projMov
+{
+    int w_projectiler;
+    int h_projectiler;
+    int x_projectiler;
+    int y_projectiler;
+    int speed_projectiler;
+};
+
+struct recMov
+{
+    int weight_screen;
+    int height_screen;
+    int weight_rectangle;
+    int height_rectangle;
+    int x;
+    int y;
+    int speed;
+    int timeStamp;
+};
+
 class MoverInterface
 {
 public:

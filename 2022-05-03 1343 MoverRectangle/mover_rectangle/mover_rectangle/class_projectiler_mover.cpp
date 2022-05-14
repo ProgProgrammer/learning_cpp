@@ -2,9 +2,9 @@
 #include "timer.h"
 
 ProjectilerMover::ProjectilerMover(sf::RenderWindow & wd, sf::RectangleShape & prj, sf::RectangleShape & rct, std::vector<StaticObjects> & st_obs,
-    std::vector<sf::RectangleShape> & rs_ob, const int & c_x, const int & c_y, const int & tS, const int & speed,
-    const int & x_scr, const int & y_scr, const float & w, const float & h)
-    : x(c_x), y(c_y), v(speed), timeStamp(tS), x_screen(x_scr), y_screen(y_scr), weight(w), height(h),
+    std::vector<sf::RectangleShape> & rs_ob, const projMov & pm, const recMov & rm)
+    : x(pm.x_projectiler), y(pm.y_projectiler), v(pm.speed_projectiler), timeStamp(rm.timeStamp), x_screen(rm.weight_screen), 
+    y_screen(rm.height_screen), weight(pm.w_projectiler), height(pm.h_projectiler),
     window(wd), projectiler(prj), rectangle(rct), stat_objs(st_obs), rs_objs(rs_ob)
 {
     half_weight = weight / 2;

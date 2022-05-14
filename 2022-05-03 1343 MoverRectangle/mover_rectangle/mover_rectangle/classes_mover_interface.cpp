@@ -1,8 +1,8 @@
 #include "classes_mover_interface.h"
 
-RectangleMover::RectangleMover(const int & c_x, const int & c_y, const int & tS, const int & speed,
-    const int & x_scr, const int & y_scr, const float & w, const float & h)
-    : x(c_x), y(c_y), v(speed), timeStamp(tS), x_screen(x_scr), y_screen(y_scr), weight(w), height(h)
+RectangleMover::RectangleMover(const recMov & rm)
+    : x(rm.x), y(rm.y), v(rm.speed), timeStamp(rm.timeStamp), x_screen(rm.weight_screen), y_screen(rm.height_screen), 
+    weight(rm.weight_rectangle), height(rm.height_rectangle)
 {
     half_weight = weight / 2;
     half_height = height / 2;

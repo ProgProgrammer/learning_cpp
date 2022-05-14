@@ -5,27 +5,6 @@
 #include "class_projectiler_mover.h"
 #include "static_objects.h"
 
-struct projMov
-{
-    int w_projectiler;
-    int h_projectiler;
-    int x_projectiler;
-    int y_projectiler;
-    int speed_projectiler;
-};
-
-struct recMov
-{
-    int weight_screen;
-    int height_screen;
-    int weight_rectangle;
-    int height_rectangle;
-    int x;
-    int y;
-    int speed;
-    int timeStamp;
-};
-
 void projtlerMover(projMov & pm, recMov & rm, sf::RenderWindow & window, sf::RectangleShape & rectangle, RectangleMover * rectangle_mover, 
     std::vector<StaticObjects> & st_objects, std::vector<sf::RectangleShape> & rs_objs)
 {
@@ -39,9 +18,7 @@ void projtlerMover(projMov & pm, recMov & rm, sf::RenderWindow & window, sf::Rec
     window.draw(projectiler); // Drawing our shape.
     window.display();
 
-    ProjectilerMover * projectiler_mover = new ProjectilerMover(window, projectiler, rectangle, st_objects, rs_objs,
-        pm.x_projectiler, pm.y_projectiler, pm.speed_projectiler, rm.timeStamp, rm.weight_screen, rm.height_screen,
-        pm.w_projectiler, pm.h_projectiler);
+    ProjectilerMover * projectiler_mover = new ProjectilerMover(window, projectiler, rectangle, st_objects, rs_objs, pm, rm);
 
     projectiler_mover->CalculateYU();
 
@@ -64,8 +41,7 @@ int main()
     pm.w_projectiler = pm.h_projectiler = 10;
     pm.speed_projectiler = 1;
 
-    RectangleMover * rectangle_mover = new RectangleMover(rm.x, rm.y, rm.speed, rm.timeStamp, rm.weight_screen, rm.height_screen,
-        rm.weight_rectangle, rm.height_rectangle);
+    RectangleMover * rectangle_mover = new RectangleMover(rm);
 
     std::vector<StaticObjects> st_objects;    // массив координат и размеров статических объектов
     std::vector<sf::RectangleShape> rs_objs;  // массив для отрисовки статических объектов
