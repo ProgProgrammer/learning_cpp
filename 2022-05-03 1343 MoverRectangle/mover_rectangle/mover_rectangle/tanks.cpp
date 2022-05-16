@@ -37,8 +37,8 @@ int main()
         0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -54,23 +54,24 @@ int main()
 
     winMap->length_window = 19;
 
-    objectStruct stat_object, guided_tank, projectile_object;  // объекты, которые будут на карте (с 1 по 3)
+    objectStruct stat_object, guided_tank, projectile_object, gun;  // объекты, которые будут на карте (с 1 по 3)
     stat_object.weight = stat_object.height = stat_object.step = guided_tank.weight = guided_tank.height = 
-        guided_tank.step = projectile_object.weight = projectile_object.height = 50;
+        guided_tank.step = projectile_object.weight = projectile_object.height = gun.weight = 
+        gun.height = gun.step = 50;
 
     // Величина шагов в пикселях:
     projectile_object.step = 1;
-    stat_object.step = 50;
-    guided_tank.step = 50;
 
     // Цвета:
     stat_object.color = 7;        // Cyan
     guided_tank.color = 6;        // Magenta
+    gun.color = 3;                // Green
     projectile_object.color = 2;  // Red
 
     winMap->objsArray.push_back(stat_object);        // статический объект
-    winMap->objsArray.push_back(guided_tank);        // управляемый объект (танк)
-    winMap->objsArray.push_back(projectile_object);  // снаряд (будет равен числу 3 на карте)   
+    winMap->objsArray.push_back(guided_tank);        // управляемый объект (танк)  
+    winMap->objsArray.push_back(gun);                // орудие   
+    winMap->objsArray.push_back(projectile_object);  // снаряд (будет равен числу 3 на карте) 
 
     CreateMap * cm = new CreateMap(winMap);
 

@@ -25,7 +25,7 @@ bool CreateMap::createWindow(sf::RenderWindow * window)
                 renderedObjects.push_back(sf::RectangleShape(sf::Vector2f(objsArray[map[i] - 1].weight, objsArray[map[i] - 1].height)));  // добавление в массив объектов для отображения
                 renderedObjects[id_objs].setFillColor(colors[objsArray[map[i] - 1].color]);  // добавление цвета объектам массива
                 x = objsArray[map[i] - 1].weight * id_x;       // вычисление смещения объекта по оси "x"
-                y = objsArray[map[i] - 1].height * id_y;  // вычисление смещения объекта по оси "y"
+                y = objsArray[map[i] - 1].height * id_y;       // вычисление смещения объекта по оси "y"
                 renderedObjects[id_objs].setPosition(x, y);
                 renderedObjects[id_objs].setOrigin(renderedObjects[id_objs].getSize().x / 2, renderedObjects[id_objs].getSize().y / 2);
                 window->draw(renderedObjects[id_objs]);
