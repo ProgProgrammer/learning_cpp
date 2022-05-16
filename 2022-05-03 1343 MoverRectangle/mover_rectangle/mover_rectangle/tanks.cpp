@@ -8,11 +8,11 @@
 
 int main()
 {
-    windowStruct * winMap = new windowStruct;  // ÒÚÛÍÚÛ‡ Ò Ô‡‡ÏÂÚ‡ÏË ÓÍÌ‡
+    windowStruct * winMap = new windowStruct;  // —Å—Ç—Ä—É–∫—Ç—É—Ä–∞ —Å –ø–∞—Ä–∞–º–µ—Ç—Ä–∞–º–∏ –æ–∫–Ω–∞
     winMap->weight = 950;
     winMap->height = 950;
 
-    // ÷‚ÂÚ‡:
+    // –¶–≤–µ—Ç–∞:
     /*
     Black;       // 0
     White;       // 1
@@ -25,10 +25,10 @@ int main()
     Transparent; // 8
     */
 
-    winMap->color = 4;  // ˆ‚ÂÚ ÓÍÌ‡ "Blue"
+    winMap->color = 4;  // —Ü–≤–µ—Ç –æ–∫–Ω–∞ "Blue"
     winMap->name_window ="Rendering the rectangle.";
 
-    // Ã‡ÒÒË‚ Ò Í‡ÚÓÈ Ó·˙ÂÍÚÓ‚:
+    // –ú–∞—Å—Å–∏–≤ —Å –∫–∞—Ä—Ç–æ–π –æ–±—ä–µ–∫—Ç–æ–≤:
     winMap->map =
     {
         1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -54,23 +54,23 @@ int main()
 
     winMap->length_window = 19;
 
-    objectStruct stat_object, guided_tank, projectile_object;  // Ó·˙ÂÍÚ˚, ÍÓÚÓ˚Â ·Û‰ÛÚ Ì‡ Í‡ÚÂ (Ò 1 ÔÓ 3)
+    objectStruct stat_object, guided_tank, projectile_object;  // –æ–±—ä–µ–∫—Ç—ã, –∫–æ—Ç–æ—Ä—ã–µ –±—É–¥—É—Ç –Ω–∞ –∫–∞—Ä—Ç–µ (—Å 1 –ø–æ 3)
     stat_object.weight = stat_object.height = stat_object.step = guided_tank.weight = guided_tank.height = 
         guided_tank.step = projectile_object.weight = projectile_object.height = 50;
 
-    // ¬ÂÎË˜ËÌ‡ ¯‡„Ó‚ ‚ ÔËÍÒÂÎˇı:
+    // –í–µ–ª–∏—á–∏–Ω–∞ —à–∞–≥–æ–≤ –≤ –ø–∏–∫—Å–µ–ª—è—Ö:
     projectile_object.step = 1;
     stat_object.step = 50;
     guided_tank.step = 50;
 
-    // ÷‚ÂÚ‡:
+    // –¶–≤–µ—Ç–∞:
     stat_object.color = 7;        // Cyan
     guided_tank.color = 6;        // Magenta
     projectile_object.color = 2;  // Red
 
-    winMap->objsArray.push_back(stat_object);        // ÒÚ‡ÚË˜ÂÒÍËÈ Ó·˙ÂÍÚ
-    winMap->objsArray.push_back(guided_tank);        // ÛÔ‡‚ÎˇÂÏ˚È Ó·˙ÂÍÚ (Ú‡ÌÍ)
-    winMap->objsArray.push_back(projectile_object);  // ÒÌ‡ˇ‰ (·Û‰ÂÚ ‡‚ÂÌ ˜ËÒÎÛ 3 Ì‡ Í‡ÚÂ)   
+    winMap->objsArray.push_back(stat_object);        // —Å—Ç–∞—Ç–∏—á–µ—Å–∫–∏–π –æ–±—ä–µ–∫—Ç
+    winMap->objsArray.push_back(guided_tank);        // —É–ø—Ä–∞–≤–ª—è–µ–º—ã–π –æ–±—ä–µ–∫—Ç (—Ç–∞–Ω–∫)
+    winMap->objsArray.push_back(projectile_object);  // —Å–Ω–∞—Ä—è–¥ (–±—É–¥–µ—Ç —Ä–∞–≤–µ–Ω —á–∏—Å–ª—É 3 –Ω–∞ –∫–∞—Ä—Ç–µ)   
 
     CreateMap * cm = new CreateMap(winMap);
 

@@ -9,9 +9,9 @@ struct windowStruct
     int weight;
     int height;
     int color;
-    std::string name_window;              // название окна
-    std::vector<int> map;                 // массив с картой объектов
-    std::vector<objectStruct> objsArray;  // массив объектов
+    std::string name_window;              // РЅР°Р·РІР°РЅРёРµ РѕРєРЅР°
+    std::vector<int> map;                 // РјР°СЃСЃРёРІ СЃ РєР°СЂС‚РѕР№ РѕР±СЉРµРєС‚РѕРІ
+    std::vector<objectStruct> objsArray;  // РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ
     int length_window;
 };
 
@@ -22,12 +22,12 @@ private:
     int & height;
     std::vector<sf::Color> colors = { sf::Color::Black, sf::Color::White, sf::Color::Red, sf::Color::Green,
         sf::Color::Blue, sf::Color::Yellow, sf::Color::Magenta, sf::Color::Cyan, sf::Color::Transparent };
-    sf::Color & color;                                // выбранный цвет из массива "colors"
-    std::string & name_window;                        // название окна
-    std::vector<int> & map;                           // массив с картой объектов
-    std::vector<objectStruct> & objsArray;            // массив объектов
-    windowStruct * winSct;                            // объект структуры "windowStruct"
-    std::vector<sf::RectangleShape> renderedObjects;  // массив объектов для отображения в окне
+    sf::Color & color;                                // РІС‹Р±СЂР°РЅРЅС‹Р№ С†РІРµС‚ РёР· РјР°СЃСЃРёРІР° "colors"
+    std::string & name_window;                        // РЅР°Р·РІР°РЅРёРµ РѕРєРЅР°
+    std::vector<int> & map;                           // РјР°СЃСЃРёРІ СЃ РєР°СЂС‚РѕР№ РѕР±СЉРµРєС‚РѕРІ
+    std::vector<objectStruct> & objsArray;            // РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ
+    windowStruct * winSct;                            // РѕР±СЉРµРєС‚ СЃС‚СЂСѓРєС‚СѓСЂС‹ "windowStruct"
+    std::vector<sf::RectangleShape> renderedObjects;  // РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІ РѕРєРЅРµ
 
 public:
     CreateMap(windowStruct & ws);

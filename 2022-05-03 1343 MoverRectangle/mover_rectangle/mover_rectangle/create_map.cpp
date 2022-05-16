@@ -9,10 +9,10 @@ name_window(ws->name_window), map(ws->map), objsArray(ws->objsArray), winSct(ws)
 bool CreateMap::createWindow(sf::RenderWindow * window)
 {
     int x, y, id_objs, x_module;
-    float id_x, id_y;       // идентификатор смещения объекта по оси "x"
-    id_x = id_y = 0.5;       // идентификатор смещения объекта по оси "y"
-    id_objs = 0;   // идентификатор массива объектов для отображения
-    x_module = 0;  // переменная для условия деления по модулю
+    float id_x, id_y;       // РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р° РїРѕ РѕСЃРё "x"
+    id_x = id_y = 0.5;       // РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р° РїРѕ РѕСЃРё "y"
+    id_objs = 0;   // РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РјР°СЃСЃРёРІР° РѕР±СЉРµРєС‚РѕРІ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+    x_module = 0;  // РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ СѓСЃР»РѕРІРёСЏ РґРµР»РµРЅРёСЏ РїРѕ РјРѕРґСѓР»СЋ
 
     if (window->isOpen())
     {
@@ -22,25 +22,25 @@ bool CreateMap::createWindow(sf::RenderWindow * window)
         {
             if (map[i] != 0)
             {
-                renderedObjects.push_back(sf::RectangleShape(sf::Vector2f(objsArray[map[i] - 1].weight, objsArray[map[i] - 1].height)));  // добавление в массив объектов для отображения
-                renderedObjects[id_objs].setFillColor(colors[objsArray[map[i] - 1].color]);  // добавление цвета объектам массива
-                x = objsArray[map[i] - 1].weight * id_x;       // вычисление смещения объекта по оси "x"
-                y = objsArray[map[i] - 1].height * id_y;  // вычисление смещения объекта по оси "y"
+                renderedObjects.push_back(sf::RectangleShape(sf::Vector2f(objsArray[map[i] - 1].weight, objsArray[map[i] - 1].height)));  // РґРѕР±Р°РІР»РµРЅРёРµ РІ РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+                renderedObjects[id_objs].setFillColor(colors[objsArray[map[i] - 1].color]);  // РґРѕР±Р°РІР»РµРЅРёРµ С†РІРµС‚Р° РѕР±СЉРµРєС‚Р°Рј РјР°СЃСЃРёРІР°
+                x = objsArray[map[i] - 1].weight * id_x;       // РІС‹С‡РёСЃР»РµРЅРёРµ СЃРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р° РїРѕ РѕСЃРё "x"
+                y = objsArray[map[i] - 1].height * id_y;  // РІС‹С‡РёСЃР»РµРЅРёРµ СЃРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р° РїРѕ РѕСЃРё "y"
                 renderedObjects[id_objs].setPosition(x, y);
                 renderedObjects[id_objs].setOrigin(renderedObjects[id_objs].getSize().x / 2, renderedObjects[id_objs].getSize().y / 2);
                 window->draw(renderedObjects[id_objs]);
                 id_objs++;
             }
 
-            if ((x_module + 1) % winSct->length_window == 0)  // сброс смещения по оси "x" при достижении конца строки матрицы
+            if ((x_module + 1) % winSct->length_window == 0)  // СЃР±СЂРѕСЃ СЃРјРµС‰РµРЅРёСЏ РїРѕ РѕСЃРё "x" РїСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё РєРѕРЅС†Р° СЃС‚СЂРѕРєРё РјР°С‚СЂРёС†С‹
             {
                 id_x = 0.5;
-                id_y += 1;  // переключение на следующую строку матрицы внизу
+                id_y += 1;  // РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ СЃС‚СЂРѕРєСѓ РјР°С‚СЂРёС†С‹ РІРЅРёР·Сѓ
                 x_module = 0;
             }
             else
             {
-                id_x += 1; // увеличение смещения по оси "x" на один шаг
+                id_x += 1; // СѓРІРµР»РёС‡РµРЅРёРµ СЃРјРµС‰РµРЅРёСЏ РїРѕ РѕСЃРё "x" РЅР° РѕРґРёРЅ С€Р°Рі
                 x_module += 1;
             }
         }
