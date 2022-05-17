@@ -132,6 +132,8 @@ int main()
 
     delete cm;
     delete winMap;
+    delete tank;
+    delete window;
 
     return 0;
 }
