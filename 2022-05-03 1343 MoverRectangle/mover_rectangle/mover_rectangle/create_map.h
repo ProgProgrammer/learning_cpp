@@ -4,18 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "class_mover_interface.h"
 
-struct windowStruct
-{
-    int weight;
-    int height;
-    int color;
-    std::string name_window;              // название окна
-    std::vector<int> map;                 // массив с картой объектов
-    std::vector<objectStruct> objsArray;  // массив объектов
-    int length_window;
-};
-
-class CreateMap
+class CreateMap : public Map
 {
 private:
     int & weight;
@@ -32,6 +21,6 @@ private:
 public:
     CreateMap(windowStruct & ws);
     CreateMap(windowStruct * ws);
-    bool createWindow(sf::RenderWindow * window);
-    bool updateWindow();
+    virtual bool createWindow(sf::RenderWindow * window) override;
+    virtual bool updateWindow() override { return true; };
 };
