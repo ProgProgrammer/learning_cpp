@@ -8,7 +8,7 @@
 
 int main()
 {
-    windowStruct * winMap = new windowStruct;  // структура с параметрами окна
+    WindowStruct* winMap = new WindowStruct;  // структура с параметрами окна
     winMap->weight = 950;
     winMap->height = 950;
 
@@ -25,8 +25,15 @@ int main()
     Transparent; // 8
     */
 
-    winMap->color = 4;  // цвет окна "Blue"
-    winMap->name_window ="Tanks";
+    // Номеры объекто на карте:
+    /*
+    StatObj,  // 1
+    TankUser,     // 2
+    Gun       // 3
+    */
+
+    winMap->color = Blue;  // цвет окна "Blue"
+    winMap->name_window = "Tanks";
 
     // Массив с картой объектов:
     winMap->map =
@@ -50,33 +57,26 @@ int main()
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,
-    };  
+    };
 
     winMap->length_window = 19;
 
-    objectStruct stat_object, guided_tank, projectile_object, gun;  // объекты, которые будут на карте (с 1 по 3)
-    stat_object.weight = stat_object.height = stat_object.step = guided_tank.weight = guided_tank.height = 
-        guided_tank.step = projectile_object.weight = projectile_object.height = gun.weight = 
-        gun.height = gun.step = 50;
-
-    // Величина шагов в пикселях:
-    projectile_object.step = 1;
-
-    // Цвета:
-    stat_object.color = 7;        // цвет статических объектов - Cyan
-    guided_tank.color = 6;        // цвет танка - Magenta
-    gun.color = 3;                // цвет орудия танка - Green
-    projectile_object.color = 2;  // цвет снаряда - Red
+    // Объекты, которые будут на карте (ширина, высота, величина шагов в пикселях и цвет объектов):
+    ObjectStruct stat_object = { 50, 50, 50, Cyan };        // цвет статических объектов - Cyan
+    ObjectStruct guided_tank = { 50, 50, 50, Magenta };     // цвет танка - Magenta
+    ObjectStruct projectile_object = { 50, 50, 1, Red };    // цвет орудия танка - Red
+    ObjectStruct gun = { 50, 50, 50, Green };               // цвет снаряда - Green
 
     winMap->objsArray.push_back(stat_object);        // статический объект
     winMap->objsArray.push_back(guided_tank);        // управляемый объект (танк)  
     winMap->objsArray.push_back(gun);                // орудие   
     winMap->objsArray.push_back(projectile_object);  // снаряд (будет равен числу 3 на карте)
 
-    moverObject * tank_struct = new moverObject;  // танк
-    tank_struct->num_fig_width = tank_struct->num_fig_height = 3;  // ширина и высота объекта в подобъектах
-    tank_struct->num_mover_obj = 2;  // номер подобъектов танка
-    tank_struct->rotated_obj = 3;    // номер поворачиваемых подобъектов танка
+    MoverObject * tank_struct = new MoverObject;  // танк
+    tank_struct->num_fig_width = 3;   // ширина объекта в подобъектах
+    tank_struct->num_fig_height = 3;  // высота объекта в подобъектах
+    tank_struct->num_mover_obj = TankUser;   // номер подобъектов танка
+    tank_struct->rotated_obj = Gun;     // номер поворачиваемых подобъектов танка
 
     CreateMap * cm = new CreateMap(winMap);
 
@@ -95,33 +95,12 @@ int main()
         {
             if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::W)
-                {
-                    crwn = tank->CalculateXU();
+                crwn = tank->Calculate(event);
 
-                    if (crwn == true)
-                        crwn = cm->createWindow(window);
-                }
-                if (event.key.code == sf::Keyboard::S)
+                if (crwn == true)
                 {
-                    crwn = tank->CalculateXD();
-
-                    if (crwn == true)
-                        crwn = cm->createWindow(window);
-                }
-                if (event.key.code == sf::Keyboard::A)
-                {
-                    crwn = tank->CalculateYL();
-
-                    if (crwn == true)
-                        crwn = cm->createWindow(window);
-                }
-                if (event.key.code == sf::Keyboard::D)
-                {
-                    crwn = tank->CalculateYR();
-
-                    if (crwn == true)
-                        crwn = cm->createWindow(window);
+                    crwn = cm->createWindow(window);
+                    crwn = false;
                 }
             }
 

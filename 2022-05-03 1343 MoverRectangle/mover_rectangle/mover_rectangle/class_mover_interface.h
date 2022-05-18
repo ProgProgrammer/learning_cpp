@@ -2,15 +2,37 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-struct objectStruct
+// Цвета:
+enum colors
+{
+    Black,       // 0
+    White,       // 1
+    Red,         // 2
+    Green,       // 3
+    Blue,        // 4
+    Yellow,      // 5
+    Magenta,     // 6
+    Cyan,        // 7
+    Transparent  // 8
+};
+
+// Номера объектов на карте:
+enum Objects
+{
+    StatObj = 1,
+    TankUser = 2,
+    Gun = 3
+};
+
+struct ObjectStruct
 {
     int weight;
     int height;
     int step;
-    int color;
+    colors color;
 };
 
-struct moverObject  // структура для хранения информации о передвигаемом объекте
+struct MoverObject  // структура для хранения информации о передвигаемом объекте
 {
     int num_fig_width;   // ширина перемещаемого объекта в подобъектах
     int num_fig_height;  // высота перемещаемого объекта в подобъектах
@@ -18,14 +40,14 @@ struct moverObject  // структура для хранения информации о передвигаемом объекте
     int rotated_obj;     // номер поворачиваемых подобъектов передвигаемого объекта
 };
 
-struct windowStruct
+struct WindowStruct
 {
     int weight;
     int height;
     int color;
     std::string name_window;              // название окна
     std::vector<int> map;                 // массив с картой объектов
-    std::vector<objectStruct> objsArray;  // массив объектов
+    std::vector<ObjectStruct> objsArray;  // массив объектов
     int length_window;
 };
 
@@ -39,8 +61,5 @@ public:
 class MoverInterface
 {
 public:
-    virtual bool CalculateXU() = 0;
-    virtual bool CalculateXD() = 0;
-    virtual bool CalculateYL() = 0;
-    virtual bool CalculateYR() = 0;
+    virtual bool Calculate(sf::Event & event) = 0;
 };

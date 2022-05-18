@@ -1,9 +1,9 @@
 #include "create_map.h"
 
-CreateMap::CreateMap(windowStruct & ws) : weight(ws.weight), height(ws.height), color(colors[ws.color]), 
+CreateMap::CreateMap(WindowStruct & ws) : weight(ws.weight), height(ws.height), color(colors[ws.color]), 
 name_window(ws.name_window), map(ws.map), objsArray(ws.objsArray), winSct(&ws) {}
 
-CreateMap::CreateMap(windowStruct * ws) : weight(ws->weight), height(ws->height), color(colors[ws->color]),
+CreateMap::CreateMap(WindowStruct * ws) : weight(ws->weight), height(ws->height), color(colors[ws->color]),
 name_window(ws->name_window), map(ws->map), objsArray(ws->objsArray), winSct(ws) {}
 
 bool CreateMap::createWindow(sf::RenderWindow * window)

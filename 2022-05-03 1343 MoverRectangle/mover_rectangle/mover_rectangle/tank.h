@@ -5,8 +5,8 @@
 class Tank : public MoverInterface
 {
 private:
-    windowStruct * map;
-    moverObject * tank;
+    WindowStruct * map;
+    MoverObject * tank;
     int middle_horizontal_top;
     int middle_horizontal_down;
     int middle_id;
@@ -17,10 +17,7 @@ private:
     void addedValues();
 
 public:
-    Tank(windowStruct & map, moverObject & tank);
-    Tank(windowStruct * map, moverObject * tank);
-    virtual bool CalculateXU() override;
-    virtual bool CalculateXD() override;
-    virtual bool CalculateYL() override;
-    virtual bool CalculateYR() override;
+    Tank(WindowStruct & map, MoverObject & tank);
+    Tank(WindowStruct * map, MoverObject * tank);
+    virtual bool Calculate(sf::Event & event) override;
 };
