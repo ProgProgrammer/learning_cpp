@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 // Цвета:
-enum colors
+enum Colors
 {
     Black,       // 0
     White,       // 1
@@ -19,6 +19,7 @@ enum colors
 // Номера объектов на карте:
 enum Objects
 {
+    EmptyObject = 0,
     StatObj = 1,
     TankUser = 2,
     Gun = 3
@@ -29,7 +30,7 @@ struct ObjectStruct
     int weight;
     int height;
     int step;
-    colors color;
+    Colors color;
 };
 
 struct MoverObject  // структура для хранения информации о передвигаемом объекте
@@ -55,7 +56,6 @@ class Map
 {
 public:
     virtual bool createWindow(sf::RenderWindow * window) = 0;
-    virtual bool updateWindow() = 0;
 };
 
 class MoverInterface

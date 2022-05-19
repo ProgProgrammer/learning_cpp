@@ -24,7 +24,7 @@ void Tank::addedValues()
 
 bool Tank::Calculate(sf::Event & event)
 {
-    if (event.key.code == sf::Keyboard::W)
+    if (event.key.code == sf::Keyboard::W)  // поворот орудия вперед
     {
         if (nums_tank[middle_horizontal_top + 1] != tank->rotated_obj)
         {
@@ -48,7 +48,7 @@ bool Tank::Calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::S)
+    if (event.key.code == sf::Keyboard::S)  // поворот орудия назад
     {
         if (nums_tank[middle_horizontal_down + 1] != tank->rotated_obj)
         {
@@ -72,7 +72,7 @@ bool Tank::Calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::A)
+    if (event.key.code == sf::Keyboard::A)  // поворот орудия влево
     {
         if (nums_tank[middle_vertical_left] != tank->rotated_obj)
         {
@@ -96,7 +96,7 @@ bool Tank::Calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::D)
+    if (event.key.code == sf::Keyboard::D)  // поворот орудия вправо
     {
         if (nums_tank[middle_vertical_right] != tank->rotated_obj)
         {
@@ -112,6 +112,57 @@ bool Tank::Calculate(sf::Event & event)
         }
         else
             return false;
+
+        for (int i = 0; i < id_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = nums_tank[i];
+        }
+
+        return true;
+    }
+    if (event.key.code == sf::Keyboard::Up)  // движение вперед
+    {
+        for (int i = 0; i < tank->num_fig_width; i++)
+        {
+            if (id_tank[i] - map->length_window < 0)
+                return false;
+
+            if (map->map[id_tank[i] - map->length_window] == StatObj)
+                return false;
+        }
+
+        for (int i = 0; i < nums_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = EmptyObject;
+            id_tank[i] = id_tank[i] - map->length_window;
+        }
+
+        for (int i = 0; i < id_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = nums_tank[i];
+        }
+
+        return true;
+    }
+    if (event.key.code == sf::Keyboard::Down)  // движение назад
+    {
+        int id_down = tank->num_fig_width * tank->num_fig_height - tank->num_fig_width;
+        int length = tank->num_fig_width * tank->num_fig_width;
+
+        for (int i = id_down; i < length; i++)
+        {
+            if (id_tank[i] + map->length_window >= map->length_window * map->length_window)
+                return false;
+
+            if (map->map[id_tank[i] + map->length_window] == StatObj)
+                return false;
+        }
+
+        for (int i = 0; i < nums_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = EmptyObject;
+            id_tank[i] = id_tank[i] + map->length_window;
+        }
 
         for (int i = 0; i < id_tank.size(); i++)
         {
