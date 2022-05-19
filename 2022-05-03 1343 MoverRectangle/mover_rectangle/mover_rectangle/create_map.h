@@ -15,11 +15,10 @@ private:
     std::string & name_window;                        // название окна
     std::vector<int> & map;                           // массив с картой объектов
     std::vector<ObjectStruct> & objsArray;            // массив объектов
-    WindowStruct * winSct;                            // объект структуры "WindowStruct"
+    WindowStruct & winSct;                            // объект структуры "WindowStruct"
     std::vector<sf::RectangleShape> renderedObjects;  // массив объектов для отображения в окне
 
 public:
     CreateMap(WindowStruct & ws);
-    CreateMap(WindowStruct * ws);
-    virtual bool createWindow(sf::RenderWindow * window) override;
+    virtual bool updateWindow(sf::RenderWindow & window) override;
 };

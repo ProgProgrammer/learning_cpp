@@ -19,5 +19,5 @@ private:
 public:
     Tank(WindowStruct & map, MoverObject & tank);
     Tank(WindowStruct * map, MoverObject * tank);
-    virtual bool Calculate(sf::Event & event) override;
+    virtual bool calculate(sf::Event & event) override;
 };

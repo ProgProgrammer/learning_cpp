@@ -55,11 +55,11 @@ struct WindowStruct
 class Map
 {
 public:
-    virtual bool createWindow(sf::RenderWindow * window) = 0;
+    virtual bool updateWindow(sf::RenderWindow & window) = 0;
 };
 
 class MoverInterface
 {
 public:
-    virtual bool Calculate(sf::Event & event) = 0;
+    virtual bool calculate(sf::Event & event) = 0;
 };

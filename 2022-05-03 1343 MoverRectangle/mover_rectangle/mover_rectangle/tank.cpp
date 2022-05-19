@@ -22,8 +22,9 @@ void Tank::addedValues()
     }
 }
 
-bool Tank::Calculate(sf::Event & event)
+bool Tank::calculate(sf::Event & event)
 {
+    static bool check = true;
     if (event.key.code == sf::Keyboard::W)  // поворот орудия вперед
     {
         if (nums_tank[middle_horizontal_top + 1] != tank->rotated_obj)
@@ -171,6 +172,30 @@ bool Tank::Calculate(sf::Event & event)
 
         return true;
     }
+    /*if (event.key.code == sf::Keyboard::Left)  // движение влево
+    {
+        for (int i = 0; i < tank->num_fig_height; i + tank->num_fig_width)
+        {
+            /*if (id_tank[i] - 1 >= map->length_window * map->length_window)
+                return false;*/
+
+                /*if (id_tank[i] - 1 == StatObj)
+                return false;
+        }
+
+        for (int i = 0; i < nums_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = EmptyObject;
+            id_tank[i] = id_tank[i] + map->length_window;
+        }
+
+        for (int i = 0; i < id_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = nums_tank[i];
+        }
+
+        return true;
+    }*/
 
     return false;
 }
