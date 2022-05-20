@@ -12,14 +12,15 @@ private:
     int middle_id;
     int middle_vertical_left;
     int middle_vertical_right;
+    int top_lines;  // половина строк сверху матрицы для вычисления высоты до начала матрицы танка
+    int middle_line;  // отступ от центра танка по середине
     int max_pixels_map;
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
-    bool checkMap() const;  // проверка танка на соприкосновение с другими объектами на карте
-    void copyMap();
+    bool tankDrawing();  // отрисовка танка
 
 public:
-    Tank() {}
+    Tank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
     Tank(WindowStruct & map, MoverObject & tank);
     virtual bool calculate(sf::Event & event) override;
 };

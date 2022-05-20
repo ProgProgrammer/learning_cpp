@@ -2,8 +2,6 @@
 
 Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t) 
 {
-    int top_lines;  // половина строк сверху матрицы для вычисления высоты до начала матрицы танка
-
     if (tank->num_fig_height % 2 == 0)
     {
         top_lines = tank->num_fig_height / 2 - 1;  // если высота делится на 2 без остатка, то она должна быть на 1 меньше, чтобы уместить орудие в размере танка при повороте башни
@@ -13,67 +11,78 @@ Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t)
         top_lines = tank->num_fig_height / 2;  // иначе орудие будет иметь нормальную длину
     }
 
-    int middle_line = tank->num_fig_width / 2;  // отступ от центра танка по середине
+    middle_line = tank->num_fig_width / 2;  // отступ от центра танка до края по горизонтали
+    max_pixels_map = map->width_window * map->height_window - 1;  // максимальный пиксель танка
+
+    if (tankDrawing() == false)
+        throw std::runtime_error("CONTACT WITH OBJECT OR TO GOING OUT OF THE MAP!");
+}
+
+bool Tank::tankDrawing()
+{
     int start_pixel = tank->center_obj - middle_line - map->width_window * top_lines;  // начальный пиксель танка
-    max_pixels_map = map->width_window * map->height_window - 1;
+    int end_pixels = start_pixel + tank->num_fig_height * map->width_window + tank->num_fig_width - 1;  // последний пиксель танка
+    int top_tank_pixels = tank->center_obj - tank->num_fig_height / 2 * map->width_window; // отступ от центра танка до края по вертикали
+    int top_lines_window = top_tank_pixels / map->width_window;
+    int top_pixels_window = top_lines_window * map->width_window;
+    int down_pixels_window = (top_lines_window + tank->num_fig_height + 1) * map->width_window - 1;
     int a;
     int id;
-
-    for (int i = 0; i < tank->num_fig_height; i++)  // создание танка в массивах-посредниках
+    
+    if (start_pixel >= 0 && end_pixels <= max_pixels_map && 
+        !(top_pixels_window > start_pixel && top_pixels_window < end_pixels) &&
+        !(down_pixels_window < end_pixels))
     {
-        a = 0;
-        id = 0;
-
-        for (; a < tank->num_fig_width; a++)
+        for (int i = 0; i < tank->num_fig_height; i++)  // создание танка в массивах-посредниках
         {
-            if (i > id)
-            {
-                start_pixel += map->width_window;  // переход на следующую строку матрицы
-                id = i;
-            }
+            a = 0;
+            id = 0;
 
-            if (start_pixel + a != tank->center_obj)  // установка номера клетки и идентификатора танка
+            for (; a < tank->num_fig_width; a++)
             {
-                nums_tank.push_back(TankUser);
-                id_tank.push_back(start_pixel + a);
-            }
-            
-            if (a == middle_line && start_pixel + a <= tank->center_obj)  // установка номера клетки и идентификатора орудия танка
-            {
-                nums_tank.push_back(Gun);
-                id_tank.push_back(start_pixel + a);
+                if (i > id)
+                {
+                    start_pixel += map->width_window;  // переход на следующую строку матрицы
+                    id = i;
+                }
+
+                if (start_pixel + a != tank->center_obj)  // установка номера клетки и идентификатора танка
+                {
+                    nums_tank.push_back(TankUser);
+                    id_tank.push_back(start_pixel + a);
+                }
+
+                if (a == middle_line && start_pixel + a <= tank->center_obj)  // установка номера клетки и идентификатора орудия танка
+                {
+                    nums_tank.push_back(Gun);
+                    id_tank.push_back(start_pixel + a);
+                }
             }
         }
     }
-
-    bool result = checkMap();  // проверка танка на соприкосновение с другими объектами на карте
-
-    if (result == false)
-        throw std::runtime_error("CONTACT WITH OBJECT!");
     else
-    {
-        copyMap();
-    }
-}
+        return false;
 
-bool Tank::checkMap() const
-{
+    bool check_drawing_tank = true;
+
     for (int i = 0; i < id_tank.size(); i++)
     {
         if (map->map[id_tank[i]] == StatObj || map->map[id_tank[i]] == TankUser ||
             map->map[id_tank[i]] == Gun)
-            return false;
+            check_drawing_tank = false;  // соприкосновение танка с другими объектами на карте есть
     }
 
-    return true;
-}
-
-void Tank::copyMap()
-{
-    for (int i = 0; i < id_tank.size(); i++)
+    if (check_drawing_tank == true)
     {
-        map->map[id_tank[i]] = nums_tank[i];  // копирование копии карты в оригинальную карту
+        for (int i = 0; i < id_tank.size(); i++)
+        {
+            map->map[id_tank[i]] = nums_tank[i];  // копирование копии карты в оригинальную карту
+        }
+
+        return true;
     }
+    else
+        return false;
 }
 
 bool Tank::calculate(sf::Event & event)
@@ -225,30 +234,6 @@ bool Tank::calculate(sf::Event & event)
 
         return true;
     }
-    /*if (event.key.code == sf::Keyboard::Left)  // движение влево
-    {
-        for (int i = 0; i < tank->num_fig_height; i + tank->num_fig_width)
-        {
-            /*if (id_tank[i] - 1 >= map->width_window * map->width_window)
-                return false;*/
-
-                /*if (id_tank[i] - 1 == StatObj)
-                return false;
-        }
-
-        for (int i = 0; i < nums_tank.size(); i++)
-        {
-            map->map[id_tank[i]] = EmptyObject;
-            id_tank[i] = id_tank[i] + map->width_window;
-        }
-
-        for (int i = 0; i < id_tank.size(); i++)
-        {
-            map->map[id_tank[i]] = nums_tank[i];
-        }
-
-        return true;
-    }*/
 
     return false;
 }
