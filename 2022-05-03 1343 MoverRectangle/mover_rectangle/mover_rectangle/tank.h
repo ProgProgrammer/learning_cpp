@@ -14,10 +14,8 @@ private:
     int middle_vertical_right;
     std::vector<int> nums_tank;
     std::vector<int> id_tank;
-    void addedValues();
 
 public:
     Tank(WindowStruct & map, MoverObject & tank);
-    Tank(WindowStruct * map, MoverObject * tank);
     virtual bool calculate(sf::Event & event) override;
 };

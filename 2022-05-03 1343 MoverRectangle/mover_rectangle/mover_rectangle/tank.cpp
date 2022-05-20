@@ -1,31 +1,59 @@
 #include "tank.h"
 
-Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t) { addedValues(); }
-
-Tank::Tank(WindowStruct * m, MoverObject * t) : map(m), tank(t) { addedValues(); }
-
-void Tank::addedValues()
+Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t) 
 {
-    middle_horizontal_top = tank->num_fig_width / 2;  // средняя точка на верху танка
-    middle_horizontal_down = tank->num_fig_width * tank->num_fig_height - middle_horizontal_top - 1;  // средняя точка внизу танка
-    middle_id = tank->num_fig_width * tank->num_fig_height / 2;  // нахождение среднего элемента танка
-    middle_vertical_left = tank->num_fig_width * middle_horizontal_top;   // средняя точка слева танка
-    middle_vertical_right = tank->num_fig_width * (middle_horizontal_top * 2) - 1;  // средняя точка справа танка
+    int top_lines;  // РїРѕР»РѕРІРёРЅР° СЃС‚СЂРѕРє СЃРІРµСЂС…Сѓ РјР°С‚СЂРёС†С‹ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РІС‹СЃРѕС‚С‹ РґРѕ РЅР°С‡Р°Р»Р° РјР°С‚СЂРёС†С‹ С‚Р°РЅРєР°
 
-    for (int i = 0; i < map->map.size(); i++)
+    if (tank->num_fig_height % 2 == 0)
     {
-        if (map->map[i] == tank->num_mover_obj || map->map[i] == tank->rotated_obj)
+        top_lines = tank->num_fig_height / 2 - 1;  // РµСЃР»Рё РІС‹СЃРѕС‚Р° РґРµР»РёС‚СЃСЏ РЅР° 2 Р±РµР· РѕСЃС‚Р°С‚РєР°, С‚Рѕ РѕРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РЅР° 1 РјРµРЅСЊС€Рµ, С‡С‚РѕР±С‹ СѓРјРµСЃС‚РёС‚СЊ РѕСЂСѓРґРёРµ РІ СЂР°Р·РјРµСЂРµ С‚Р°РЅРєР° РїСЂРё РїРѕРІРѕСЂРѕС‚Рµ Р±Р°С€РЅРё
+    }
+    else
+    {
+        top_lines = tank->num_fig_height / 2;  // РёРЅР°С‡Рµ РѕСЂСѓРґРёРµ Р±СѓРґРµС‚ РёРјРµС‚СЊ РЅРѕСЂРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ
+    }
+
+    int middle_line = tank->num_fig_width / 2;  // РѕС‚СЃС‚СѓРї РѕС‚ С†РµРЅС‚СЂР° С‚Р°РЅРєР° РїРѕ СЃРµСЂРµРґРёРЅРµ
+    int start_pixel = tank->center_obj - middle_line - map->length_window * top_lines;  // РЅР°С‡Р°Р»СЊРЅС‹Р№ РїРёРєСЃРµР»СЊ С‚Р°РЅРєР°
+    int a;
+    int id;
+
+    for (int i = 0; i < tank->num_fig_height; i++)  // СЃРѕР·РґР°РЅРёРµ С‚Р°РЅРєР° РІ РјР°СЃСЃРёРІР°С…-РїРѕСЃСЂРµРґРЅРёРєР°С…
+    {
+        a = 0;
+        id = 0;
+
+        for (; a < tank->num_fig_width; a++)
         {
-            nums_tank.push_back(map->map[i]);
-            id_tank.push_back(i);
+            if (i > id)
+            {
+                start_pixel += map->length_window;  // РїРµСЂРµС…РѕРґ РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ СЃС‚СЂРѕРєСѓ РјР°С‚СЂРёС†С‹
+                id = i;
+            }
+
+            if (start_pixel + a != tank->center_obj)  // СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРјРµСЂР° РєР»РµС‚РєРё Рё РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° С‚Р°РЅРєР°
+            {
+                nums_tank.push_back(TankUser);
+                id_tank.push_back(start_pixel + a);
+            }
+            
+            if (a == middle_line && start_pixel + a <= tank->center_obj)  // СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРјРµСЂР° РєР»РµС‚РєРё Рё РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° РѕСЂСѓРґРёСЏ С‚Р°РЅРєР°
+            {
+                nums_tank.push_back(Gun);
+                id_tank.push_back(start_pixel + a);
+            }
         }
+    }
+
+    for (int i = 0; i < id_tank.size(); i++)
+    {
+        map->map[id_tank[i]] = nums_tank[i];  // РєРѕРїРёСЂРѕРІР°РЅРёРµ РєРѕРїРёРё РєР°СЂС‚С‹ РІ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ РєР°СЂС‚Сѓ
     }
 }
 
 bool Tank::calculate(sf::Event & event)
 {
-    static bool check = true;
-    if (event.key.code == sf::Keyboard::W)  // поворот орудия вперед
+    if (event.key.code == sf::Keyboard::W)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РІРїРµСЂРµРґ
     {
         if (nums_tank[middle_horizontal_top + 1] != tank->rotated_obj)
         {
@@ -33,23 +61,23 @@ bool Tank::calculate(sf::Event & event)
             {
                 if (nums_tank[i] == tank->rotated_obj && i != middle_id)
                 {
-                    nums_tank[i] = tank->num_mover_obj;  // замена в копии карты всех значений, отвечающих за орудие танка на его обычные значения,кроме среднего значения
+                    nums_tank[i] = tank->num_mover_obj;  // Р·Р°РјРµРЅР° РІ РєРѕРїРёРё РєР°СЂС‚С‹ РІСЃРµС… Р·РЅР°С‡РµРЅРёР№, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° РѕСЂСѓРґРёРµ С‚Р°РЅРєР° РЅР° РµРіРѕ РѕР±С‹С‡РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ,РєСЂРѕРјРµ СЃСЂРµРґРЅРµРіРѕ Р·РЅР°С‡РµРЅРёСЏ
                 }
             }
 
-            nums_tank[middle_horizontal_top] = tank->rotated_obj;  // замена в копии карты обычного значения на значение орудия
+            nums_tank[middle_horizontal_top] = tank->rotated_obj;  // Р·Р°РјРµРЅР° РІ РєРѕРїРёРё РєР°СЂС‚С‹ РѕР±С‹С‡РЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РЅР° Р·РЅР°С‡РµРЅРёРµ РѕСЂСѓРґРёСЏ
         }
         else
             return false;
 
         for (int i = 0; i < id_tank.size(); i++)
         {
-            map->map[id_tank[i]] = nums_tank[i];  // копирование копии карты в оригинальную карту
+            map->map[id_tank[i]] = nums_tank[i];  // РєРѕРїРёСЂРѕРІР°РЅРёРµ РєРѕРїРёРё РєР°СЂС‚С‹ РІ РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ РєР°СЂС‚Сѓ
         }
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::S)  // поворот орудия назад
+    if (event.key.code == sf::Keyboard::S)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РЅР°Р·Р°Рґ
     {
         if (nums_tank[middle_horizontal_down + 1] != tank->rotated_obj)
         {
@@ -57,7 +85,7 @@ bool Tank::calculate(sf::Event & event)
             {
                 if (nums_tank[i] == tank->rotated_obj && i != middle_id)
                 {
-                    nums_tank[i] = tank->num_mover_obj;  // замена в копии карты всех значений, отвечающих за орудие танка на его обычные значения
+                    nums_tank[i] = tank->num_mover_obj;  // Р·Р°РјРµРЅР° РІ РєРѕРїРёРё РєР°СЂС‚С‹ РІСЃРµС… Р·РЅР°С‡РµРЅРёР№, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° РѕСЂСѓРґРёРµ С‚Р°РЅРєР° РЅР° РµРіРѕ РѕР±С‹С‡РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
                 }
             }
 
@@ -73,7 +101,7 @@ bool Tank::calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::A)  // поворот орудия влево
+    if (event.key.code == sf::Keyboard::A)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РІР»РµРІРѕ
     {
         if (nums_tank[middle_vertical_left] != tank->rotated_obj)
         {
@@ -81,7 +109,7 @@ bool Tank::calculate(sf::Event & event)
             {
                 if (nums_tank[i] == tank->rotated_obj && i != middle_id)
                 {
-                    nums_tank[i] = tank->num_mover_obj;  // замена в копии карты всех значений, отвечающих за орудие танка на его обычные значения
+                    nums_tank[i] = tank->num_mover_obj;  // Р·Р°РјРµРЅР° РІ РєРѕРїРёРё РєР°СЂС‚С‹ РІСЃРµС… Р·РЅР°С‡РµРЅРёР№, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° РѕСЂСѓРґРёРµ С‚Р°РЅРєР° РЅР° РµРіРѕ РѕР±С‹С‡РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
                 }
             }
 
@@ -97,7 +125,7 @@ bool Tank::calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::D)  // поворот орудия вправо
+    if (event.key.code == sf::Keyboard::D)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РІРїСЂР°РІРѕ
     {
         if (nums_tank[middle_vertical_right] != tank->rotated_obj)
         {
@@ -105,7 +133,7 @@ bool Tank::calculate(sf::Event & event)
             {
                 if (nums_tank[i] == tank->rotated_obj && i != middle_id)
                 {
-                    nums_tank[i] = tank->num_mover_obj;  // замена в копии карты всех значений, отвечающих за орудие танка на его обычные значения
+                    nums_tank[i] = tank->num_mover_obj;  // Р·Р°РјРµРЅР° РІ РєРѕРїРёРё РєР°СЂС‚С‹ РІСЃРµС… Р·РЅР°С‡РµРЅРёР№, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° РѕСЂСѓРґРёРµ С‚Р°РЅРєР° РЅР° РµРіРѕ РѕР±С‹С‡РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
                 }
             }
 
@@ -121,7 +149,7 @@ bool Tank::calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::Up)  // движение вперед
+    if (event.key.code == sf::Keyboard::Up)  // РґРІРёР¶РµРЅРёРµ РІРїРµСЂРµРґ
     {
         for (int i = 0; i < tank->num_fig_width; i++)
         {
@@ -145,7 +173,7 @@ bool Tank::calculate(sf::Event & event)
 
         return true;
     }
-    if (event.key.code == sf::Keyboard::Down)  // движение назад
+    if (event.key.code == sf::Keyboard::Down)  // РґРІРёР¶РµРЅРёРµ РЅР°Р·Р°Рґ
     {
         int id_down = tank->num_fig_width * tank->num_fig_height - tank->num_fig_width;
         int length = tank->num_fig_width * tank->num_fig_width;
@@ -172,7 +200,7 @@ bool Tank::calculate(sf::Event & event)
 
         return true;
     }
-    /*if (event.key.code == sf::Keyboard::Left)  // движение влево
+    /*if (event.key.code == sf::Keyboard::Left)  // РґРІРёР¶РµРЅРёРµ РІР»РµРІРѕ
     {
         for (int i = 0; i < tank->num_fig_height; i + tank->num_fig_width)
         {

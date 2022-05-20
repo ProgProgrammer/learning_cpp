@@ -46,9 +46,9 @@ int main()
         0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -79,6 +79,7 @@ int main()
     tank_struct.num_fig_height = 3;  // высота объекта в подобъектах
     tank_struct.num_mover_obj = TankUser;   // номер подобъектов танка
     tank_struct.rotated_obj = Gun;     // номер поворачиваемых подобъектов танка
+    tank_struct.center_obj = 161;     // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 
@@ -93,6 +94,9 @@ int main()
         if (event.type == sf::Event::KeyPressed)
         {
             tank.calculate(event);
+
+            static int counter = 0;
+            std::cout << counter++ << std::endl;
         }
 
         cm.updateWindow(window);
@@ -102,9 +106,6 @@ int main()
 
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(1000ms / 24);
-
-        static int counter = 0;
-        std::cout << counter++ << std::endl;
     }
 
     return 0;

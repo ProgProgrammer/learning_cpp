@@ -2,7 +2,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-// Цвета:
+// Р¦РІРµС‚Р°:
 enum Colors
 {
     Black,       // 0
@@ -16,7 +16,7 @@ enum Colors
     Transparent  // 8
 };
 
-// Номера объектов на карте:
+// РќРѕРјРµСЂР° РѕР±СЉРµРєС‚РѕРІ РЅР° РєР°СЂС‚Рµ:
 enum Objects
 {
     EmptyObject = 0,
@@ -33,12 +33,13 @@ struct ObjectStruct
     Colors color;
 };
 
-struct MoverObject  // структура для хранения информации о передвигаемом объекте
+struct MoverObject  // СЃС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїРµСЂРµРґРІРёРіР°РµРјРѕРј РѕР±СЉРµРєС‚Рµ
 {
-    int num_fig_width;   // ширина перемещаемого объекта в подобъектах
-    int num_fig_height;  // высота перемещаемого объекта в подобъектах
-    int num_mover_obj;   // номер подобъектов передвигаемого объекта
-    int rotated_obj;     // номер поворачиваемых подобъектов передвигаемого объекта
+    int num_fig_width;   // С€РёСЂРёРЅР° РїРµСЂРµРјРµС‰Р°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р° РІ РїРѕРґРѕР±СЉРµРєС‚Р°С…
+    int num_fig_height;  // РІС‹СЃРѕС‚Р° РїРµСЂРµРјРµС‰Р°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р° РІ РїРѕРґРѕР±СЉРµРєС‚Р°С…
+    int num_mover_obj;   // РЅРѕРјРµСЂ РїРѕРґРѕР±СЉРµРєС‚РѕРІ РїРµСЂРµРґРІРёРіР°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°
+    int rotated_obj;     // РЅРѕРјРµСЂ РїРѕРІРѕСЂР°С‡РёРІР°РµРјС‹С… РїРѕРґРѕР±СЉРµРєС‚РѕРІ РїРµСЂРµРґРІРёРіР°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°
+    int center_obj;      // С†РµРЅС‚СЂ РїРµСЂРµРјРµС‰Р°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р°
 };
 
 struct WindowStruct
@@ -46,9 +47,9 @@ struct WindowStruct
     int weight;
     int height;
     int color;
-    std::string name_window;              // название окна
-    std::vector<int> map;                 // массив с картой объектов
-    std::vector<ObjectStruct> objsArray;  // массив объектов
+    std::string name_window;              // РЅР°Р·РІР°РЅРёРµ РѕРєРЅР°
+    std::vector<int> map;                 // РјР°СЃСЃРёРІ СЃ РєР°СЂС‚РѕР№ РѕР±СЉРµРєС‚РѕРІ
+    std::vector<ObjectStruct> objsArray;  // РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ
     int length_window;
 };
 
