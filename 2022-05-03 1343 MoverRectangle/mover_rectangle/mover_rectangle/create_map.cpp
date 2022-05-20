@@ -29,7 +29,7 @@ bool CreateMap::updateWindow(sf::RenderWindow & window)
                 id_objs++;
             }
 
-            if ((x_module + 1) % winSct.length_window == 0)  // сброс смещения по оси "x" при достижении конца строки матрицы
+            if ((x_module + 1) % winSct.width_window == 0)  // сброс смещения по оси "x" при достижении конца строки матрицы
             {
                 id_x = 0.5;
                 id_y += 1;  // переключение на следующую строку матрицы внизу

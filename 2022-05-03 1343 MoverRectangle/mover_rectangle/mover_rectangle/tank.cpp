@@ -14,7 +14,8 @@ Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t)
     }
 
     int middle_line = tank->num_fig_width / 2;  // отступ от центра танка по середине
-    int start_pixel = tank->center_obj - middle_line - map->length_window * top_lines;  // начальный пиксель танка
+    int start_pixel = tank->center_obj - middle_line - map->width_window * top_lines;  // начальный пиксель танка
+    max_pixels_map = map->width_window * map->height_window - 1;
     int a;
     int id;
 
@@ -27,7 +28,7 @@ Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t)
         {
             if (i > id)
             {
-                start_pixel += map->length_window;  // переход на следующую строку матрицы
+                start_pixel += map->width_window;  // переход на следующую строку матрицы
                 id = i;
             }
 
@@ -45,6 +46,30 @@ Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t)
         }
     }
 
+    bool result = checkMap();  // проверка танка на соприкосновение с другими объектами на карте
+
+    if (result == false)
+        throw std::runtime_error("CONTACT WITH OBJECT!");
+    else
+    {
+        copyMap();
+    }
+}
+
+bool Tank::checkMap() const
+{
+    for (int i = 0; i < id_tank.size(); i++)
+    {
+        if (map->map[id_tank[i]] == StatObj || map->map[id_tank[i]] == TankUser ||
+            map->map[id_tank[i]] == Gun)
+            return false;
+    }
+
+    return true;
+}
+
+void Tank::copyMap()
+{
     for (int i = 0; i < id_tank.size(); i++)
     {
         map->map[id_tank[i]] = nums_tank[i];  // копирование копии карты в оригинальную карту
@@ -153,17 +178,17 @@ bool Tank::calculate(sf::Event & event)
     {
         for (int i = 0; i < tank->num_fig_width; i++)
         {
-            if (id_tank[i] - map->length_window < 0)
+            if (id_tank[i] - map->width_window < 0)
                 return false;
 
-            if (map->map[id_tank[i] - map->length_window] == StatObj)
+            if (map->map[id_tank[i] - map->width_window] == StatObj)
                 return false;
         }
 
         for (int i = 0; i < nums_tank.size(); i++)
         {
             map->map[id_tank[i]] = EmptyObject;
-            id_tank[i] = id_tank[i] - map->length_window;
+            id_tank[i] = id_tank[i] - map->width_window;
         }
 
         for (int i = 0; i < id_tank.size(); i++)
@@ -180,17 +205,17 @@ bool Tank::calculate(sf::Event & event)
 
         for (int i = id_down; i < length; i++)
         {
-            if (id_tank[i] + map->length_window >= map->length_window * map->length_window)
+            if (id_tank[i] + map->width_window >= map->width_window * map->width_window)
                 return false;
 
-            if (map->map[id_tank[i] + map->length_window] == StatObj)
+            if (map->map[id_tank[i] + map->width_window] == StatObj)
                 return false;
         }
 
         for (int i = 0; i < nums_tank.size(); i++)
         {
             map->map[id_tank[i]] = EmptyObject;
-            id_tank[i] = id_tank[i] + map->length_window;
+            id_tank[i] = id_tank[i] + map->width_window;
         }
 
         for (int i = 0; i < id_tank.size(); i++)
@@ -204,7 +229,7 @@ bool Tank::calculate(sf::Event & event)
     {
         for (int i = 0; i < tank->num_fig_height; i + tank->num_fig_width)
         {
-            /*if (id_tank[i] - 1 >= map->length_window * map->length_window)
+            /*if (id_tank[i] - 1 >= map->width_window * map->width_window)
                 return false;*/
 
                 /*if (id_tank[i] - 1 == StatObj)
@@ -214,7 +239,7 @@ bool Tank::calculate(sf::Event & event)
         for (int i = 0; i < nums_tank.size(); i++)
         {
             map->map[id_tank[i]] = EmptyObject;
-            id_tank[i] = id_tank[i] + map->length_window;
+            id_tank[i] = id_tank[i] + map->width_window;
         }
 
         for (int i = 0; i < id_tank.size(); i++)

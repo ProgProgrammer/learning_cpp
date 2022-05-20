@@ -61,7 +61,8 @@ int main()
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,
     };
 
-    winMap.length_window = 19;
+    winMap.width_window = 19;
+    winMap.height_window = 19;
 
     // Объекты, которые будут на карте (ширина, высота, величина шагов в пикселях и цвет объектов):
     ObjectStruct stat_object = { 50, 50, 50, Cyan };        // цвет статических объектов - Cyan
@@ -79,12 +80,21 @@ int main()
     tank_struct.num_fig_height = 3;  // высота объекта в подобъектах
     tank_struct.num_mover_obj = TankUser;   // номер подобъектов танка
     tank_struct.rotated_obj = Gun;     // номер поворачиваемых подобъектов танка
-    tank_struct.center_obj = 161;     // номер поворачиваемых подобъектов танка
+    tank_struct.center_obj = 142;      // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 
     sf::RenderWindow window(sf::VideoMode(winMap.weight, winMap.height), winMap.name_window);
-    Tank tank(winMap, tank_struct);
+    Tank tank;
+
+    try
+    {
+        tank = Tank(winMap, tank_struct);   // если вызвано исключение, то перейти к catch
+    }
+    catch (std::runtime_error & error)
+    {
+        std::cout << std::endl << error.what() << std::endl;  // вывод исключения в консоль
+    }
 
     while (window.isOpen())
     {
@@ -105,7 +115,7 @@ int main()
             window.close();
 
         using namespace std::chrono_literals;
-        std::this_thread::sleep_for(1000ms / 24);
+        std::this_thread::sleep_for(1000ms / 24);  // обновление экрана (заход на следующий цикл) в секунду FPS
     }
 
     return 0;

@@ -50,7 +50,8 @@ struct WindowStruct
     std::string name_window;              // название окна
     std::vector<int> map;                 // массив с картой объектов
     std::vector<ObjectStruct> objsArray;  // массив объектов
-    int length_window;
+    int width_window;
+    int height_window;
 };
 
 class Map
