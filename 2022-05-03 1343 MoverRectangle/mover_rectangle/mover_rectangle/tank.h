@@ -18,8 +18,6 @@ private:
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
     bool tankDrawing();  // отрисовка танка
-    void copyArr(int & i, const int & length_arr, std::vector<int> & arr_id) const;
-    void clearItems(std::vector<int> & arr_id);
 
 public:
     Tank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
