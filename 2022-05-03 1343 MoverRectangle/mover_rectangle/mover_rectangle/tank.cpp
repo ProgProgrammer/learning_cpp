@@ -89,7 +89,11 @@ bool Tank::tankDrawing(std::string obj)
                 }
             }
 
-            position_gun;
+            if (position_gun == 0)
+            {
+                position_gun = tank->center_obj - map->width_window * top_lines;
+                direction_gun = "top";
+            }
         }
         else
             return false;
@@ -156,6 +160,7 @@ bool Tank::calculate(sf::Event & event)
     if (event.key.code == sf::Keyboard::Up)  // движение вперед
     {
         tank->center_obj -= map->width_window;
+        position_gun -= map->width_window;
 
         if (!tankDrawing())
         {
@@ -169,6 +174,7 @@ bool Tank::calculate(sf::Event & event)
     if (event.key.code == sf::Keyboard::Down)  // движение назад
     {
         tank->center_obj += map->width_window;
+        position_gun += map->width_window;
 
         if (!tankDrawing())
         {
@@ -182,6 +188,7 @@ bool Tank::calculate(sf::Event & event)
     if (event.key.code == sf::Keyboard::Left)  // движение влево
     {
         tank->center_obj -= 1;
+        position_gun -= 1;
 
         if (!tankDrawing())
         {
@@ -195,6 +202,7 @@ bool Tank::calculate(sf::Event & event)
     if (event.key.code == sf::Keyboard::Right)  // движение вправо
     {
         tank->center_obj += 1;
+        position_gun += 1;
 
         if (!tankDrawing())
         {
@@ -222,6 +230,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
+        direction_gun = "top";
 
         if (tankDrawing(gun))
             return true;
@@ -243,6 +252,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
+        direction_gun = "bottom";
 
         if (tankDrawing(gun))
             return true;
@@ -262,6 +272,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
+        direction_gun = "left";
 
         if (tankDrawing(gun))
             return true;
@@ -283,6 +294,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
+        direction_gun = "right";
 
         if (tankDrawing(gun))
             return true;

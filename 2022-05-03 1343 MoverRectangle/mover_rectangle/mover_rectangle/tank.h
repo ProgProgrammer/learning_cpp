@@ -19,7 +19,8 @@ private:
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
     std::string gun = "gun";
-    int position_gun;  // позиция конца орудия
+    int position_gun = 0;  // позиция конца орудия
+    std::string direction_gun;
     bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
     bool tankDrawing(std::string obj = "");  // отрисовка танка
     bool removeGun();
