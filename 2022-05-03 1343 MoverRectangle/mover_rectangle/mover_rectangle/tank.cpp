@@ -2,107 +2,133 @@
 
 Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t) 
 {
-    if (tank->num_fig_height % 2 == 0)
+    if (tank->num_fig_height % 2 != 0 && tank->num_fig_width == tank->num_fig_height)
     {
-        top_lines = tank->num_fig_height / 2 - 1;  // если высота делится на 2 без остатка, то она должна быть на 1 меньше, чтобы уместить орудие в размере танка при повороте башни
+        top_lines = tank->num_fig_height / 2;  // длина орудия
     }
     else
-    {
-        top_lines = tank->num_fig_height / 2;  // иначе орудие будет иметь нормальную длину
-    }
+        throw std::runtime_error("WRONG PROPORTIONS!");
 
     middle_line = tank->num_fig_width / 2;  // отступ от центра танка до края по горизонтали
+    gun_axis = tank->num_fig_width * tank->num_fig_height / 2;  // идентификатор оси орудия в массиве nums_tank
     max_pixels_map = map->width_window * map->height_window - 1;  // максимальный пиксель карты
 
     if (tankDrawing() == false)
         throw std::runtime_error("CONTACT WITH OBJECT OR TO GOING OUT OF THE MAP!");
 }
 
-bool Tank::tankDrawing()
+bool Tank::tankDrawing(std::string obj)
 {
-    int start_pixel = tank->center_obj - middle_line - map->width_window * top_lines;  // начальный пиксель танка
-    int end_pixel = start_pixel + (tank->num_fig_height - 1) * map->width_window + tank->num_fig_width - 1;  // последний пиксель танка
-    int top_tank_pixels = tank->center_obj - tank->num_fig_height / 2 * map->width_window; // отступ от центра танка до края по вертикали
-    int top_lines_window = top_tank_pixels / map->width_window;
-    int top_pixels_window = top_lines_window * map->width_window;
-    int down_pixels_window = (top_lines_window + tank->num_fig_height) * map->width_window - 1;
-    int a;
-    int id;
-    std::vector<int> nt;
-    std::vector<int> it;
-    std::vector<int> copy_id_tank;
-    
-    if (start_pixel >= 0 && end_pixel <= max_pixels_map && 
-        !(top_pixels_window > start_pixel && top_pixels_window < end_pixel) &&
-        !(down_pixels_window < end_pixel))
+    if (obj != gun)  // если двигается не орудие
     {
-        nt = nums_tank;
-        it = id_tank;
+        int start_pixel = tank->center_obj - middle_line - map->width_window * top_lines;  // начальный пиксель танка
+        int end_pixel = start_pixel + (tank->num_fig_height - 1) * map->width_window + tank->num_fig_width - 1;  // последний пиксель танка
+        int top_tank_pixels = tank->center_obj - tank->num_fig_height / 2 * map->width_window; // отступ от центра танка до края по вертикали
+        int top_lines_window = top_tank_pixels / map->width_window;
+        int top_pixels_window = top_lines_window * map->width_window;
+        int down_pixels_window = (top_lines_window + tank->num_fig_height) * map->width_window - 1;
+        int a;
+        int id;
+        std::vector<int> nt;
+        std::vector<int> it;
+        std::vector<int> copy_id_tank;
 
-        if (id_tank.size() > 0)
+        if (start_pixel >= 0 && end_pixel <= max_pixels_map &&
+            !(top_pixels_window > start_pixel && top_pixels_window < end_pixel) &&
+            !(down_pixels_window < end_pixel))
         {
-            copy_id_tank = id_tank;
-        }
+            nt = nums_tank;
+            it = id_tank;
 
-        nums_tank.clear();  // очистка массива с прошлым расположением танка, чтобы не дублироват танк
-        id_tank.clear();    // очистка массива с прошлым расположением танка, чтобы не дублироват танк
-
-        for (int i = 0; i < tank->num_fig_height; i++)  // создание танка в массивах-посредниках
-        {
-            a = 0;
-            id = 0;
-
-            for (; a < tank->num_fig_width; a++)
+            if (id_tank.size() > 0)
             {
-                if (i > id)
-                {
-                    start_pixel += map->width_window;  // переход на следующую строку матрицы
-                    id = i;
-                }
+                copy_id_tank = id_tank;
+            }
 
-                if (a == middle_line && start_pixel + a <= tank->center_obj)  // установка номера клетки и идентификатора орудия танка
-                {
-                    nums_tank.push_back(Gun);
-                    id_tank.push_back(start_pixel + a);
-                }
+            if (moving_gun == true)
+            {
+                nums_tank.clear();  // очистка массива с прошлым расположением танка, чтобы не дублироват танк
+            }
 
-                if (start_pixel + a != tank->center_obj)  // установка номера клетки и идентификатора танка
-                {
-                    if (a == middle_line && start_pixel + a <= tank->center_obj)
-                        continue;
+            id_tank.clear();    // очистка массива с прошлым расположением танка, чтобы не дублироват танк
 
-                    nums_tank.push_back(TankUser);
-                    id_tank.push_back(start_pixel + a);
+            for (int i = 0; i < tank->num_fig_height; i++)  // создание танка в массивах-посредниках
+            {
+                a = 0;
+                id = 0;
+
+                for (; a < tank->num_fig_width; a++)
+                {
+                    if (i > id)
+                    {
+                        start_pixel += map->width_window;  // переход на следующую строку матрицы
+                        id = i;
+                    }
+
+                    if (moving_gun == true)
+                    {
+                        if (a == middle_line && start_pixel + a <= tank->center_obj)  // установка номера клетки и идентификатора орудия танка
+                        {
+                            nums_tank.push_back(tank->rotated_obj);
+                            id_tank.push_back(start_pixel + a);
+                        }
+
+                        if (start_pixel + a != tank->center_obj)  // установка номера клетки и идентификатора танка
+                        {
+                            if (a == middle_line && start_pixel + a <= tank->center_obj)
+                                continue;
+
+                            nums_tank.push_back(tank->num_mover_obj);
+                            id_tank.push_back(start_pixel + a);
+                        }
+                    }
+                    else
+                    {
+                        id_tank.push_back(start_pixel + a);
+                    }
                 }
             }
+
+            position_gun;
         }
-    }
-    else
-        return false;
+        else
+            return false;
 
-    bool check_drawing_tank = true;
+        bool check_drawing_tank = true;
 
-    for (int i = 0; i < id_tank.size(); i++)
-    {
-        if (map->map[id_tank[i]] == StatObj /* || map->map[id_tank[i]] == TankUser ||
-            map->map[id_tank[i]] == Gun*/)
+        for (int i = 0; i < id_tank.size(); i++)
         {
-            check_drawing_tank = false;  // соприкосновение танка с другими объектами на карте есть
-            nums_tank = nt;
-            id_tank = it;
-        }
-    }
-
-    if (check_drawing_tank == true)
-    {
-        if (copy_id_tank.size() > 0)
-        {
-            for (int i = 0; i < copy_id_tank.size(); i++)
+            if (map->map[id_tank[i]] == StatObj /* || map->map[id_tank[i]] == TankUser ||
+                map->map[id_tank[i]] == Gun*/)
             {
-                map->map[copy_id_tank[i]] = EmptyObject;  // чистит прошлое расположение танка
+                check_drawing_tank = false;  // соприкосновение танка с другими объектами на карте есть
+                nums_tank = nt;
+                id_tank = it;
             }
         }
 
+        if (check_drawing_tank == true)
+        {
+            if (copy_id_tank.size() > 0)
+            {
+                for (int i = 0; i < copy_id_tank.size(); i++)
+                {
+                    map->map[copy_id_tank[i]] = EmptyObject;  // чистит прошлое расположение танка
+                }
+            }
+
+            for (int i = 0; i < id_tank.size(); i++)
+            {
+                map->map[id_tank[i]] = nums_tank[i];  // копирование копии карты в оригинальную карту
+            }
+
+            return true;
+        }
+        else
+            return false;
+    }
+    else if (obj == gun)  // если двигается орудие
+    {
         for (int i = 0; i < id_tank.size(); i++)
         {
             map->map[id_tank[i]] = nums_tank[i];  // копирование копии карты в оригинальную карту
@@ -110,8 +136,19 @@ bool Tank::tankDrawing()
 
         return true;
     }
-    else
-        return false;
+}
+
+bool Tank::removeGun()
+{
+    for (int i = 0; i < nums_tank.size(); i++)
+    {
+        if (nums_tank[i] == Gun && i != gun_axis)
+            nums_tank[i] = TankUser;
+    }
+
+    tankDrawing(gun);
+
+    return true;
 }
 
 bool Tank::calculate(sf::Event & event)
@@ -170,21 +207,85 @@ bool Tank::calculate(sf::Event & event)
     }
     if (event.key.code == sf::Keyboard::W)  // поворот орудия вперед
     {        
+        int a;
 
-        return true;
+        if (removeGun())
+        {
+            for (int i = gun_axis - tank->num_fig_width;
+                i < gun_axis && i > 0;
+                i -= tank->num_fig_width)
+            {
+                nums_tank[i] = Gun;
+                a = i;
+            }
+        }
+
+        moving_gun = false;
+        position_gun = id_tank[a];
+
+        if (tankDrawing(gun))
+            return true;
     }
     if (event.key.code == sf::Keyboard::S)  // поворот орудия назад
     {
+        int a;
 
-        return true;
+        if (removeGun())
+        {
+            for (int i = gun_axis + tank->num_fig_width;
+                i > gun_axis && i < nums_tank.size(); 
+                i += tank->num_fig_width)
+            {
+                nums_tank[i] = Gun;
+                a = i;
+            }
+        }
+
+        moving_gun = false;
+        position_gun = id_tank[a];
+
+        if (tankDrawing(gun))
+            return true;
     }
     if (event.key.code == sf::Keyboard::A)  // поворот орудия влево
     {
+        int a;
+
+        if (removeGun())
+        {
+            for (int i = gun_axis; i > gun_axis - middle_line - 1; i--)
+            {
+                nums_tank[i] = Gun;
+                a = i;
+            }
+        }
+
+        moving_gun = false;
+        position_gun = id_tank[a];
+
+        if (tankDrawing(gun))
+            return true;
 
         return true;
     }
     if (event.key.code == sf::Keyboard::D)  // поворот орудия вправо
     {
+        int a;
+
+        if (removeGun())
+        {
+            for (int i = gun_axis; i < gun_axis + middle_line + 1; i++)
+            {
+                nums_tank[i] = Gun;
+                a = i;
+            }
+        }
+
+        moving_gun = false;
+        position_gun = id_tank[a];
+
+        if (tankDrawing(gun))
+            return true;
 
         return true;
     }

@@ -75,6 +75,7 @@ int main()
     winMap.objsArray.push_back(gun);                // орудие   
     winMap.objsArray.push_back(projectile_object);  // снаряд (будет равен числу 3 на карте)
 
+    //Пропорции танка должны быть нечетными и одинаковыми по размеру
     MoverObject tank_struct;  // танк
     tank_struct.num_fig_width = 3;   // ширина объекта в подобъектах
     tank_struct.num_fig_height = 3;  // высота объекта в подобъектах
