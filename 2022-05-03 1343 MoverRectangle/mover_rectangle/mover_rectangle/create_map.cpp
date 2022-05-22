@@ -17,7 +17,7 @@ bool CreateMap::updateWindow(sf::RenderWindow & window)
 
         for (int i = 0; i < map.size(); i++)
         {
-            if (map[i] != 0)
+            if (map[i] != EmptyObject)
             {
                 renderedObjects.push_back(sf::RectangleShape(sf::Vector2f(objsArray[map[i] - 1].weight, objsArray[map[i] - 1].height)));  // добавление в массив объектов для отображения
                 renderedObjects[id_objs].setFillColor(colors[objsArray[map[i] - 1].color]);  // добавление цвета объектам массива

@@ -92,7 +92,7 @@ bool Tank::tankDrawing(std::string obj)
             if (position_gun == 0)
             {
                 position_gun = tank->center_obj - map->width_window * top_lines;
-                direction_gun = "top";
+                direction_gun = DirectionsGun::top;
             }
         }
         else
@@ -151,6 +151,31 @@ bool Tank::removeGun()
     }
 
     tankDrawing(gun);
+
+    return true;
+}
+
+bool Tank::shot()
+{
+    int i = position_gun - map->width_window;
+
+    while (i >= 0 && i < map->map.size())
+    {        
+        if (direction_gun == DirectionsGun::top)
+        {
+            //if (map->map[i] == Projectile)
+                //map->map[i] = EmptyObject;
+
+            map->map[i] = Projectile;
+            i -= map->width_window;
+            
+            if (!tankDrawing())
+                return false;
+        }
+    }
+
+    //if (map->map[i] == Projectile)
+        //map->map[i] = EmptyObject;
 
     return true;
 }
@@ -230,7 +255,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
-        direction_gun = "top";
+        direction_gun = DirectionsGun::top;
 
         if (tankDrawing(gun))
             return true;
@@ -252,7 +277,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
-        direction_gun = "bottom";
+        direction_gun = DirectionsGun::bottom;
 
         if (tankDrawing(gun))
             return true;
@@ -272,7 +297,7 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
-        direction_gun = "left";
+        direction_gun = DirectionsGun::left;
 
         if (tankDrawing(gun))
             return true;
@@ -294,12 +319,18 @@ bool Tank::calculate(sf::Event & event)
 
         moving_gun = false;
         position_gun = id_tank[a];
-        direction_gun = "right";
+        direction_gun = DirectionsGun::right;
 
         if (tankDrawing(gun))
             return true;
 
         return true;
+    }
+
+    if (event.key.code == sf::Keyboard::Space)
+    {
+        if (shot())
+            return true;
     }
 
     return false;

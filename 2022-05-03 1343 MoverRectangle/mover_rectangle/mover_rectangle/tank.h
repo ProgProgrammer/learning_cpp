@@ -1,10 +1,18 @@
 #pragma once
 #include <iostream>
 #include "class_mover_interface.h"
+#include "time.h"
 
 class Tank : public MoverInterface
 {
 private:
+    enum DirectionsGun
+    {
+        top,    // 0
+        left,   // 1
+        right,  // 2
+        bottom  // 3
+    };
     WindowStruct * map;  // карта
     MoverObject * tank;  // танк
     int middle_horizontal_top;
@@ -20,10 +28,11 @@ private:
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
     std::string gun = "gun";
     int position_gun = 0;  // позиция конца орудия
-    std::string direction_gun;
+    int direction_gun;
     bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
     bool tankDrawing(std::string obj = "");  // отрисовка танка
     bool removeGun();
+    bool shot();
 
 public:
     Tank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке

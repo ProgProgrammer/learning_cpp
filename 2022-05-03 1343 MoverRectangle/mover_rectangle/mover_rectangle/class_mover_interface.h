@@ -22,7 +22,8 @@ enum Objects
     EmptyObject = 0,
     StatObj = 1,
     TankUser = 2,
-    Gun = 3
+    Gun = 3,
+    Projectile = 4
 };
 
 struct ObjectStruct
@@ -39,6 +40,7 @@ struct MoverObject  // структура для хранения информа
     int num_fig_height;  // высота перемещаемого объекта в подобъектах
     int num_mover_obj;   // номер подобъектов передвигаемого объекта
     int rotated_obj;     // номер поворачиваемых подобъектов передвигаемого объекта
+    int projectile_obj;  // номер снаряда
     int center_obj;      // центр перемещаемого объекта
 };
 

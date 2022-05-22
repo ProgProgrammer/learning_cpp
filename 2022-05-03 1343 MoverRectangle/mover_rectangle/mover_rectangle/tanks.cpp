@@ -67,21 +67,24 @@ int main()
     // Объекты, которые будут на карте (ширина, высота, величина шагов в пикселях и цвет объектов):
     ObjectStruct stat_object = { 50, 50, 50, Cyan };        // цвет статических объектов - Cyan
     ObjectStruct guided_tank = { 50, 50, 50, Magenta };     // цвет танка - Magenta
-    ObjectStruct projectile_object = { 50, 50, 1, Red };    // цвет снаряда - Red
     ObjectStruct gun = { 50, 50, 50, Green };               // цвет орудия танка - Green
+    ObjectStruct projectile_object = { 50, 50, 1, Red };    // цвет снаряда - Red
+    ObjectStruct affected_object = { 50, 50, 1, Yellow };   // цвет пораженного объекта - Yellow
 
     winMap.objsArray.push_back(stat_object);        // статический объект
     winMap.objsArray.push_back(guided_tank);        // управляемый объект (танк)  
     winMap.objsArray.push_back(gun);                // орудие   
     winMap.objsArray.push_back(projectile_object);  // снаряд (будет равен числу 3 на карте)
+    winMap.objsArray.push_back(affected_object);    // пораженный объект (будет равен числу 4 на карте)
 
     //Пропорции танка должны быть нечетными и одинаковыми по размеру
     MoverObject tank_struct;  // танк
     tank_struct.num_fig_width = 3;   // ширина объекта в подобъектах
     tank_struct.num_fig_height = 3;  // высота объекта в подобъектах
-    tank_struct.num_mover_obj = TankUser;   // номер подобъектов танка
-    tank_struct.rotated_obj = Gun;     // номер поворачиваемых подобъектов танка
-    tank_struct.center_obj = 142;      // номер поворачиваемых подобъектов танка
+    tank_struct.num_mover_obj = TankUser;     // номер подобъектов танка
+    tank_struct.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
+    tank_struct.projectile_obj = Projectile;  // номер снаряда
+    tank_struct.center_obj = 142;             // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 
