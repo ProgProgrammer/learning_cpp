@@ -3,7 +3,7 @@
 CreateMap::CreateMap(WindowStruct & ws) : weight(ws.weight), height(ws.height), color(colors[ws.color]), 
 name_window(ws.name_window), map(ws.map), objsArray(ws.objsArray), winSct(ws) {}
 
-bool CreateMap::updateWindow(sf::RenderWindow & window)
+bool CreateMap::updateWindow(sf::RenderWindow * window)
 {
     int x, y, id_objs, x_module;
     float id_x, id_y;       // идентификатор смещения объекта по оси "x"
@@ -11,9 +11,10 @@ bool CreateMap::updateWindow(sf::RenderWindow & window)
     id_objs = 0;   // идентификатор массива объектов для отображения
     x_module = 0;  // переменная для условия деления по модулю
 
-    if (window.isOpen())
+    if (window->isOpen())
     {
-        window.clear(color);
+        renderedObjects.clear();
+        window->clear(color);
 
         for (int i = 0; i < map.size(); i++)
         {
@@ -25,7 +26,7 @@ bool CreateMap::updateWindow(sf::RenderWindow & window)
                 y = objsArray[map[i] - 1].height * id_y;       // вычисление смещения объекта по оси "y"
                 renderedObjects[id_objs].setPosition(x, y);
                 renderedObjects[id_objs].setOrigin(renderedObjects[id_objs].getSize().x / 2, renderedObjects[id_objs].getSize().y / 2);
-                window.draw(renderedObjects[id_objs]);
+                window->draw(renderedObjects[id_objs]);
                 id_objs++;
             }
 
@@ -42,7 +43,7 @@ bool CreateMap::updateWindow(sf::RenderWindow & window)
             }
         }
 
-        window.display();
+        window->display();
 
         return true;
     }

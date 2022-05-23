@@ -68,8 +68,8 @@ int main()
     ObjectStruct stat_object = { 50, 50, 50, Cyan };        // цвет статических объектов - Cyan
     ObjectStruct guided_tank = { 50, 50, 50, Magenta };     // цвет танка - Magenta
     ObjectStruct gun = { 50, 50, 50, Green };               // цвет орудия танка - Green
-    ObjectStruct projectile_object = { 50, 50, 1, Red };    // цвет снаряда - Red
-    ObjectStruct affected_object = { 50, 50, 1, Yellow };   // цвет пораженного объекта - Yellow
+    ObjectStruct projectile_object = { 50, 50, 50, Red };    // цвет снаряда - Red
+    ObjectStruct affected_object = { 50, 50, 50, Yellow };   // цвет пораженного объекта - Yellow
 
     winMap.objsArray.push_back(stat_object);        // статический объект
     winMap.objsArray.push_back(guided_tank);        // управляемый объект (танк)  
@@ -84,26 +84,27 @@ int main()
     tank_struct.num_mover_obj = TankUser;     // номер подобъектов танка
     tank_struct.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
     tank_struct.projectile_obj = Projectile;  // номер снаряда
+    tank_struct.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
     tank_struct.center_obj = 142;             // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 
-    sf::RenderWindow window(sf::VideoMode(winMap.weight, winMap.height), winMap.name_window);
+    sf::RenderWindow * window = new sf::RenderWindow(sf::VideoMode(winMap.weight, winMap.height), winMap.name_window);
     Tank tank;
 
     try
     {
-        tank = Tank(winMap, tank_struct);   // если вызвано исключение, то перейти к catch
+        tank = Tank(winMap, tank_struct, window, cm);   // если вызвано исключение, то перейти к catch
     }
     catch (std::runtime_error & error)
     {
         std::cout << std::endl << error.what() << std::endl;  // вывод исключения в консоль
     }
 
-    while (window.isOpen())
+    while (window->isOpen())
     {
         sf::Event event;
-        window.pollEvent(event);
+        window->pollEvent(event);
 
         if (event.type == sf::Event::KeyPressed)
         {
@@ -116,11 +117,13 @@ int main()
         cm.updateWindow(window);
 
         if (event.type == sf::Event::Closed)
-            window.close();
+            window->close();
 
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(1000ms / 24);  // обновление экрана (заход на следующий цикл) в секунду FPS
     }
+
+    delete window;
 
     return 0;
 }

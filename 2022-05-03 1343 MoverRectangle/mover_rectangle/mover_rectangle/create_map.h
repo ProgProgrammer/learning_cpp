@@ -20,5 +20,5 @@ private:
 
 public:
     CreateMap(WindowStruct & ws);
-    virtual bool updateWindow(sf::RenderWindow & window) override;
+    virtual bool updateWindow(sf::RenderWindow * window) override;
 };

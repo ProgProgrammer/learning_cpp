@@ -1,7 +1,10 @@
 #pragma once
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "class_mover_interface.h"
-#include "time.h"
+#include "timer.h"
+#include "create_map.h"
 
 class Tank : public MoverInterface
 {
@@ -15,6 +18,8 @@ private:
     };
     WindowStruct * map;  // карта
     MoverObject * tank;  // танк
+    sf::RenderWindow * window;
+    CreateMap * copy_map;
     int middle_horizontal_top;
     int middle_horizontal_down;
     int middle_id;
@@ -32,10 +37,11 @@ private:
     bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
     bool tankDrawing(std::string obj = "");  // отрисовка танка
     bool removeGun();
-    bool shot();
+    bool destroyedObj(int i);  // эффект уничтожения объекта
+    bool shot();  // стрельба из орудия
 
 public:
     Tank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
-    Tank(WindowStruct & map, MoverObject & tank);
+    Tank(WindowStruct & map, MoverObject & tank, sf::RenderWindow * window, CreateMap & cm);
     virtual bool calculate(sf::Event & event) override;
 };

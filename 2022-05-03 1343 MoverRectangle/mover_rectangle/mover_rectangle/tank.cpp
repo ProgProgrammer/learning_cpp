@@ -1,6 +1,6 @@
 #include "tank.h"
 
-Tank::Tank(WindowStruct & m, MoverObject & t) : map(&m), tank(&t) 
+Tank::Tank(WindowStruct & m, MoverObject & t, sf::RenderWindow * w, CreateMap & cm) : map(&m), tank(&t), window(w), copy_map(&cm)
 {
     if (tank->num_fig_height % 2 != 0 && tank->num_fig_width == tank->num_fig_height)
     {
@@ -155,27 +155,117 @@ bool Tank::removeGun()
     return true;
 }
 
-bool Tank::shot()
+bool Tank::destroyedObj(int i)
 {
-    int i = position_gun - map->width_window;
+    if (map->map[i] == StatObj)
+    {
+        map->map[i] = DestroyedObj;
 
-    while (i >= 0 && i < map->map.size())
-    {        
-        if (direction_gun == DirectionsGun::top)
+        if (copy_map->updateWindow(window))
         {
-            //if (map->map[i] == Projectile)
-                //map->map[i] = EmptyObject;
+            map->map[i] = EmptyObject;
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1000ms / 4);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool Tank::shot()  // стрельба из орудия
+{
+    using namespace std::chrono_literals;
+    int i;
+
+    if (direction_gun == DirectionsGun::top)
+    {
+        i = position_gun - map->width_window;
+
+        while (i >= 0)
+        {
+            if (map->map[i + map->width_window] == Projectile)
+                map->map[i + map->width_window] = EmptyObject;
+
+            if (destroyedObj(i))
+                break;
 
             map->map[i] = Projectile;
             i -= map->width_window;
-            
-            if (!tankDrawing())
-                return false;
+            copy_map->updateWindow(window);
+
+            std::this_thread::sleep_for(1000ms / 24);
+        }
+    }
+    else if (direction_gun == DirectionsGun::bottom)
+    {
+        i = position_gun + map->width_window;
+
+        while (i < map->map.size())
+        {
+            if (map->map[i - map->width_window] == Projectile)
+                map->map[i - map->width_window] = EmptyObject;
+
+            if (destroyedObj(i))
+                break;
+
+            map->map[i] = Projectile;
+            i += map->width_window;
+            copy_map->updateWindow(window);
+
+            std::this_thread::sleep_for(1000ms / 24);
+        }
+    }
+    else if (direction_gun == DirectionsGun::left)
+    {
+        i = position_gun - 1;
+        int border_pixel = position_gun / map->width_window * map->width_window;
+
+        while (i >= 0 && i >= border_pixel)
+        {
+            if (map->map[i + 1] == Projectile)
+                map->map[i + 1] = EmptyObject;
+
+            if (destroyedObj(i))
+                break;
+
+            map->map[i] = Projectile;
+            i -= 1;
+            copy_map->updateWindow(window);
+
+            std::this_thread::sleep_for(1000ms / 24);
+        }
+    }
+    else if (direction_gun == DirectionsGun::right)
+    {
+        i = position_gun + 1;
+        int border_pixel = position_gun / map->width_window * map->width_window + map->width_window;
+
+        while (i < map->map.size() && i < border_pixel)
+        {
+            if (map->map[i - 1] == Projectile)
+                map->map[i - 1] = EmptyObject;
+
+            if (destroyedObj(i))
+                break;
+
+            map->map[i] = Projectile;
+            i += 1;
+            copy_map->updateWindow(window);
+
+            std::this_thread::sleep_for(1000ms / 24);
         }
     }
 
-    //if (map->map[i] == Projectile)
-        //map->map[i] = EmptyObject;
+    if (direction_gun == DirectionsGun::top && map->map[i + map->width_window] == Projectile)
+        map->map[i + map->width_window] = EmptyObject;
+    else if (direction_gun == DirectionsGun::bottom && map->map[i - map->width_window] == Projectile)
+        map->map[i - map->width_window] = EmptyObject;
+    else if (direction_gun == DirectionsGun::left && map->map[i + 1] == Projectile)
+        map->map[i + 1] = EmptyObject;
+    else if (direction_gun == DirectionsGun::right && map->map[i - 1] == Projectile)
+        map->map[i - 1] = EmptyObject;
 
     return true;
 }
@@ -185,7 +275,6 @@ bool Tank::calculate(sf::Event & event)
     if (event.key.code == sf::Keyboard::Up)  // движение вперед
     {
         tank->center_obj -= map->width_window;
-        position_gun -= map->width_window;
 
         if (!tankDrawing())
         {
@@ -194,12 +283,13 @@ bool Tank::calculate(sf::Event & event)
             return false;
         }
 
+        position_gun -= map->width_window;
+
         return true;
     }
     if (event.key.code == sf::Keyboard::Down)  // движение назад
     {
         tank->center_obj += map->width_window;
-        position_gun += map->width_window;
 
         if (!tankDrawing())
         {
@@ -208,12 +298,13 @@ bool Tank::calculate(sf::Event & event)
             return false;
         }
 
+        position_gun += map->width_window;
+
         return true;
     }
     if (event.key.code == sf::Keyboard::Left)  // движение влево
     {
         tank->center_obj -= 1;
-        position_gun -= 1;
 
         if (!tankDrawing())
         {
@@ -222,12 +313,13 @@ bool Tank::calculate(sf::Event & event)
             return false;
         }
 
+        position_gun -= 1;
+
         return true;
     }
     if (event.key.code == sf::Keyboard::Right)  // движение вправо
     {
         tank->center_obj += 1;
-        position_gun += 1;
 
         if (!tankDrawing())
         {
@@ -235,6 +327,8 @@ bool Tank::calculate(sf::Event & event)
 
             return false;
         }
+
+        position_gun += 1;
 
         return true;
     }

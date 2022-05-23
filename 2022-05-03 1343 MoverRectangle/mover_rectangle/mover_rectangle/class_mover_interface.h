@@ -23,7 +23,8 @@ enum Objects
     StatObj = 1,
     TankUser = 2,
     Gun = 3,
-    Projectile = 4
+    Projectile = 4,
+    DestroyedObj = 5
 };
 
 struct ObjectStruct
@@ -41,6 +42,7 @@ struct MoverObject  // структура для хранения информа
     int num_mover_obj;   // номер подобъектов передвигаемого объекта
     int rotated_obj;     // номер поворачиваемых подобъектов передвигаемого объекта
     int projectile_obj;  // номер снаряда
+    int destroyed_obj;   // номер уничтоженного объекта
     int center_obj;      // центр перемещаемого объекта
 };
 
@@ -59,7 +61,7 @@ struct WindowStruct
 class Map
 {
 public:
-    virtual bool updateWindow(sf::RenderWindow & window) = 0;
+    virtual bool updateWindow(sf::RenderWindow * window) = 0;
 };
 
 class MoverInterface
