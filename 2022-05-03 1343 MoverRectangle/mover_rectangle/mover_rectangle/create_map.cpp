@@ -21,7 +21,7 @@ bool CreateMap::updateWindow(sf::RenderWindow * window)
             if (map[i] != EmptyObject)
             {
                 renderedObjects.push_back(sf::RectangleShape(sf::Vector2f(objsArray[map[i] - 1].weight, objsArray[map[i] - 1].height)));  // добавление в массив объектов для отображения
-                renderedObjects[id_objs].setFillColor(colors[objsArray[map[i] - 1].color]);  // добавление цвета объектам массива
+                renderedObjects[id_objs].setFillColor(colors[objsArray[map[i] - 1].color]);  // добавление цвета объектам массива ((map[i] - 1) - цвет пикселя в массиве map)
                 x = objsArray[map[i] - 1].weight * id_x;       // вычисление смещения объекта по оси "x"
                 y = objsArray[map[i] - 1].height * id_y;       // вычисление смещения объекта по оси "y"
                 renderedObjects[id_objs].setPosition(x, y);
