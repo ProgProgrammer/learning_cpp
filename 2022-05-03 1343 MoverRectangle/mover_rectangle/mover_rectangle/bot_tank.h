@@ -5,10 +5,9 @@
 #include "class_mover_interface.h"
 #include "timer.h"
 #include "create_map.h"
+#include "tank.h"
 
-class BotTank;
-
-class Tank : public MoverInterface
+class BotTank : public Tank
 {
 private:
     enum DirectionsGun
@@ -18,10 +17,10 @@ private:
         right,  // 2
         bottom  // 3
     };
-    WindowStruct * map;  // карта
-    MoverObject * tank;  // танк
-    sf::RenderWindow * window;
-    CreateMap * copy_map;
+    WindowStruct* map;  // карта
+    MoverObject* tank;  // танк
+    sf::RenderWindow* window;
+    CreateMap* copy_map;
     int middle_horizontal_top;
     int middle_horizontal_down;
     int middle_id;
@@ -34,24 +33,15 @@ private:
     bool flag_ready_to_destroy = false;
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
-    std::vector<BotTank*> bot_tanks;  // массив объектов-танков на карте
+    Tank * main_tank;  // главный танк на карте
     std::string gun = "gun";
     int position_gun = 0;  // позиция конца орудия
     int direction_gun;
     bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
-
-protected:
-    bool tankDrawing(std::string obj = "");  // отрисовка танка
-    bool removeGun();
     bool destroyedObj(int i);  // эффект уничтожения объекта
-    bool shot();  // стрельба из орудия
-
 
 public:
-    Tank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
-    Tank(WindowStruct & map, MoverObject & tank, sf::RenderWindow * window, CreateMap & cm, std::vector<BotTank*> bot_tanks);
+    BotTank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
+    BotTank(WindowStruct& map, MoverObject& tank, sf::RenderWindow* window, CreateMap& cm, Tank * main_tank);
     virtual bool calculate(sf::Event & event) override;
-    virtual std::vector<int> returnIdTank() const { return id_tank; }
-    void destroy();
-    bool isReadyToDestroy();
 };

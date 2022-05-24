@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "class_projectiler_mover.h"
 #include "tank.h"
+#include "bot_tank.h"
 #include "static_objects.h"
 #include "create_map.h"
 
@@ -87,18 +88,41 @@ int main()
     tank_struct.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
     tank_struct.center_obj = 142;             // номер поворачиваемых подобъектов танка
 
+    //Пропорции танка-бота должны быть нечетными и одинаковыми по размеру
+    MoverObject bot_tank_struct;  // бот-танк
+    bot_tank_struct.num_fig_width = 3;   // ширина объекта в подобъектах
+    bot_tank_struct.num_fig_height = 3;  // высота объекта в подобъектах
+    bot_tank_struct.num_mover_obj = TankUser;     // номер подобъектов танка
+    bot_tank_struct.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
+    bot_tank_struct.projectile_obj = Projectile;  // номер снаряда
+    bot_tank_struct.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
+    bot_tank_struct.center_obj = 24;             // номер поворачиваемых подобъектов танка
+
     CreateMap cm(winMap);
 
     sf::RenderWindow * window = new sf::RenderWindow(sf::VideoMode(winMap.weight, winMap.height), winMap.name_window);
     Tank tank;
+    BotTank botTank;
+
+    std::vector<BotTank*> tanks;
+    tanks.push_back(&botTank);
 
     try
     {
-        tank = Tank(winMap, tank_struct, window, cm);   // если вызвано исключение, то перейти к catch
+        tank = Tank(winMap, tank_struct, window, cm, tanks);   // если вызвано исключение, то перейти к catch
     }
     catch (std::runtime_error & error)
     {
-        std::cout << std::endl << error.what() << std::endl;  // вывод исключения в консоль
+        std::cout << std::endl << "Tank: " << error.what() << std::endl;  // вывод исключения в консоль
+    }
+
+    try
+    {
+        botTank = BotTank(winMap, bot_tank_struct, window, cm, &tank);   // если вызвано исключение, то перейти к catch
+    }
+    catch (std::runtime_error& error)
+    {
+        std::cout << std::endl << "Bot tank: " << error.what() << std::endl;  // вывод исключения в консоль
     }
 
     while (window->isOpen())
@@ -106,13 +130,13 @@ int main()
         sf::Event event;
         window->pollEvent(event);
 
-        if (event.type == sf::Event::KeyPressed)
-        {
-            tank.calculate(event);
+        tank.calculate(event);
 
-            static int counter = 0;
-            std::cout << counter++ << std::endl;
-        }
+        if (tanks[0] != NULL)
+            botTank.calculate(event);
+
+        static int counter = 0;
+        std::cout << counter++ << std::endl;
 
         cm.updateWindow(window);
 

@@ -68,4 +68,5 @@ class MoverInterface
 {
 public:
     virtual bool calculate(sf::Event & event) = 0;
+    virtual std::vector<int> returnIdTank() const = 0;
 };

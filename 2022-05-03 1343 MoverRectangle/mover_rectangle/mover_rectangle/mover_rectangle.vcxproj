@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bot_tank.cpp" />
     <ClCompile Include="tank.cpp" />
     <ClCompile Include="class_projectiler_mover.cpp" />
     <ClCompile Include="create_map.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bot_tank.h" />
     <ClInclude Include="tank.h" />
     <ClInclude Include="class_mover_interface.h" />
     <ClInclude Include="class_projectiler_mover.h" />

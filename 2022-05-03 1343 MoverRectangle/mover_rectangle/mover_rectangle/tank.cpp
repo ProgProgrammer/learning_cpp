@@ -1,6 +1,7 @@
 #include "tank.h"
+#include "bot_tank.h"
 
-Tank::Tank(WindowStruct & m, MoverObject & t, sf::RenderWindow * w, CreateMap & cm) : map(&m), tank(&t), window(w), copy_map(&cm)
+Tank::Tank(WindowStruct & m, MoverObject & t, sf::RenderWindow * w, CreateMap & cm, std::vector<BotTank*> bt) : map(&m), tank(&t), window(w), copy_map(&cm), bot_tanks(bt)
 {
     if (tank->num_fig_height % 2 != 0 && tank->num_fig_width == tank->num_fig_height)
     {
@@ -170,6 +171,55 @@ bool Tank::destroyedObj(int i)
 
         return true;
     }
+    else if (map->map[i] == TankUser || map->map[i] == Gun)
+    {
+        int num_tank;
+        std::vector<int> id_tank;
+        BotTank * bt;
+        bool bal = true;
+
+        for (int a = 0; a < bot_tanks.size(); a++)
+        {
+            if (bal == true)
+            {
+                id_tank = bot_tanks[a]->returnIdTank();
+                bt = bot_tanks[a];
+
+                for (int b = 0; b < id_tank.size(); b++)
+                {
+                    if (i == id_tank[b])
+                    {
+                        num_tank = a;
+
+                        for (int c = 0; c < id_tank.size(); c++)
+                        {
+                            map->map[id_tank[c]] = DestroyedObj;
+                        }
+
+                        bal = false;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (copy_map->updateWindow(window))
+        {
+            for (int i = 0; i < id_tank.size(); i++)
+            {
+                map->map[id_tank[i]] = EmptyObject;
+            }
+
+            bot_tanks[num_tank]->destroy();
+            bot_tanks[num_tank] = nullptr;
+
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1000ms / 4);
+        }
+
+        return true;
+    }
 
     return false;
 }
@@ -272,160 +322,173 @@ bool Tank::shot()  // стрельба из орудия
 
 bool Tank::calculate(sf::Event & event)
 {
-    if (event.key.code == sf::Keyboard::Up)  // движение вперед
+    if (event.type == sf::Event::KeyPressed)
     {
-        tank->center_obj -= map->width_window;
-
-        if (!tankDrawing())
-        {
-            tank->center_obj += map->width_window;
-
-            return false;
-        }
-
-        position_gun -= map->width_window;
-
-        return true;
-    }
-    if (event.key.code == sf::Keyboard::Down)  // движение назад
-    {
-        tank->center_obj += map->width_window;
-
-        if (!tankDrawing())
+        if (event.key.code == sf::Keyboard::Up)  // движение вперед
         {
             tank->center_obj -= map->width_window;
 
-            return false;
+            if (!tankDrawing())
+            {
+                tank->center_obj += map->width_window;
+
+                return false;
+            }
+
+            position_gun -= map->width_window;
+
+            return true;
         }
-
-        position_gun += map->width_window;
-
-        return true;
-    }
-    if (event.key.code == sf::Keyboard::Left)  // движение влево
-    {
-        tank->center_obj -= 1;
-
-        if (!tankDrawing())
+        if (event.key.code == sf::Keyboard::Down)  // движение назад
         {
-            tank->center_obj += 1;
+            tank->center_obj += map->width_window;
 
-            return false;
+            if (!tankDrawing())
+            {
+                tank->center_obj -= map->width_window;
+
+                return false;
+            }
+
+            position_gun += map->width_window;
+
+            return true;
         }
-
-        position_gun -= 1;
-
-        return true;
-    }
-    if (event.key.code == sf::Keyboard::Right)  // движение вправо
-    {
-        tank->center_obj += 1;
-
-        if (!tankDrawing())
+        if (event.key.code == sf::Keyboard::Left)  // движение влево
         {
             tank->center_obj -= 1;
 
-            return false;
-        }
-
-        position_gun += 1;
-
-        return true;
-    }
-    if (event.key.code == sf::Keyboard::W)  // поворот орудия вперед
-    {        
-        int a;
-
-        if (removeGun())
-        {
-            for (int i = gun_axis - tank->num_fig_width;
-                i < gun_axis && i > 0;
-                i -= tank->num_fig_width)
+            if (!tankDrawing())
             {
-                nums_tank[i] = Gun;
-                a = i;
+                tank->center_obj += 1;
+
+                return false;
             }
-        }
 
-        moving_gun = false;
-        position_gun = id_tank[a];
-        direction_gun = DirectionsGun::top;
+            position_gun -= 1;
 
-        if (tankDrawing(gun))
             return true;
-    }
-    if (event.key.code == sf::Keyboard::S)  // поворот орудия назад
-    {
-        int a;
-
-        if (removeGun())
+        }
+        if (event.key.code == sf::Keyboard::Right)  // движение вправо
         {
-            for (int i = gun_axis + tank->num_fig_width;
-                i > gun_axis && i < nums_tank.size(); 
-                i += tank->num_fig_width)
+            tank->center_obj += 1;
+
+            if (!tankDrawing())
             {
-                nums_tank[i] = Gun;
-                a = i;
+                tank->center_obj -= 1;
+
+                return false;
             }
-        }
 
-        moving_gun = false;
-        position_gun = id_tank[a];
-        direction_gun = DirectionsGun::bottom;
+            position_gun += 1;
 
-        if (tankDrawing(gun))
             return true;
-    }
-    if (event.key.code == sf::Keyboard::A)  // поворот орудия влево
-    {
-        int a;
-
-        if (removeGun())
+        }
+        if (event.key.code == sf::Keyboard::W)  // поворот орудия вперед
         {
-            for (int i = gun_axis; i > gun_axis - middle_line - 1; i--)
+            int a;
+
+            if (removeGun())
             {
-                nums_tank[i] = Gun;
-                a = i;
+                for (int i = gun_axis - tank->num_fig_width;
+                    i < gun_axis && i > 0;
+                    i -= tank->num_fig_width)
+                {
+                    nums_tank[i] = Gun;
+                    a = i;
+                }
             }
+
+            moving_gun = false;
+            position_gun = id_tank[a];
+            direction_gun = DirectionsGun::top;
+
+            if (tankDrawing(gun))
+                return true;
         }
-
-        moving_gun = false;
-        position_gun = id_tank[a];
-        direction_gun = DirectionsGun::left;
-
-        if (tankDrawing(gun))
-            return true;
-
-        return true;
-    }
-    if (event.key.code == sf::Keyboard::D)  // поворот орудия вправо
-    {
-        int a;
-
-        if (removeGun())
+        if (event.key.code == sf::Keyboard::S)  // поворот орудия назад
         {
-            for (int i = gun_axis; i < gun_axis + middle_line + 1; i++)
+            int a;
+
+            if (removeGun())
             {
-                nums_tank[i] = Gun;
-                a = i;
+                for (int i = gun_axis + tank->num_fig_width;
+                    i > gun_axis && i < nums_tank.size();
+                    i += tank->num_fig_width)
+                {
+                    nums_tank[i] = Gun;
+                    a = i;
+                }
             }
+
+            moving_gun = false;
+            position_gun = id_tank[a];
+            direction_gun = DirectionsGun::bottom;
+
+            if (tankDrawing(gun))
+                return true;
+        }
+        if (event.key.code == sf::Keyboard::A)  // поворот орудия влево
+        {
+            int a;
+
+            if (removeGun())
+            {
+                for (int i = gun_axis; i > gun_axis - middle_line - 1; i--)
+                {
+                    nums_tank[i] = Gun;
+                    a = i;
+                }
+            }
+
+            moving_gun = false;
+            position_gun = id_tank[a];
+            direction_gun = DirectionsGun::left;
+
+            if (tankDrawing(gun))
+                return true;
+
+            return true;
+        }
+        if (event.key.code == sf::Keyboard::D)  // поворот орудия вправо
+        {
+            int a;
+
+            if (removeGun())
+            {
+                for (int i = gun_axis; i < gun_axis + middle_line + 1; i++)
+                {
+                    nums_tank[i] = Gun;
+                    a = i;
+                }
+            }
+
+            moving_gun = false;
+            position_gun = id_tank[a];
+            direction_gun = DirectionsGun::right;
+
+            if (tankDrawing(gun))
+                return true;
+
+            return true;
         }
 
-        moving_gun = false;
-        position_gun = id_tank[a];
-        direction_gun = DirectionsGun::right;
-
-        if (tankDrawing(gun))
-            return true;
-
-        return true;
-    }
-
-    if (event.key.code == sf::Keyboard::Space)
-    {
-        if (shot())
-            return true;
+        if (event.key.code == sf::Keyboard::Space)
+        {
+            if (shot())
+                return true;
+        }
     }
 
     return false;
+}
+
+void Tank::destroy()
+{
+    flag_ready_to_destroy = true;
+}
+
+bool Tank::isReadyToDestroy()
+{
+    return flag_ready_to_destroy;
 }

@@ -33,6 +33,9 @@
     <ClCompile Include="create_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bot_tank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="class_mover_interface.h">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="create_map.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_tank.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
