@@ -41,7 +41,6 @@ private:
     bool destroyedObj(int i);  // эффект уничтожения объекта
 
 public:
-    BotTank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
-    BotTank(WindowStruct& map, MoverObject& tank, sf::RenderWindow* window, CreateMap& cm, Tank * main_tank);
+    BotTank(WindowStruct& map, MoverObject& tank, sf::RenderWindow* window, CreateMap& cm, Tank * main_tank, std::vector<BotTank*> & bot_tanks);
     virtual bool calculate(sf::Event & event) override;
 };

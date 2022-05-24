@@ -1,7 +1,7 @@
 #include "tank.h"
 #include "bot_tank.h"
 
-Tank::Tank(WindowStruct & m, MoverObject & t, sf::RenderWindow * w, CreateMap & cm, std::vector<BotTank*> bt) : map(&m), tank(&t), window(w), copy_map(&cm), bot_tanks(bt)
+Tank::Tank(WindowStruct & m, MoverObject & t, sf::RenderWindow * w, CreateMap & cm, std::vector<BotTank*> & bt) : map(&m), tank(&t), window(w), copy_map(&cm), bot_tanks(bt)
 {
     if (tank->num_fig_height % 2 != 0 && tank->num_fig_width == tank->num_fig_height)
     {
@@ -143,6 +143,21 @@ bool Tank::tankDrawing(std::string obj)
     }
 }
 
+std::vector<int> Tank::numsTank() const
+{
+    return nums_tank;
+}
+
+int Tank::returnPosition() const
+{
+    return position_gun;
+}
+
+std::vector<int> Tank::idTank() const
+{
+    return id_tank;
+}
+
 bool Tank::removeGun()
 {
     for (int i = 0; i < nums_tank.size(); i++)
@@ -212,7 +227,6 @@ bool Tank::destroyedObj(int i)
             }
 
             bot_tanks[num_tank]->destroy();
-            bot_tanks[num_tank] = nullptr;
 
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(1000ms / 4);

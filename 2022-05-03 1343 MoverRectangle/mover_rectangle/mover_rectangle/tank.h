@@ -34,7 +34,7 @@ private:
     bool flag_ready_to_destroy = false;
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
-    std::vector<BotTank*> bot_tanks;  // массив объектов-танков на карте
+    std::vector<BotTank*> & bot_tanks;  // массив объектов-танков на карте
     std::string gun = "gun";
     int position_gun = 0;  // позиция конца орудия
     int direction_gun;
@@ -45,11 +45,13 @@ protected:
     bool removeGun();
     bool destroyedObj(int i);  // эффект уничтожения объекта
     bool shot();  // стрельба из орудия
+    std::vector<int> numsTank() const;
+    std::vector<int> idTank() const;
+    int returnPosition() const;
 
 
 public:
-    Tank() {}  // создание пустого объекта для того, чтобы создать проверку танка на соприкосновение с объектами и выходом за границу при первоначальной отрисовке
-    Tank(WindowStruct & map, MoverObject & tank, sf::RenderWindow * window, CreateMap & cm, std::vector<BotTank*> bot_tanks);
+    Tank(WindowStruct & map, MoverObject & tank, sf::RenderWindow * window, CreateMap & cm, std::vector<BotTank*> & bot_tanks);
     virtual bool calculate(sf::Event & event) override;
     virtual std::vector<int> returnIdTank() const { return id_tank; }
     void destroy();

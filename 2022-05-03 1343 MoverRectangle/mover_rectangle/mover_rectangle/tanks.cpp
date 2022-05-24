@@ -96,20 +96,19 @@ int main()
     bot_tank_struct.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
     bot_tank_struct.projectile_obj = Projectile;  // номер снаряда
     bot_tank_struct.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
-    bot_tank_struct.center_obj = 24;             // номер поворачиваемых подобъектов танка
+    bot_tank_struct.center_obj = 27;             // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 
     sf::RenderWindow * window = new sf::RenderWindow(sf::VideoMode(winMap.weight, winMap.height), winMap.name_window);
-    Tank tank;
-    BotTank botTank;
-
     std::vector<BotTank*> tanks;
+    Tank tank(winMap, tank_struct, window, cm, tanks);
+    BotTank botTank(winMap, bot_tank_struct, window, cm, &tank, tanks);
     tanks.push_back(&botTank);
 
-    try
+    /*try
     {
-        tank = Tank(winMap, tank_struct, window, cm, tanks);   // если вызвано исключение, то перейти к catch
+        tank;   // если вызвано исключение, то перейти к catch
     }
     catch (std::runtime_error & error)
     {
@@ -118,22 +117,28 @@ int main()
 
     try
     {
-        botTank = BotTank(winMap, bot_tank_struct, window, cm, &tank);   // если вызвано исключение, то перейти к catch
+        botTank;   // если вызвано исключение, то перейти к catch
     }
     catch (std::runtime_error& error)
     {
         std::cout << std::endl << "Bot tank: " << error.what() << std::endl;  // вывод исключения в консоль
-    }
+    }*/
 
     while (window->isOpen())
     {
         sf::Event event;
         window->pollEvent(event);
 
-        tank.calculate(event);
+        if (!tank.isReadyToDestroy())
+            tank.calculate(event);
 
-        if (tanks[0] != NULL)
-            botTank.calculate(event);
+        int i = 0;
+
+        while (i < tanks.size() && !tanks[i]->isReadyToDestroy())
+        {
+            tanks[i]->calculate(event);
+            i++;
+        }
 
         static int counter = 0;
         std::cout << counter++ << std::endl;
