@@ -11,15 +11,9 @@ class BotTank;
 class Tank : public MoverInterface
 {
 private:
-    enum DirectionsGun
-    {
-        top,    // 0
-        left,   // 1
-        right,  // 2
-        bottom  // 3
-    };
-    WindowStruct * map;  // карта
-    MoverObject * tank;  // танк
+    WindowStruct * map = nullptr;  // карта
+    MoverObject * tank = nullptr;  // танк
+    Tank * main_tank = nullptr;  // объект главного танка на карте
     sf::RenderWindow * window;
     CreateMap * copy_map;
     int middle_horizontal_top;
@@ -34,20 +28,32 @@ private:
     bool flag_ready_to_destroy = false;
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
+    std::vector<int> moving_pixels;
     std::vector<BotTank*> & bot_tanks;  // массив объектов-танков на карте
     std::string gun = "gun";
     int position_gun = 0;  // позиция конца орудия
     int direction_gun;
     bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
+    bool checkCoincidence(int& i, std::vector<int>& it) const;
 
 protected:
+    enum DirectionsGun
+    {
+        top,    // 0
+        left,   // 1
+        right,  // 2
+        bottom  // 3
+    };
     bool tankDrawing(std::string obj = "");  // отрисовка танка
     bool removeGun();
     bool destroyedObj(int i);  // эффект уничтожения объекта
-    bool shot();  // стрельба из орудия
+    bool shot(Tank * main_tank = nullptr);  // стрельба из орудия
     std::vector<int> numsTank() const;
     std::vector<int> idTank() const;
     int returnPosition() const;
+    void movingPositionTank(int pixels);
+    void movingPositionTankDirectionGun(int pixels, int position);
+    void changeNumsTank(int& i, Objects object);
 
 
 public:

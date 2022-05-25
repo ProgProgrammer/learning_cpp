@@ -12,8 +12,8 @@ int getRandomInt(int & min, int & max)
     return random_integer;
 }
 
-BotTank::BotTank(WindowStruct& m, MoverObject& t, sf::RenderWindow* w, CreateMap& cm, Tank* mt, std::vector<BotTank*> & bt) : Tank(m, t, w, cm, bt),
-                                                                                                                            map(&m), tank(&t), window(w), copy_map(&cm), main_tank(mt)
+BotTank::BotTank(WindowStruct& m, MoverObject& t, sf::RenderWindow* w, CreateMap& cm, Tank * mt, std::vector<BotTank*> & bt) : Tank(m, t, w, cm, bt),
+                                                                                                                            map(&m), tank(&t), window(w), main_tank(mt), copy_map(&cm)
 {
     if (tank->num_fig_height % 2 != 0 && tank->num_fig_width == tank->num_fig_height)
     {
@@ -112,8 +112,7 @@ bool BotTank::calculate(sf::Event & event)
                 return false;
             }
 
-            position_gun = returnPosition();
-            position_gun -= map->width_window;
+            movingPositionTank(-map->width_window);
 
             return true;
         }
@@ -128,8 +127,7 @@ bool BotTank::calculate(sf::Event & event)
                 return false;
             }
 
-            position_gun = returnPosition();
-            position_gun += map->width_window;
+            movingPositionTank(map->width_window);
 
             return true;
         }
@@ -144,8 +142,7 @@ bool BotTank::calculate(sf::Event & event)
                 return false;
             }
 
-            position_gun = returnPosition();
-            position_gun -= 1;
+            movingPositionTank(-1);
 
             return true;
         }
@@ -160,8 +157,7 @@ bool BotTank::calculate(sf::Event & event)
                 return false;
             }
 
-            position_gun = returnPosition();
-            position_gun += 1;
+            movingPositionTank(1);
 
             return true;
         }
@@ -175,15 +171,13 @@ bool BotTank::calculate(sf::Event & event)
                     i < gun_axis && i > 0;
                     i -= tank->num_fig_width)
                 {
-                    nums_tank[i] = Gun;
+                    changeNumsTank(i, Gun);
                     a = i;
                 }
             }
 
             moving_gun = false;
-            position_gun = returnPosition();
-            position_gun = id_tank[a];
-            direction_gun = DirectionsGun::top;
+            movingPositionTankDirectionGun(id_tank[a], 0);
 
             if (tankDrawing(gun))
                 return true;
@@ -198,15 +192,13 @@ bool BotTank::calculate(sf::Event & event)
                     i > gun_axis && i < nums_tank.size();
                     i += tank->num_fig_width)
                 {
-                    nums_tank[i] = Gun;
+                    changeNumsTank(i, Gun);
                     a = i;
                 }
             }
 
             moving_gun = false;
-            position_gun = returnPosition();
-            position_gun = id_tank[a];
-            direction_gun = DirectionsGun::bottom;
+            movingPositionTankDirectionGun(id_tank[a], 3);
 
             if (tankDrawing(gun))
                 return true;
@@ -219,15 +211,13 @@ bool BotTank::calculate(sf::Event & event)
             {
                 for (int i = gun_axis; i > gun_axis - middle_line - 1; i--)
                 {
-                    nums_tank[i] = Gun;
+                    changeNumsTank(i, Gun);
                     a = i;
                 }
             }
 
             moving_gun = false;
-            position_gun = returnPosition();
-            position_gun = id_tank[a];
-            direction_gun = DirectionsGun::left;
+            movingPositionTankDirectionGun(id_tank[a], 1);
 
             if (tankDrawing(gun))
                 return true;
@@ -242,15 +232,13 @@ bool BotTank::calculate(sf::Event & event)
             {
                 for (int i = gun_axis; i < gun_axis + middle_line + 1; i++)
                 {
-                    nums_tank[i] = Gun;
+                    changeNumsTank(i, Gun);
                     a = i;
                 }
             }
 
             moving_gun = false;
-            position_gun = returnPosition();
-            position_gun = id_tank[a];
-            direction_gun = DirectionsGun::right;
+            movingPositionTankDirectionGun(id_tank[a], 2);
 
             if (tankDrawing(gun))
                 return true;
@@ -260,7 +248,7 @@ bool BotTank::calculate(sf::Event & event)
 
         if (res == 9)
         {
-            if (shot())
+            if (shot(main_tank))
                 return true;
         }
     }

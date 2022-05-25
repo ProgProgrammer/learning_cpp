@@ -10,15 +10,9 @@
 class BotTank : public Tank
 {
 private:
-    enum DirectionsGun
-    {
-        top,    // 0
-        left,   // 1
-        right,  // 2
-        bottom  // 3
-    };
-    WindowStruct* map;  // карта
-    MoverObject* tank;  // танк
+    WindowStruct* map = nullptr;  // карта
+    MoverObject* tank = nullptr;  // танк
+    Tank* main_tank = nullptr;  // объект главного танка;
     sf::RenderWindow* window;
     CreateMap* copy_map;
     int middle_horizontal_top;
@@ -33,10 +27,7 @@ private:
     bool flag_ready_to_destroy = false;
     std::vector<int> nums_tank;  // массив с информацией о строении танка
     std::vector<int> id_tank;    // массив с идентификаторами танка на карте
-    Tank * main_tank;  // главный танк на карте
     std::string gun = "gun";
-    int position_gun = 0;  // позиция конца орудия
-    int direction_gun;
     bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
     bool destroyedObj(int i);  // эффект уничтожения объекта
 

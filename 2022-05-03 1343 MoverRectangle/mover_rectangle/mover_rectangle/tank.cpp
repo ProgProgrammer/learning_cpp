@@ -18,6 +18,17 @@ Tank::Tank(WindowStruct & m, MoverObject & t, sf::RenderWindow * w, CreateMap & 
         throw std::runtime_error("CONTACT WITH OBJECT OR TO GOING OUT OF THE MAP!");
 }
 
+bool Tank::checkCoincidence(int& i, std::vector<int>& it) const
+{
+    for (int a = 0; a < it.size(); a++)
+    {
+        if (id_tank[i] == it[a])
+            return true;
+    }
+
+    return false;
+}
+
 bool Tank::tankDrawing(std::string obj)
 {
     if (obj != gun)  // если двигается не орудие
@@ -30,6 +41,7 @@ bool Tank::tankDrawing(std::string obj)
         int down_pixels_window = (top_lines_window + tank->num_fig_height) * map->width_window - 1;
         int a;
         int id;
+        int start_tank_pixel;
         std::vector<int> nt;
         std::vector<int> it;
         std::vector<int> copy_id_tank;
@@ -40,6 +52,9 @@ bool Tank::tankDrawing(std::string obj)
         {
             nt = nums_tank;
             it = id_tank;
+
+            if (id_tank.size() > 0)
+                start_tank_pixel = id_tank[0];
 
             if (id_tank.size() > 0)
             {
@@ -100,17 +115,40 @@ bool Tank::tankDrawing(std::string obj)
             return false;
 
         bool check_drawing_tank = true;
+        int check_tank = 0;
+        int allowable_num_cells = tank->num_fig_width * tank->num_fig_height - tank->num_fig_width;
 
         for (int i = 0; i < id_tank.size(); i++)
         {
-            if (map->map[id_tank[i]] == StatObj /* || map->map[id_tank[i]] == TankUser ||
-                map->map[id_tank[i]] == Gun*/)
+            if (map->map[id_tank[i]] == StatObj)
             {
                 check_drawing_tank = false;  // соприкосновение танка с другими объектами на карте есть
                 nums_tank = nt;
                 id_tank = it;
+                break;
             }
         }
+
+        moving_pixels.clear();
+
+        for (int i = 0; i < id_tank.size(); i++)
+        {
+            if (!checkCoincidence(i, it))
+                moving_pixels.push_back(id_tank[i]);
+        }
+
+        for (int i = 0; i < moving_pixels.size(); i++)
+        {
+            if (map->map[moving_pixels[i]] == TankUser || map->map[moving_pixels[i]] == Gun)
+            {
+                check_drawing_tank = false;  // соприкосновение танка с другими объектами на карте есть
+                nums_tank = nt;
+                id_tank = it;
+                break;
+            }
+        }
+
+        // map->map[id_tank[i]] == TankUser || map->map[id_tank[i]] == Gun
 
         if (check_drawing_tank == true)
         {
@@ -141,6 +179,17 @@ bool Tank::tankDrawing(std::string obj)
 
         return true;
     }
+}
+
+void Tank::movingPositionTank(int pixels)
+{
+    position_gun += pixels;
+}
+
+void Tank::movingPositionTankDirectionGun(int pixels, int position)
+{
+    position_gun = pixels;
+    direction_gun = DirectionsGun(position);
 }
 
 std::vector<int> Tank::numsTank() const
@@ -219,6 +268,37 @@ bool Tank::destroyedObj(int i)
             }
         }
 
+        if (main_tank != NULL)
+        {
+            std::vector<int> it = main_tank->id_tank;
+
+            for (int a = 0; a < it.size(); a++)
+            {
+                if (i == it[a])
+                {
+                    for (int b = 0; b < it.size(); b++)
+                    {
+                        map->map[it[b]] = DestroyedObj;
+                    }
+
+                    if(copy_map->updateWindow(window))
+                    {
+                        for (int i = 0; i < it.size(); i++)
+                        {
+                            map->map[it[i]] = EmptyObject;
+                        }
+
+                        main_tank->destroy();
+
+                        using namespace std::chrono_literals;
+                        std::this_thread::sleep_for(1000ms / 4);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
         if (copy_map->updateWindow(window))
         {
             for (int i = 0; i < id_tank.size(); i++)
@@ -238,10 +318,13 @@ bool Tank::destroyedObj(int i)
     return false;
 }
 
-bool Tank::shot()  // стрельба из орудия
+bool Tank::shot(Tank* mt)  // стрельба из орудия
 {
     using namespace std::chrono_literals;
     int i;
+
+    if (main_tank == NULL)
+        main_tank = mt;
 
     if (direction_gun == DirectionsGun::top)
     {
@@ -505,4 +588,9 @@ void Tank::destroy()
 bool Tank::isReadyToDestroy()
 {
     return flag_ready_to_destroy;
+}
+
+void Tank::changeNumsTank(int& i, Objects object)
+{
+    nums_tank[i] = object;
 }

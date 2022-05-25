@@ -96,7 +96,17 @@ int main()
     bot_tank_struct.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
     bot_tank_struct.projectile_obj = Projectile;  // номер снаряда
     bot_tank_struct.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
-    bot_tank_struct.center_obj = 27;             // номер поворачиваемых подобъектов танка
+    bot_tank_struct.center_obj = 24;             // номер поворачиваемых подобъектов танка
+
+    //Пропорции танка-бота должны быть нечетными и одинаковыми по размеру
+    MoverObject bot_tank_struct2;  // бот-танк
+    bot_tank_struct2.num_fig_width = 3;   // ширина объекта в подобъектах
+    bot_tank_struct2.num_fig_height = 3;  // высота объекта в подобъектах
+    bot_tank_struct2.num_mover_obj = TankUser;     // номер подобъектов танка
+    bot_tank_struct2.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
+    bot_tank_struct2.projectile_obj = Projectile;  // номер снаряда
+    bot_tank_struct2.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
+    bot_tank_struct2.center_obj = 27;             // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 
@@ -104,7 +114,9 @@ int main()
     std::vector<BotTank*> tanks;
     Tank tank(winMap, tank_struct, window, cm, tanks);
     BotTank botTank(winMap, bot_tank_struct, window, cm, &tank, tanks);
+    BotTank botTank2(winMap, bot_tank_struct2, window, cm, &tank, tanks);
     tanks.push_back(&botTank);
+    tanks.push_back(&botTank2);
 
     /*try
     {
@@ -134,10 +146,15 @@ int main()
 
         int i = 0;
 
-        while (i < tanks.size() && !tanks[i]->isReadyToDestroy())
+        while (i < tanks.size())
         {
-            tanks[i]->calculate(event);
-            i++;
+            if (!tanks[i]->isReadyToDestroy())
+            {
+                tanks[i]->calculate(event);
+                i++;
+            }
+            else
+                tanks.erase(tanks.begin() + i);
         }
 
         static int counter = 0;
