@@ -3,10 +3,8 @@
 #include <chrono>
 #include <thread>
 #include <SFML/Graphics.hpp>
-#include "class_projectiler_mover.h"
 #include "tank.h"
 #include "bot_tank.h"
-#include "static_objects.h"
 #include "create_map.h"
 
 int main()
@@ -106,7 +104,7 @@ int main()
     bot_tank_struct2.rotated_obj = Gun;            // номер поворачиваемых подобъектов танка
     bot_tank_struct2.projectile_obj = Projectile;  // номер снаряда
     bot_tank_struct2.destroyed_obj = DestroyedObj; // номер уничтоженного объекта
-    bot_tank_struct2.center_obj = 27;             // номер поворачиваемых подобъектов танка
+    bot_tank_struct2.center_obj = 212;             // номер поворачиваемых подобъектов танка
 
     CreateMap cm(winMap);
 

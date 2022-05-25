@@ -21,15 +21,6 @@
     <ClCompile Include="tank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="class_projectiler_mover.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="timer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="static_objects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="create_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,15 +33,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="tank.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="class_projectiler_mover.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="static_objects.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="create_map.h">

@@ -10,9 +10,9 @@
 class BotTank : public Tank
 {
 private:
-    WindowStruct* map = nullptr;  // карта
-    MoverObject* tank = nullptr;  // танк
-    Tank* main_tank = nullptr;  // объект главного танка;
+    WindowStruct* map = nullptr;  // пїЅпїЅпїЅпїЅпїЅ
+    MoverObject* tank = nullptr;  // пїЅпїЅпїЅпїЅ
+    Tank* main_tank = nullptr;  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ;
     sf::RenderWindow* window;
     CreateMap* copy_map;
     int middle_horizontal_top;
@@ -20,16 +20,16 @@ private:
     int middle_id;
     int middle_vertical_left;
     int middle_vertical_right;
-    int top_lines;  // половина строк сверху матрицы для вычисления высоты до начала матрицы танка
-    int middle_line;  // отступ от центра танка по середине
-    int gun_axis;  // идентификатор оси орудия в массиве nums_tank
+    int top_lines;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    int middle_line;  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    int gun_axis;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ nums_tank
     int max_pixels_map;
     bool flag_ready_to_destroy = false;
-    std::vector<int> nums_tank;  // массив с информацией о строении танка
-    std::vector<int> id_tank;    // массив с идентификаторами танка на карте
+    std::vector<int> nums_tank;  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    std::vector<int> id_tank;    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     std::string gun = "gun";
-    bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
-    bool destroyedObj(int i);  // эффект уничтожения объекта
+    bool moving_gun = true;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
+    bool destroyedObj(int i);  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 public:
     BotTank(WindowStruct& map, MoverObject& tank, sf::RenderWindow* window, CreateMap& cm, Tank * main_tank, std::vector<BotTank*> & bot_tanks);
