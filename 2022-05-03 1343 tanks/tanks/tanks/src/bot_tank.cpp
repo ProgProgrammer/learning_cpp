@@ -1,6 +1,8 @@
 #include "bot_tank.h"
 #include <random>
 
+__declspec(dllimport) int getRandomIntDll(int & min, int & max);
+
 int getRandomInt(int & min, int & max)
 {
     std::random_device rd;     // only used once to initialise (seed) engine
@@ -96,10 +98,10 @@ bool BotTank::calculate(sf::Event & event)
     int res;
     nums_tank = numsTank();
     id_tank = idTank();
-    
+
     while (true)
     {
-        res = getRandomInt(min, max);
+        res = getRandomIntDll(min, max);
 
         if (res == 1)  // движение вперед
         {

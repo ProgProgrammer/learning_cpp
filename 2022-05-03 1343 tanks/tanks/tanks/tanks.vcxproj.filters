@@ -15,30 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tanks.cpp">
+    <ClCompile Include="src\tanks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tank.cpp">
+    <ClCompile Include="src\tank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="create_map.cpp">
+    <ClCompile Include="src\create_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bot_tank.cpp">
+    <ClCompile Include="src\bot_tank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="class_mover_interface.h">
+    <ClInclude Include="src\class_mover_interface.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="bot_tank.h">
+    <ClInclude Include="src\bot_tank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="create_map.h">
+    <ClInclude Include="src\create_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tank.h">
+    <ClInclude Include="src\tank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
