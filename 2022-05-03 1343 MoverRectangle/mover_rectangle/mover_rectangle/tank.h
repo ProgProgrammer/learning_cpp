@@ -3,7 +3,6 @@
 #include <chrono>
 #include <thread>
 #include "class_mover_interface.h"
-#include "timer.h"
 #include "create_map.h"
 
 class BotTank;

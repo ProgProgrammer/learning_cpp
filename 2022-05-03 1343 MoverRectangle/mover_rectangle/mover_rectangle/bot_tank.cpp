@@ -17,14 +17,14 @@ BotTank::BotTank(WindowStruct& m, MoverObject& t, sf::RenderWindow* w, CreateMap
 {
     if (tank->num_fig_height % 2 != 0 && tank->num_fig_width == tank->num_fig_height)
     {
-        top_lines = tank->num_fig_height / 2;  // длина орудия
+        top_lines = tank->num_fig_height / 2;  // РґР»РёРЅР° РѕСЂСѓРґРёСЏ
     }
     else
         throw std::runtime_error("WRONG PROPORTIONS!");
 
-    middle_line = tank->num_fig_width / 2;  // отступ от центра танка до края по горизонтали
-    gun_axis = tank->num_fig_width * tank->num_fig_height / 2;  // идентификатор оси орудия в массиве nums_tank
-    max_pixels_map = map->width_window * map->height_window - 1;  // максимальный пиксель карты
+    middle_line = tank->num_fig_width / 2;  // РѕС‚СЃС‚СѓРї РѕС‚ С†РµРЅС‚СЂР° С‚Р°РЅРєР° РґРѕ РєСЂР°СЏ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
+    gun_axis = tank->num_fig_width * tank->num_fig_height / 2;  // РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РѕСЃРё РѕСЂСѓРґРёСЏ РІ РјР°СЃСЃРёРІРµ nums_tank
+    max_pixels_map = map->width_window * map->height_window - 1;  // РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РїРёРєСЃРµР»СЊ РєР°СЂС‚С‹
 
     //if (tankDrawing() == false)
         //throw std::runtime_error("CONTACT WITH OBJECT OR TO GOING OUT OF THE MAP!");
@@ -101,7 +101,7 @@ bool BotTank::calculate(sf::Event & event)
     {
         res = getRandomInt(min, max);
 
-        if (res == 1)  // движение вперед
+        if (res == 1)  // РґРІРёР¶РµРЅРёРµ РІРїРµСЂРµРґ
         {
             tank->center_obj -= map->width_window;
 
@@ -116,7 +116,7 @@ bool BotTank::calculate(sf::Event & event)
 
             return true;
         }
-        if (res == 2)  // движение назад
+        if (res == 2)  // РґРІРёР¶РµРЅРёРµ РЅР°Р·Р°Рґ
         {
             tank->center_obj += map->width_window;
 
@@ -131,7 +131,7 @@ bool BotTank::calculate(sf::Event & event)
 
             return true;
         }
-        if (res == 3)  // движение влево
+        if (res == 3)  // РґРІРёР¶РµРЅРёРµ РІР»РµРІРѕ
         {
             tank->center_obj -= 1;
 
@@ -146,7 +146,7 @@ bool BotTank::calculate(sf::Event & event)
 
             return true;
         }
-        if (res == 4)  // движение вправо
+        if (res == 4)  // РґРІРёР¶РµРЅРёРµ РІРїСЂР°РІРѕ
         {
             tank->center_obj += 1;
 
@@ -161,7 +161,7 @@ bool BotTank::calculate(sf::Event & event)
 
             return true;
         }
-        if (res == 5)  // поворот орудия вперед
+        if (res == 5)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РІРїРµСЂРµРґ
         {
             int a;
 
@@ -182,7 +182,7 @@ bool BotTank::calculate(sf::Event & event)
             if (tankDrawing(gun))
                 return true;
         }
-        if (res == 6)  // поворот орудия назад
+        if (res == 6)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РЅР°Р·Р°Рґ
         {
             int a;
 
@@ -203,7 +203,7 @@ bool BotTank::calculate(sf::Event & event)
             if (tankDrawing(gun))
                 return true;
         }
-        if (res == 7)  // поворот орудия влево
+        if (res == 7)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РІР»РµРІРѕ
         {
             int a;
 
@@ -224,7 +224,7 @@ bool BotTank::calculate(sf::Event & event)
 
             return true;
         }
-        if (res == 8)  // поворот орудия вправо
+        if (res == 8)  // РїРѕРІРѕСЂРѕС‚ РѕСЂСѓРґРёСЏ РІРїСЂР°РІРѕ
         {
             int a;
 
