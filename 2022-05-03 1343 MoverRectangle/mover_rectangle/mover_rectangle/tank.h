@@ -10,9 +10,9 @@ class BotTank;
 class Tank : public MoverInterface
 {
 private:
-    WindowStruct * map = nullptr;  // карта
-    MoverObject * tank = nullptr;  // танк
-    Tank * main_tank = nullptr;  // объект главного танка на карте
+    WindowStruct * map = nullptr;  // РєР°СЂС‚Р°
+    MoverObject * tank = nullptr;  // С‚Р°РЅРє
+    Tank * main_tank = nullptr;  // РѕР±СЉРµРєС‚ РіР»Р°РІРЅРѕРіРѕ С‚Р°РЅРєР° РЅР° РєР°СЂС‚Рµ
     sf::RenderWindow * window;
     CreateMap * copy_map;
     int middle_horizontal_top;
@@ -20,19 +20,19 @@ private:
     int middle_id;
     int middle_vertical_left;
     int middle_vertical_right;
-    int top_lines;  // половина строк сверху матрицы для вычисления высоты до начала матрицы танка
-    int middle_line;  // отступ от центра танка по середине
-    int gun_axis;  // идентификатор оси орудия в массиве nums_tank
+    int top_lines;  // РїРѕР»РѕРІРёРЅР° СЃС‚СЂРѕРє СЃРІРµСЂС…Сѓ РјР°С‚СЂРёС†С‹ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РІС‹СЃРѕС‚С‹ РґРѕ РЅР°С‡Р°Р»Р° РјР°С‚СЂРёС†С‹ С‚Р°РЅРєР°
+    int middle_line;  // РѕС‚СЃС‚СѓРї РѕС‚ С†РµРЅС‚СЂР° С‚Р°РЅРєР° РїРѕ СЃРµСЂРµРґРёРЅРµ
+    int gun_axis;  // РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РѕСЃРё РѕСЂСѓРґРёСЏ РІ РјР°СЃСЃРёРІРµ nums_tank
     int max_pixels_map;
     bool flag_ready_to_destroy = false;
-    std::vector<int> nums_tank;  // массив с информацией о строении танка
-    std::vector<int> id_tank;    // массив с идентификаторами танка на карте
+    std::vector<int> nums_tank;  // РјР°СЃСЃРёРІ СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ СЃС‚СЂРѕРµРЅРёРё С‚Р°РЅРєР°
+    std::vector<int> id_tank;    // РјР°СЃСЃРёРІ СЃ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°РјРё С‚Р°РЅРєР° РЅР° РєР°СЂС‚Рµ
     std::vector<int> moving_pixels;
-    std::vector<BotTank*> & bot_tanks;  // массив объектов-танков на карте
+    std::vector<BotTank*> & bot_tanks;  // РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ-С‚Р°РЅРєРѕРІ РЅР° РєР°СЂС‚Рµ
     std::string gun = "gun";
-    int position_gun = 0;  // позиция конца орудия
+    int position_gun = 0;  // РїРѕР·РёС†РёСЏ РєРѕРЅС†Р° РѕСЂСѓРґРёСЏ
     int direction_gun;
-    bool moving_gun = true;  // проверка на то, было ли изменено положение орудия или нет
+    bool moving_gun = true;  // РїСЂРѕРІРµСЂРєР° РЅР° С‚Рѕ, Р±С‹Р»Рѕ Р»Рё РёР·РјРµРЅРµРЅРѕ РїРѕР»РѕР¶РµРЅРёРµ РѕСЂСѓРґРёСЏ РёР»Рё РЅРµС‚
     bool checkCoincidence(int& i, std::vector<int>& it) const;
 
 protected:
@@ -43,10 +43,10 @@ protected:
         right,  // 2
         bottom  // 3
     };
-    bool tankDrawing(std::string obj = "");  // отрисовка танка
+    bool tankDrawing(std::string obj = "");  // РѕС‚СЂРёСЃРѕРІРєР° С‚Р°РЅРєР°
     bool removeGun();
-    bool destroyedObj(int i);  // эффект уничтожения объекта
-    bool shot(Tank * main_tank = nullptr);  // стрельба из орудия
+    bool destroyedObj(int i);  // СЌС„С„РµРєС‚ СѓРЅРёС‡С‚РѕР¶РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
+    bool shot(Tank * main_tank = nullptr);  // СЃС‚СЂРµР»СЊР±Р° РёР· РѕСЂСѓРґРёСЏ
     std::vector<int> numsTank() const;
     std::vector<int> idTank() const;
     int returnPosition() const;
