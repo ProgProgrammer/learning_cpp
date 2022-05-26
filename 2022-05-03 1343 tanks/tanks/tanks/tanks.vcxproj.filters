@@ -32,14 +32,14 @@
     <ClInclude Include="class_mover_interface.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="tank.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="bot_tank.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="create_map.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bot_tank.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="tank.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
