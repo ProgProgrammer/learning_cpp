@@ -1,145 +1,66 @@
 #include "world.h"
 
-int castToInt(const char ch)
+void World::createTriangle(const float x, const float y) const
 {
-    std::stringstream ss;
-    ss << ch;
-    int num = std::stoi(ss.str());
-
-    return num;
+    sf::RectangleShape rec_shape = sf::RectangleShape(sf::Vector2f(m_figure_length, m_figure_length));
+    rec_shape.setOrigin(rec_shape.getSize().x, rec_shape.getSize().y);
+    sf::CircleShape triangle(m_figure_length, 3);
+    triangle.setFillColor(m_color);
+    triangle.setPosition(x, y);
+    triangle.setOrigin(m_figure_length, m_figure_length);
+    m_window->draw(triangle);
 }
 
-int getRandomInt(const int min, const int max)
+void World::createSquare(const float x, const float y) const
 {
-    std::random_device rd;
-    std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> uni(min, max);
-    auto random_integer = uni(rng);
-
-    return random_integer;
+    sf::CircleShape square(m_figure_length, 4);
+    square.setFillColor(m_color);
+    square.setPosition(x, y);
+    square.setRotation(-45.f);
+    square.setOrigin(m_figure_length, m_figure_length);
+    m_window->draw(square);
 }
 
-void World::setPositions()
+void World::createRectangle(const float x, const float y) const
 {
-    for (int pos_y = 0; pos_y < m_level.size(); pos_y++)
-    {
-        const auto& line = m_level[pos_y];
-
-        for (int pos_x = 0; pos_x < line.size(); pos_x++)
-        {
-            m_symbols.push_back(line[pos_x]);
-            m_xPosition.push_back(m_config->m_dx * (pos_x + 1));
-            m_yPosition.push_back(m_config->m_dy * (pos_y + 1));
-        }
-    }
-}
-int World::numLevels() const
-{
-    return m_levels.size();
+    sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(m_figure_length + m_figure_length, m_figure_length));
+    rectangle.setFillColor(m_color);
+    rectangle.setPosition(x, y);
+    rectangle.setOrigin(rectangle.getSize().x, rectangle.getSize().y);
+    m_window->draw(rectangle);
 }
 
-Level World::getLevel(int num_level) const
+void World::createCircle(const float x, const float y) const
 {
-    if (num_level < m_levels.size() && m_levels[0].size() != 0)
-    {
-        return m_levels[num_level];
-    }
-    else
-    {
-        throw std::runtime_error("There is no such element on the level.");
-    }
-}
-
-void World::readLevelsFromFile(const std::string filename)
-{
-    std::string input_file = filename;
-    std::ifstream inFile;
-    inFile.open(filename);
-
-    if (inFile.is_open())
-    {
-        Level current_figure;
-
-        do
-        {
-            std::string str_figure = "";
-            std::getline(inFile, str_figure);
-
-            if (str_figure != "")
-            {
-                current_figure.push_back(str_figure);
-            }
-            else
-            {
-               m_levels.push_back(current_figure);
-                current_figure.clear();
-            }
-        } while (!inFile.eof());
-
-       m_levels.push_back(current_figure);
-    }
-    else
-    {
-        throw std::runtime_error("Levels file missing.");
-    }
-
-    inFile.close();
+    sf::CircleShape circle(m_figure_length);
+    circle.setFillColor(m_color);
+    circle.setPosition(x, y);
+    circle.setOrigin(m_figure_length, m_figure_length);
+    m_window->draw(circle);
 }
 
 void World::draw() const
 {
     m_window->clear();
 
-    sf::Color color;
-    int num_position = 0;
-
-    for (int i = 0; i < m_symbols.size(); i++)
-    {
-        if (m_symbols[i] == '.')
-        {
-            color = m_emptyPlace;
-        }
-        else
-        {
-            int elem = castToInt(m_symbols[i]);
-            color = m_colors[elem];
-        }
-
-        sf::RectangleShape rec_shape = sf::RectangleShape(sf::Vector2f(m_config->m_dx, m_config->m_dy));
-        rec_shape.setFillColor(color);
-        rec_shape.setPosition(m_xPosition[num_position], m_yPosition[num_position]);
-        rec_shape.setOrigin(rec_shape.getSize().x, rec_shape.getSize().y);
-        num_position++;
-
-        m_window->draw(rec_shape);
-    }
+    createTriangle(150, 150);
+    createSquare(450, 150);
+    createRectangle(850, 150);
+    createCircle(1050, 150);
+    createTriangle(1050, 450);
+    createSquare(850, 450);
+    createRectangle(550, 450);
+    createCircle(150, 450);
 
     m_window->display();
 }
 
 World::World()
 {
-    int x = 30;
-    int y = 30;
-    int width_window = 1200;
-    int height_window = 600;
-    m_window = std::shared_ptr<sf::RenderWindow>(new sf::RenderWindow(sf::VideoMode(width_window, height_window), "Figures"));
-    m_config = std::shared_ptr<Config>(new Config(x, y, width_window, height_window));
-
-    try
-    {
-        readLevelsFromFile("levels.txt");
-        int num_levels = numLevels();
-        int num_level = getRandomInt(0, num_levels - 1);
-        m_level = getLevel(num_level);
-    }
-    catch (std::runtime_error& error)
-    {
-        std::cout << error.what() << "\n";
-        exit(0);
-    }
-
-    setPositions();
+    m_figure_length = 100;
+    m_width_window = 1200;
+    m_height_window = 600;
+    m_window = std::shared_ptr<sf::RenderWindow>(new sf::RenderWindow(sf::VideoMode(m_width_window, m_height_window), "Figures"));
 }
 
 void World::startLoop()

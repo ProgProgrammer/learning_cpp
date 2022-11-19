@@ -131,7 +131,6 @@
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\config.h" />
     <ClInclude Include="src\i_drawable.h" />
     <ClInclude Include="src\world.h" />
   </ItemGroup>
