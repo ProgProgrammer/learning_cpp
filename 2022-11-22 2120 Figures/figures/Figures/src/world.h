@@ -1,10 +1,6 @@
 #pragma once
 #include "i_drawable.h"
 #include <SFML/Graphics.hpp>
-#include <fstream>
-#include <string>
-#include <random>
-#include <sstream>
 #include <chrono>
 #include <thread>
 
