@@ -16,6 +16,8 @@ class World : public iDrawable
         float m_figure_length;
         sf::Color m_color = sf::Color(192, 192, 192);
         std::shared_ptr<sf::RenderWindow> m_window;
+        template<class T>
+        void addColorPosition(T figure, const float x, const float y, const float origin_x, const float origin_y, const float rotate) const;
         void createTriangle(const float x, const float y) const;
         void createSquare(const float x, const float y) const;
         void createRectangle(const float x, const float y) const;
