@@ -14,11 +14,11 @@ private:
     sf::Color m_color;
 
 public:
-    Figure::Figure(const float x, const float y, const float side_length, const Type figure, const std::shared_ptr<sf::RenderWindow> window, const sf::Color color, const float angle_rotation)
+    Figure(const float x, const float y, const float side_length, const Type figure, const std::shared_ptr<sf::RenderWindow> window, const sf::Color color, const float angle_rotation = 0)
         : m_dx(x), m_dy(y), m_side_length(side_length), m_figure(figure), m_window(window), m_color(color), m_angle_rotation(angle_rotation)
     {
     }
-    void Figure::draw() override
+    void draw() override
     {
         m_figure.setFillColor(m_color);
         m_figure.setPosition(m_dx, m_dy);

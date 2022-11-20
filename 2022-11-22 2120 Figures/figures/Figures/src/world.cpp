@@ -35,17 +35,17 @@ void World::startLoop()
     m_figures.push_back(std::shared_ptr<iDrawable>(new Circle(150, 450, 100, m_window, m_color)));*/
 
     sf::CircleShape triangle = sf::CircleShape(length_circle, 3);
-    sf::CircleShape square = sf::CircleShape(length_circle, 3);
+    sf::CircleShape square = sf::CircleShape(length_circle, 4);
     sf::CircleShape circle = sf::CircleShape(length_circle);
     sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(length_circle + length_circle, length_circle));
-    //m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(150, 150, length_circle, triangle, m_window, m_color)));
-    /*m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(400, 150, length_square, square, m_window, m_color, turning_radius)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(150, 150, length_circle, triangle, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(400, 150, length_square, square, m_window, m_color, turning_radius)));
     m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::RectangleShape>(750, 150, length_circle, rectangle, m_window, m_color)));
     m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(1050, 150, length_circle, circle, m_window, m_color)));
     m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(1050, 450, length_circle, triangle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(800, 450, length_square, square, m_window, m_color, turning_radius)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::RectangleShape>(750, 150, length_circle, rectangle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(150, 450, length_circle, circle, m_window, m_color)));*/
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(750, 450, length_square, square, m_window, m_color, turning_radius)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::RectangleShape>(400, 450, length_circle, rectangle, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(150, 450, length_circle, circle, m_window, m_color)));
 
     while (m_window->isOpen())
     {
