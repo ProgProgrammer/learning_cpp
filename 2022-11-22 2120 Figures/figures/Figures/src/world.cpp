@@ -1,62 +1,19 @@
 #include "world.h"
 
-template<class T>
-void World::addColorPosition(T figure, const float x, const float y, const float origin_x, const float origin_y, const float rotate) const
-{
-    figure.setFillColor(m_color);
-    figure.setPosition(x, y);
-    figure.setOrigin(origin_x, origin_y);
-    figure.setRotation(rotate);
-    m_window->draw(figure);
-}
-
-void World::createTriangle(const float x, const float y) const
-{
-    sf::CircleShape triangle(m_figure_length, 3);
-    const float rotate = 0;
-    addColorPosition(triangle, x, y, m_figure_length, m_figure_length, rotate);
-}
-
-void World::createSquare(const float x, const float y) const
-{
-    sf::CircleShape square(m_figure_length, 4);
-    const float rotate = -45;
-    addColorPosition(square, x, y, m_figure_length, m_figure_length, rotate);
-}
-
-void World::createRectangle(const float x, const float y) const
-{
-    sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(m_figure_length + m_figure_length, m_figure_length));
-    const float rotate = 0;
-    addColorPosition(rectangle, x, y, m_figure_length, m_figure_length, rotate);
-}
-
-void World::createCircle(const float x, const float y) const
-{
-    sf::CircleShape circle(m_figure_length);
-    const float rotate = 0;
-    addColorPosition(circle, x, y, m_figure_length, m_figure_length, rotate);
-}
-
-void World::draw() const
+void World::draw()
 {
     m_window->clear();
 
-    createTriangle(150, 150);
-    createSquare(450, 150);
-    createRectangle(750, 150);
-    createCircle(1050, 150);
-    createTriangle(1050, 450);
-    createSquare(750, 450);
-    createRectangle(550, 450);
-    createCircle(150, 450);
+    for (int i = 0; i < m_figures.size(); i++)
+    {
+        m_figures[i]->draw();
+    }
 
     m_window->display();
 }
 
 World::World()
 {
-    m_figure_length = 100;
     m_width_window = 1200;
     m_height_window = 600;
     m_window = std::shared_ptr<sf::RenderWindow>(new sf::RenderWindow(sf::VideoMode(m_width_window, m_height_window), "Figures"));
@@ -64,6 +21,17 @@ World::World()
 
 void World::startLoop()
 {
+    float turning_radius = -45;
+
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Triangle(150, 150, 100, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Square(400, 150, 125, m_window, m_color, turning_radius)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Rectangle(750, 150, 100, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Circle(1050, 150, 100, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Triangle(1050, 450, 100, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Square(800, 450, 125, m_window, m_color, turning_radius)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Rectangle(550, 450, 100, m_window, m_color)));
+    m_figures.push_back(std::shared_ptr<iDrawable>(new Circle(150, 450, 100, m_window, m_color)));
+
     while (m_window->isOpen())
     {
         using namespace std::chrono_literals;

@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 class iDrawable
 {
     public:
-        virtual void draw() const = 0;
+        virtual void draw() = 0;
 };

@@ -21,12 +21,36 @@
     <ClCompile Include="src\world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\square.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\circle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\world.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\i_drawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\circle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\square.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

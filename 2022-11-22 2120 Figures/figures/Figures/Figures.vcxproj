@@ -127,11 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\circle.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\rectangle.cpp" />
+    <ClCompile Include="src\square.cpp" />
+    <ClCompile Include="src\triangle.cpp" />
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\circle.h" />
     <ClInclude Include="src\i_drawable.h" />
+    <ClInclude Include="src\rectangle.h" />
+    <ClInclude Include="src\square.h" />
+    <ClInclude Include="src\triangle.h" />
     <ClInclude Include="src\world.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
