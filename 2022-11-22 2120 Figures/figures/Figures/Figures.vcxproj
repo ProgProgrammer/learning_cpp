@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\circle.h" />
+    <ClInclude Include="src\figure.h" />
     <ClInclude Include="src\i_drawable.h" />
     <ClInclude Include="src\rectangle.h" />
     <ClInclude Include="src\square.h" />

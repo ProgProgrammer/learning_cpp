@@ -1,9 +1,10 @@
 #pragma once
 #include "i_drawable.h"
-#include "circle.h"
-#include "rectangle.h"
-#include "square.h"
-#include "triangle.h"
+#include "figure.h"
+//#include "circle.h"
+//#include "rectangle.h"
+//#include "square.h"
+//#include "triangle.h"
 #include <chrono>
 #include <thread>
 
