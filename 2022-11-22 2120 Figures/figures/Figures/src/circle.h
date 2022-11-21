@@ -5,7 +5,7 @@
 class Circle : public FigureData
 {
 private:
-    sf::CircleShape m_circle;
+    sf::CircleShape m_circle;  // объект "круг"
 
 public:
     Circle(const float x, const float y, const float width, const float height, 

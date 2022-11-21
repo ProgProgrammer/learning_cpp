@@ -5,7 +5,7 @@
 class Square : public FigureData
 {
 private:
-    sf::CircleShape m_square;
+    sf::CircleShape m_square;  // объект "квадрат"
 
 public:
     Square(const float x, const float y, const float width, const float height,

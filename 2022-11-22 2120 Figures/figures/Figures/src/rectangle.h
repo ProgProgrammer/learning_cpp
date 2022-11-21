@@ -5,7 +5,7 @@
 class Rectangle : public FigureData
 {
 private:
-    sf::RectangleShape m_rectangle;
+    sf::RectangleShape m_rectangle;  // объект "прямоугольник"
 
 public:
     Rectangle(const float x, const float y, const float width, const float height,

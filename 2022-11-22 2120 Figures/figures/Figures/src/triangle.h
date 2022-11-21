@@ -5,7 +5,7 @@
 class Triangle : public FigureData
 {
 private:
-    sf::CircleShape m_triangle;
+    sf::CircleShape m_triangle;  // объект "треугольник"
 
 public:
     Triangle(const float x, const float y, const float width, const float height,

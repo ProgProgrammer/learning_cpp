@@ -22,10 +22,10 @@ World::World()
 void World::startLoop()
 {
     float angle_rotation = -45;
-    float w_h = 100;  // ширина и высота фигур, кроме квадрата
-    float w_h_square = 125;  // ширина и высота квадрата
-    float w_rectangle = 200;  // ширина квадрата
-    float h_rectangle = 100;  // высота квадрата
+    float w_h = 100;  // С€РёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° С„РёРіСѓСЂ, РєСЂРѕРјРµ РєРІР°РґСЂР°С‚Р°
+    float w_h_square = 125;  // С€РёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° РєРІР°РґСЂР°С‚Р°
+    float w_rectangle = 200;  // С€РёСЂРёРЅР° РєРІР°РґСЂР°С‚Р°
+    float h_rectangle = 100;  // РІС‹СЃРѕС‚Р° РєРІР°РґСЂР°С‚Р°
 
     m_figures.push_back(std::make_shared<Triangle>(150, 150, w_h, w_h, m_window, m_color));
     m_figures.push_back(std::make_shared<Square>(400, 150, w_h_square, w_h_square, m_window, m_color, angle_rotation));
