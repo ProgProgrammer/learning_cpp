@@ -16,36 +16,25 @@ World::World()
 {
     m_width_window = 1200;
     m_height_window = 600;
-    m_window = std::shared_ptr<sf::RenderWindow>(new sf::RenderWindow(sf::VideoMode(m_width_window, m_height_window), "Figures"));
+    m_window = std::make_shared<sf::RenderWindow>(sf::VideoMode(m_width_window, m_height_window), "Figures");
 }
 
 void World::startLoop()
 {
-    float turning_radius = -45;
-    float length_circle = 100;
-    float length_square = 125;
+    float angle_rotation = -45;
+    float w_h = 100;  // ширина и высота фигур, кроме квадрата
+    float w_h_square = 125;  // ширина и высота квадрата
+    float w_rectangle = 200;  // ширина квадрата
+    float h_rectangle = 100;  // высота квадрата
 
-    /*m_figures.push_back(std::shared_ptr<iDrawable>(new Triangle(150, 150, 100, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Square(400, 150, 125, m_window, m_color, turning_radius)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Rectangle(750, 150, 100, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Circle(1050, 150, 100, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Triangle(1050, 450, 100, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Square(800, 450, 125, m_window, m_color, turning_radius)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Rectangle(550, 450, 100, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Circle(150, 450, 100, m_window, m_color)));*/
-
-    sf::CircleShape triangle = sf::CircleShape(length_circle, 3);
-    sf::CircleShape square = sf::CircleShape(length_circle, 4);
-    sf::CircleShape circle = sf::CircleShape(length_circle);
-    sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(length_circle + length_circle, length_circle));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(150, 150, length_circle, triangle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(400, 150, length_square, square, m_window, m_color, turning_radius)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::RectangleShape>(750, 150, length_circle, rectangle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(1050, 150, length_circle, circle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(1050, 450, length_circle, triangle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(750, 450, length_square, square, m_window, m_color, turning_radius)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::RectangleShape>(400, 450, length_circle, rectangle, m_window, m_color)));
-    m_figures.push_back(std::shared_ptr<iDrawable>(new Figure<sf::CircleShape>(150, 450, length_circle, circle, m_window, m_color)));
+    m_figures.push_back(std::make_shared<Triangle>(150, 150, w_h, w_h, m_window, m_color));
+    m_figures.push_back(std::make_shared<Square>(400, 150, w_h_square, w_h_square, m_window, m_color, angle_rotation));
+    m_figures.push_back(std::make_shared<Rectangle>(750, 150, w_rectangle, h_rectangle, m_window, m_color));
+    m_figures.push_back(std::make_shared<Circle>(1050, 150, w_h, w_h, m_window, m_color));
+    m_figures.push_back(std::make_shared<Triangle>(1050, 450, w_h, w_h, m_window, m_color));
+    m_figures.push_back(std::make_shared<Square>(800, 450, w_h_square, w_h_square, m_window, m_color, angle_rotation));
+    m_figures.push_back(std::make_shared<Rectangle>(550, 450, w_rectangle, h_rectangle, m_window, m_color));
+    m_figures.push_back(std::make_shared<Circle>(150, 450, w_h, w_h, m_window, m_color));
 
     while (m_window->isOpen())
     {

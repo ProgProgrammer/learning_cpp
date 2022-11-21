@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\circle.cpp" />
+    <ClCompile Include="src\figure_data.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\rectangle.cpp" />
     <ClCompile Include="src\square.cpp" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="src\circle.h" />
     <ClInclude Include="src\figure.h" />
+    <ClInclude Include="src\figure_data.h" />
     <ClInclude Include="src\i_drawable.h" />
     <ClInclude Include="src\rectangle.h" />
     <ClInclude Include="src\square.h" />
