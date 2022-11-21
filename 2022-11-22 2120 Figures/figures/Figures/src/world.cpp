@@ -6,7 +6,7 @@ void World::draw()
 {
     m_window->clear();
 
-    for (int i = 0; i < m_figures.size(); i++)
+    for (int i = 0; i < m_figures.size(); ++i)
     {
         m_figures[i]->draw();
     }
