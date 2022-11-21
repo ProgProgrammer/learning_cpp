@@ -1,4 +1,5 @@
 #include "circle.h"
+#include <iostream>
 
 Circle::Circle(const float x, const float y, const float width, const float height,
     const std::shared_ptr<sf::RenderWindow> window,

@@ -1,4 +1,5 @@
 #include "square.h"
+#include <iostream>
 
 Square::Square(const float x, const float y, const float width, const float height,
     const std::shared_ptr<sf::RenderWindow> window,

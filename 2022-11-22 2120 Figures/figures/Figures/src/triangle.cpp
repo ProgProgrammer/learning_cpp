@@ -1,4 +1,5 @@
 #include "triangle.h"
+#include <iostream>
 
 Triangle::Triangle(const float x, const float y, const float width, const float height,
     const std::shared_ptr<sf::RenderWindow> window,

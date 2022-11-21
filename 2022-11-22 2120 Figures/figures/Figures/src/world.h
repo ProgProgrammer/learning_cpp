@@ -4,8 +4,6 @@
 #include "rectangle.h"
 #include "square.h"
 #include "triangle.h"
-#include <chrono>
-#include <thread>
 #include <SFML/Graphics.hpp>
 
 class World : public IDrawable

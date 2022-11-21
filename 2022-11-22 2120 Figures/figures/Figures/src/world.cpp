@@ -1,4 +1,6 @@
 #include "world.h"
+#include <chrono>
+#include <thread>
 
 void World::draw()
 {
