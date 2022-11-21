@@ -4,7 +4,7 @@
 
 Программа по выводу геометрических фигур на экран приложения.
 
-![figures](C:/Users/vladi/Desktop/Programming/GIT/learning_cpp/2022-11-22 2120 Figures/figures/images/figures.jpg)
+![figures](images/figures.jpg)
 
 
 
@@ -12,7 +12,7 @@
 
 [diagram.drawio](diagram.drawio) 
 
-![diagram](C:/Users/vladi/Desktop/Programming/GIT/learning_cpp/2022-11-22 2120 Figures/figures/images/diagram.jpg)
+![diagram](images/diagram.jpg)
 
 
 
