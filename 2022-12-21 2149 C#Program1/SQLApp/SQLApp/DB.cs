@@ -53,24 +53,38 @@ namespace SQLApp
             return connection;
         }
 
+        private bool userExistCheck(DataTable table, MySqlDataAdapter adapter, MySqlCommand command)
+        {
+            openConnection();                 // открытие соединение с БД
+            adapter.SelectCommand = command;  // отправка команды в БД на выполнение
+            adapter.Fill(table);              // запись в объект table информации о том, что совпадение найдено
+            closeConnection();                // закрытие соединения с БД, чтобы не перегружать БД
+
+            if (table.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void authorization()
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand command = new MySqlCommand("SELECT * FROM users WHERE login = @lu AND password = @pu", connection);
-            command.Parameters.Add("@lu", MySqlDbType.VarChar).Value = loginUser;
-            command.Parameters.Add("@pu", MySqlDbType.VarChar).Value = passUser;
+            MySqlCommand command = new MySqlCommand("SELECT * FROM users WHERE login = @login AND password = @password", connection);  // создание команды
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = loginUser;    // присвоение значения псевдониму
+            command.Parameters.Add("@password", MySqlDbType.VarChar).Value = passUser;  // присвоение значения псевдониму
 
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
-
-            if (table.Rows.Count > 0)
+            if (userExistCheck(table, adapter, command))
             {
-                MessageBox.Show("Yes");
+                MessageBox.Show("You are logged in.");
             }
             else
             {
-                MessageBox.Show("No");
+                MessageBox.Show("This user is not in the database.");
             }
         }
 
@@ -78,23 +92,39 @@ namespace SQLApp
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand command = new MySqlCommand("INSERT INTO users(login, password, name, surname) VALUES(@lu, @pu, @un, @us)", connection);
-            command.Parameters.Add("@lu", MySqlDbType.VarChar).Value = loginUser;
-            command.Parameters.Add("@pu", MySqlDbType.VarChar).Value = passUser;
-            command.Parameters.Add("@un", MySqlDbType.VarChar).Value = userName;
-            command.Parameters.Add("@us", MySqlDbType.VarChar).Value = userSurname;
+            MySqlCommand command = new MySqlCommand("SELECT * FROM users WHERE login = @login", connection);
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = loginUser;
 
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
+            openConnection();                 // открытие соединение с БД
+            adapter.SelectCommand = command;  // отправка команды в БД на выполнение
+            adapter.Fill(table);              // запись в объект table информации о том, что совпадение найдено
+            closeConnection();
 
-            if (table.Rows.Count > 0)
+            if (userExistCheck(table, adapter, command))
             {
-                MessageBox.Show("Yes");
+                MessageBox.Show("A user with this login already exists in the database. Add another login.");
+
+                return;
+            }
+
+            command = new MySqlCommand("INSERT INTO users(login, password, name, surname) VALUES(@login, @password, @name, @surname)", connection);
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = loginUser;
+            command.Parameters.Add("@password", MySqlDbType.VarChar).Value = passUser;
+            command.Parameters.Add("@name", MySqlDbType.VarChar).Value = userName;
+            command.Parameters.Add("@surname", MySqlDbType.VarChar).Value = userSurname;
+
+            openConnection();
+
+            if (command.ExecuteNonQuery() == 1)
+            {
+                MessageBox.Show("Account created.");
             }
             else
             {
-                MessageBox.Show("No");
+                MessageBox.Show("Account has not been created.");
             }
+
+            closeConnection();
         }
     }
 }
