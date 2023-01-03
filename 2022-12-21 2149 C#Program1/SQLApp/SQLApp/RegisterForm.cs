@@ -24,7 +24,7 @@ namespace SQLApp
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
         }
 
         Point lastPoint;
@@ -78,7 +78,13 @@ namespace SQLApp
                     this.userSurname.BackColor = Color.White;
 
                     DB db = new DB(loginUser, passUser, usName, usSurname);
-                    db.registration();
+
+                    if (db.registration())
+                    {
+                        this.Hide();
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.Show();
+                    }
                 }
                 else
                 {
@@ -130,6 +136,28 @@ namespace SQLApp
                 userSurname.Text = "Введите фамилию";
                 userSurname.ForeColor = Color.Gray;
             }
+        }
+
+        private void loginLabel_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            LoginForm loginForm = new LoginForm();
+            loginForm.Show();
+        }
+
+        private void loginLabel_MouseHover(object sender, EventArgs e)
+        {
+            this.loginLabel.ForeColor = Color.Cyan;
+        }
+
+        private void loginLabel_MouseLeave(object sender, EventArgs e)
+        {
+            this.loginLabel.ForeColor = Color.White;
+        }
+
+        private void loginLabel_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.loginLabel.ForeColor = Color.FromArgb(243, 0, 33);
         }
     }
 }

@@ -70,7 +70,7 @@ namespace SQLApp
             }
         }
 
-        public void authorization()
+        public bool authorization()
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
@@ -80,15 +80,17 @@ namespace SQLApp
 
             if (userExistCheck(table, adapter, command))
             {
-                MessageBox.Show("You are logged in.");
+                return true;
             }
             else
             {
                 MessageBox.Show("This user is not in the database.");
+
+                return false;
             }
         }
 
-        public void registration()
+        public bool registration()
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
@@ -104,7 +106,7 @@ namespace SQLApp
             {
                 MessageBox.Show("A user with this login already exists in the database. Add another login.");
 
-                return;
+                return false;
             }
 
             command = new MySqlCommand("INSERT INTO users(login, password, name, surname) VALUES(@login, @password, @name, @surname)", connection);
@@ -122,9 +124,13 @@ namespace SQLApp
             else
             {
                 MessageBox.Show("Account has not been created.");
+
+                return false;
             }
 
             closeConnection();
+
+            return true;
         }
     }
 }

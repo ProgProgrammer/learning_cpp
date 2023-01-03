@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.loginLabel = new System.Windows.Forms.Label();
+            this.userSurname = new System.Windows.Forms.TextBox();
+            this.userName = new System.Windows.Forms.TextBox();
             this.repeatPassField = new System.Windows.Forms.TextBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.buttonRegistr = new System.Windows.Forms.Button();
@@ -39,8 +42,6 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.closeButton = new System.Windows.Forms.Label();
             this.panel = new System.Windows.Forms.Label();
-            this.userName = new System.Windows.Forms.TextBox();
-            this.userSurname = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -51,6 +52,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(156)))), ((int)(((byte)(210)))));
+            this.panel1.Controls.Add(this.loginLabel);
             this.panel1.Controls.Add(this.userSurname);
             this.panel1.Controls.Add(this.userName);
             this.panel1.Controls.Add(this.repeatPassField);
@@ -65,6 +67,42 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(365, 500);
             this.panel1.TabIndex = 1;
+            // 
+            // loginLabel
+            // 
+            this.loginLabel.AutoSize = true;
+            this.loginLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.loginLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.loginLabel.ForeColor = System.Drawing.Color.White;
+            this.loginLabel.Location = new System.Drawing.Point(114, 460);
+            this.loginLabel.Name = "loginLabel";
+            this.loginLabel.Size = new System.Drawing.Size(128, 17);
+            this.loginLabel.TabIndex = 10;
+            this.loginLabel.Text = "Авторизоваться";
+            this.loginLabel.Click += new System.EventHandler(this.loginLabel_Click);
+            this.loginLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.loginLabel_MouseDown);
+            this.loginLabel.MouseLeave += new System.EventHandler(this.loginLabel_MouseLeave);
+            this.loginLabel.MouseHover += new System.EventHandler(this.loginLabel_MouseHover);
+            // 
+            // userSurname
+            // 
+            this.userSurname.Location = new System.Drawing.Point(86, 266);
+            this.userSurname.Multiline = true;
+            this.userSurname.Name = "userSurname";
+            this.userSurname.Size = new System.Drawing.Size(227, 31);
+            this.userSurname.TabIndex = 9;
+            this.userSurname.Enter += new System.EventHandler(this.userSurname_Enter);
+            this.userSurname.Leave += new System.EventHandler(this.userSurname_Leave);
+            // 
+            // userName
+            // 
+            this.userName.Location = new System.Drawing.Point(86, 220);
+            this.userName.Multiline = true;
+            this.userName.Name = "userName";
+            this.userName.Size = new System.Drawing.Size(227, 31);
+            this.userName.TabIndex = 8;
+            this.userName.Enter += new System.EventHandler(this.userName_Enter);
+            this.userName.Leave += new System.EventHandler(this.userName_Leave);
             // 
             // repeatPassField
             // 
@@ -174,26 +212,6 @@
             this.panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_MouseDown);
             this.panel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel_MouseMove);
             // 
-            // userName
-            // 
-            this.userName.Location = new System.Drawing.Point(86, 220);
-            this.userName.Multiline = true;
-            this.userName.Name = "userName";
-            this.userName.Size = new System.Drawing.Size(227, 31);
-            this.userName.TabIndex = 8;
-            this.userName.Enter += new System.EventHandler(this.userName_Enter);
-            this.userName.Leave += new System.EventHandler(this.userName_Leave);
-            // 
-            // userSurname
-            // 
-            this.userSurname.Location = new System.Drawing.Point(86, 266);
-            this.userSurname.Multiline = true;
-            this.userSurname.Name = "userSurname";
-            this.userSurname.Size = new System.Drawing.Size(227, 31);
-            this.userSurname.TabIndex = 9;
-            this.userSurname.Enter += new System.EventHandler(this.userSurname_Enter);
-            this.userSurname.Leave += new System.EventHandler(this.userSurname_Leave);
-            // 
             // RegisterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -229,5 +247,6 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.TextBox userSurname;
         private System.Windows.Forms.TextBox userName;
+        private System.Windows.Forms.Label loginLabel;
     }
 }

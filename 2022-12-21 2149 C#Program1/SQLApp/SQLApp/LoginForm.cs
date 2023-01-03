@@ -20,7 +20,7 @@ namespace SQLApp
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
         }
 
         private void closeButton_MouseHover(object sender, EventArgs e)
@@ -87,13 +87,41 @@ namespace SQLApp
                 this.passField.BackColor = Color.White;
 
                 DB db = new DB(loginUser, passUser);
-                db.authorization();
+
+                if (db.authorization())
+                {
+                    this.Hide();
+                    MainForm mainForm = new MainForm();
+                    mainForm.Show();
+                }
             }
             else
             {
                 this.loginField.BackColor = Color.FromArgb(243, 0, 33);
                 this.passField.BackColor = Color.FromArgb(243, 0, 33);
             }
+        }
+
+        private void registrationLabel_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            RegisterForm registerForm = new RegisterForm();
+            registerForm.Show();
+        }
+
+        private void registrationLabel_MouseHover(object sender, EventArgs e)
+        {
+            this.registrationLabel.ForeColor = Color.Cyan;
+        }
+
+        private void registrationLabel_MouseLeave(object sender, EventArgs e)
+        {
+            this.registrationLabel.ForeColor = Color.White;
+        }
+
+        private void registrationLabel_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.registrationLabel.ForeColor = Color.FromArgb(243, 0, 33);
         }
     }
 }

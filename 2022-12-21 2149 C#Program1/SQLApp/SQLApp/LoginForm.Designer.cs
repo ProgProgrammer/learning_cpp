@@ -31,21 +31,23 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonLogin = new System.Windows.Forms.Button();
             this.passField = new System.Windows.Forms.TextBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.loginField = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.closeButton = new System.Windows.Forms.Label();
             this.panel = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.registrationLabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(156)))), ((int)(((byte)(210)))));
+            this.panel1.Controls.Add(this.registrationLabel);
             this.panel1.Controls.Add(this.buttonLogin);
             this.panel1.Controls.Add(this.passField);
             this.panel1.Controls.Add(this.pictureBox2);
@@ -79,6 +81,16 @@
             this.passField.UseSystemPasswordChar = true;
             this.passField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.passField_KeyDown);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::SQLApp.Properties.Resources._lock;
+            this.pictureBox2.Location = new System.Drawing.Point(47, 214);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 3;
+            this.pictureBox2.TabStop = false;
+            // 
             // loginField
             // 
             this.loginField.Location = new System.Drawing.Point(86, 168);
@@ -87,6 +99,16 @@
             this.loginField.Size = new System.Drawing.Size(227, 31);
             this.loginField.TabIndex = 2;
             this.loginField.KeyDown += new System.Windows.Forms.KeyEventHandler(this.loginField_KeyDown);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::SQLApp.Properties.Resources.user;
+            this.pictureBox1.Location = new System.Drawing.Point(47, 168);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
             // 
             // panel2
             // 
@@ -130,25 +152,21 @@
             this.panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.downPanel_MouseDown);
             this.panel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.movePanel_MouseMove);
             // 
-            // pictureBox2
+            // registrationLabel
             // 
-            this.pictureBox2.Image = global::SQLApp.Properties.Resources._lock;
-            this.pictureBox2.Location = new System.Drawing.Point(47, 214);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 3;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::SQLApp.Properties.Resources.user;
-            this.pictureBox1.Location = new System.Drawing.Point(47, 168);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
+            this.registrationLabel.AutoSize = true;
+            this.registrationLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.registrationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.registrationLabel.ForeColor = System.Drawing.Color.White;
+            this.registrationLabel.Location = new System.Drawing.Point(113, 356);
+            this.registrationLabel.Name = "registrationLabel";
+            this.registrationLabel.Size = new System.Drawing.Size(152, 17);
+            this.registrationLabel.TabIndex = 6;
+            this.registrationLabel.Text = "Еще нет аккаунта?";
+            this.registrationLabel.Click += new System.EventHandler(this.registrationLabel_Click);
+            this.registrationLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.registrationLabel_MouseDown);
+            this.registrationLabel.MouseLeave += new System.EventHandler(this.registrationLabel_MouseLeave);
+            this.registrationLabel.MouseHover += new System.EventHandler(this.registrationLabel_MouseHover);
             // 
             // LoginForm
             // 
@@ -161,10 +179,10 @@
             this.Text = "LoginForm";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -180,5 +198,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TextBox loginField;
         private System.Windows.Forms.Button buttonLogin;
+        private System.Windows.Forms.Label registrationLabel;
     }
 }
