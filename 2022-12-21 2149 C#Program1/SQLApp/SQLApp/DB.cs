@@ -48,16 +48,11 @@ namespace SQLApp
             }
         }
 
-        private MySqlConnection getConnection()
-        {
-            return connection;
-        }
-
         private bool userExistCheck(DataTable table, MySqlDataAdapter adapter, MySqlCommand command)
         {
             openConnection();                 // открытие соединение с БД
             adapter.SelectCommand = command;  // отправка команды в БД на выполнение
-            adapter.Fill(table);              // запись в объект table информации о том, что совпадение найдено
+            adapter.Fill(table);              // запись в объект table информации о том, что совпадение найдено / не найдено
             closeConnection();                // закрытие соединения с БД, чтобы не перегружать БД
 
             if (table.Rows.Count > 0)
@@ -97,11 +92,6 @@ namespace SQLApp
             MySqlCommand command = new MySqlCommand("SELECT * FROM users WHERE login = @login", connection);
             command.Parameters.Add("@login", MySqlDbType.VarChar).Value = loginUser;
 
-            openConnection();                 // открытие соединение с БД
-            adapter.SelectCommand = command;  // отправка команды в БД на выполнение
-            adapter.Fill(table);              // запись в объект table информации о том, что совпадение найдено
-            closeConnection();
-
             if (userExistCheck(table, adapter, command))
             {
                 MessageBox.Show("A user with this login already exists in the database. Add another login.");
@@ -120,17 +110,95 @@ namespace SQLApp
             if (command.ExecuteNonQuery() == 1)
             {
                 MessageBox.Show("Account created.");
+                closeConnection();
+
+                return true;
             }
             else
             {
                 MessageBox.Show("Account has not been created.");
+                closeConnection();
 
                 return false;
             }
+        }
 
+        public bool removeData(String login)
+        {
+            DataTable table = new DataTable();
+            MySqlCommand command = new MySqlCommand("DELETE FROM users WHERE login = @login", connection);
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+
+            openConnection();
+
+            if (command.ExecuteNonQuery() == 1)
+            {
+                closeConnection();
+
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Account has not been deleted.");
+                closeConnection();
+
+                return false;
+            }
+        }
+
+        public List<string[]> getData()
+        {
+            MySqlCommand command = new MySqlCommand("SELECT * FROM users ORDER BY id", connection);
+
+            openConnection();
+
+            MySqlDataReader reader = command.ExecuteReader();
+            List<string[]> data = new List<string[]>();
+
+            while (reader.Read())
+            {
+                data.Add(new string[3]);
+
+                data[data.Count - 1][0] = reader[1].ToString();
+                data[data.Count - 1][1] = reader[3].ToString();
+                data[data.Count - 1][2] = reader[4].ToString();
+            }
+
+            reader.Close();
             closeConnection();
 
-            return true;
+            return data;
+        }
+
+        public List<string[]> getFacultiesGroups()
+        {
+            MySqlCommand command_groups_num = new MySqlCommand("SELECT COUNT(*) FROM groups", connection);
+
+            openConnection();
+            int numRowsGroups = Convert.ToInt32(command_groups_num.ExecuteScalar());
+            closeConnection();
+
+            List<string[]> data = new List<string[]>();
+
+            MySqlCommand command = new MySqlCommand("SELECT * FROM faculties_groups JOIN faculties ON faculties_groups.num_faculty = faculties.id JOIN groups ON faculties_groups.num_group = groups.id", connection);
+
+            openConnection();
+            MySqlDataReader reader = command.ExecuteReader();
+
+            for (int i = 0; i < numRowsGroups; i++)
+            {
+                if (reader.Read())
+                {
+                    data.Add(new string[2]);
+                    data[i][0] = reader[4].ToString();
+                    data[i][1] = reader[6].ToString();
+                }
+            }
+
+            reader.Close();
+            closeConnection();
+
+            return data;
         }
     }
 }
