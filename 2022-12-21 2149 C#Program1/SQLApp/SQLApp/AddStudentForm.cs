@@ -17,32 +17,24 @@ namespace SQLApp
         private string num_student = "№ зачетной книжки";
         private string name_student = "Имя студента";
         private string surname_student = "Фамилия студента";
-        private List<string> list_faculties = new List<string>();
+        private List<string[]> list_faculties = new List<string[]>();
         private List<string[]> data_groups;
         public AddStudentForm()
         {
             InitializeComponent();
             comboBoxes();
 
-            numberStudent.Text = num_student;
-            numberStudent.ForeColor = Color.Gray;
-            nameStudent.Text = name_student;
-            nameStudent.ForeColor = Color.Gray;
-            surnameStudent.Text = surname_student;
-            surnameStudent.ForeColor = Color.Gray;
-            facultyCombo.Text = "Факультет";
-            facultyCombo.ForeColor = Color.Gray;
-            groupCombo.Text = "Группа";
-            groupCombo.ForeColor = Color.Gray;
+            this.numberStudent.Text = num_student;
+            this.numberStudent.ForeColor = Color.Gray;
+            this.nameStudent.Text = name_student;
+            this.nameStudent.ForeColor = Color.Gray;
+            this.surnameStudent.Text = surname_student;
+            this.surnameStudent.ForeColor = Color.Gray;
+            this.facultyCombo.Text = "Факультет";
+            this.facultyCombo.ForeColor = Color.Gray;
+            this.groupCombo.Text = "Группа";
+            this.groupCombo.ForeColor = Color.Gray;
         }
-
-        /*private void addItems(System.Windows.Forms.ComboBox combox, ref List<string[]> data)
-        {
-            foreach (string s in data)
-            {
-                combox.Items.Add(s);
-            }
-        }*/
 
         private void comboBoxes()
         {
@@ -52,48 +44,102 @@ namespace SQLApp
 
             for (int i = 0; i < data_groups.Count; i++)
             {
-                list_faculties.Add(data_groups[i][0]);
+                this.list_faculties.Add(new string[2]);
+                this.list_faculties[i][0] = this.data_groups[i][0];
+                this.list_faculties[i][1] = this.data_groups[i][1];
             }
 
-            for (int i = 0; i < list_faculties.Count; i++)
+            for (int i = 0; i < this.list_faculties.Count; i++)
             {
-                for (int a = i + 1; a < list_faculties.Count; a++)
+                for (int a = i + 1; a < this.list_faculties.Count; a++)
                 {
-                    if (list_faculties[i][0] == list_faculties[a][0])
+                    if (this.list_faculties[i][1] == this.list_faculties[a][1])
                     {
-                        list_faculties.RemoveAt(a);
+                        this.list_faculties.RemoveAt(a);
                     }
                 }
             }
 
-            foreach (string s in list_faculties)
+            for (int i = 0; i < list_faculties.Count(); i++)
             {
-                facultyCombo.Items.Add(s);
+                facultyCombo.Items.Add(list_faculties[i][1]);
             }
         }
 
-        private void facultyCombo_Leave(object sender, EventArgs e)
+        private void facultyCombo_Enter(object sender, EventArgs e)
         {
-            groupCombo.Text = "";
+            this.groupCombo.Text = "";
         }
 
         private void group_Enter(object sender, EventArgs e)
         {
-            groupCombo.Items.Clear();
+            this.groupCombo.Items.Clear();
             string faculty = facultyCombo.Text;
 
             for (int i = 0; i < data_groups.Count; i++)
             {
-                if (data_groups[i][0] == faculty)
+                if (data_groups[i][1] == faculty)
                 {
-                    groupCombo.Items.Add(data_groups[i][1]);
+                    this.groupCombo.Items.Add(this.data_groups[i][3]);
                 }
             }
         }
 
+        public struct InfoStudent
+        {
+            public String number_student;
+            public String name_student;
+            public String surname_student;
+            public String faculty_combo;
+            public String group_combo;
+        }
+
         private void addButton_Click(object sender, EventArgs e)
         {
+            InfoStudent infoStudent = new InfoStudent();
+            infoStudent.number_student = this.numberStudent.Text;
+            infoStudent.name_student = this.nameStudent.Text;
+            infoStudent.surname_student = this.surnameStudent.Text;
+            String faculty_combo = this.facultyCombo.Text;
+            String group_combo = this.groupCombo.Text;
 
+            if (infoStudent.number_student.Length >= 8 && infoStudent.name_student.Length > 1
+                && infoStudent.surname_student.Length > 1 && faculty_combo.Length > 0
+                && group_combo.Length > 0)
+            {
+                this.numberStudent.BackColor = Color.White;
+                this.nameStudent.BackColor = Color.White;
+                this.surnameStudent.BackColor = Color.White;
+                this.facultyCombo.BackColor = Color.White;
+                this.groupCombo.BackColor = Color.White;
+
+                DB db = new DB("admin", "12345");
+
+                for (int i = 0; i < list_faculties.Count; i++)
+                {
+                    if (list_faculties[i][1] == faculty_combo)
+                    {
+                        infoStudent.faculty_combo = list_faculties[i][0];
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < data_groups.Count; i++)
+                {
+                    if (data_groups[i][3] == group_combo)
+                    {
+                        infoStudent.group_combo = data_groups[i][2];
+                        break;
+                    }
+                }
+
+                if (db.registrationStudent(infoStudent))
+                {
+                    this.Hide();
+                    MainForm mainForm = new MainForm();
+                    mainForm.Show();
+                }
+            }
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -155,7 +201,7 @@ namespace SQLApp
 
         private void surnameStudent_Enter(object sender, EventArgs e)
         {
-            if (surnameStudent.Text == name_student)
+            if (surnameStudent.Text == surname_student)
             {
                 surnameStudent.Text = "";
                 surnameStudent.ForeColor = Color.Black;
@@ -166,7 +212,7 @@ namespace SQLApp
         {
             if (surnameStudent.Text == "")
             {
-                surnameStudent.Text = name_student;
+                surnameStudent.Text = surname_student;
                 surnameStudent.ForeColor = Color.Gray;
             }
         }

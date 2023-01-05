@@ -79,7 +79,7 @@ namespace SQLApp
 
                     DB db = new DB(loginUser, passUser, usName, usSurname);
 
-                    if (db.registration())
+                    if (db.registrationUser())
                     {
                         this.Hide();
                         LoginForm loginForm = new LoginForm();

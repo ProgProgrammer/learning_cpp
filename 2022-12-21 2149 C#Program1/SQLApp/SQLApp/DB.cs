@@ -12,8 +12,8 @@ namespace SQLApp
 {
     internal class DB
     {
-        private String loginUser;
-        private String passUser;
+        private readonly String loginUser;
+        private readonly String passUser;
         private String userName;
         private String userSurname;
         MySqlConnection connection = new MySqlConnection("server=localhost;port=3306;username=root;password=root;database=itproger");
@@ -69,9 +69,9 @@ namespace SQLApp
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand command = new MySqlCommand("SELECT * FROM users WHERE login = @login AND password = @password", connection);  // создание команды
-            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = loginUser;    // присвоение значения псевдониму
-            command.Parameters.Add("@password", MySqlDbType.VarChar).Value = passUser;  // присвоение значения псевдониму
+            MySqlCommand command = new MySqlCommand($"SELECT * FROM users WHERE login = @login AND password = @password", connection);  // создание команды
+            command.Parameters.Add("@login", MySqlDbType.VarChar).Value = loginUser;     // присвоение значения псевдониму
+            command.Parameters.Add("@password", MySqlDbType.VarChar).Value = passUser;   // присвоение значения псевдониму
 
             if (userExistCheck(table, adapter, command))
             {
@@ -85,7 +85,7 @@ namespace SQLApp
             }
         }
 
-        public bool registration()
+        public bool registrationUser()
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
@@ -123,6 +123,35 @@ namespace SQLApp
             }
         }
 
+        public bool registrationStudent(AddStudentForm.InfoStudent infoStudent)
+        {
+            DataTable table = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand command = new MySqlCommand("INSERT INTO students(student_number, name, surname, num_faculty, num_group) VALUES(@student_number, @name, @surname, @num_faculty, @num_group)", connection);
+            command.Parameters.Add("@student_number", MySqlDbType.VarChar).Value = infoStudent.number_student;
+            command.Parameters.Add("@name", MySqlDbType.VarChar).Value = infoStudent.name_student;
+            command.Parameters.Add("@surname", MySqlDbType.VarChar).Value = infoStudent.surname_student;
+            command.Parameters.Add("@num_faculty", MySqlDbType.VarChar).Value = infoStudent.faculty_combo;
+            command.Parameters.Add("@num_group", MySqlDbType.VarChar).Value = infoStudent.group_combo;
+
+            openConnection();
+
+            if (command.ExecuteNonQuery() == 1)
+            {
+                MessageBox.Show("User added.");
+                closeConnection();
+
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("User has not been added.");
+                closeConnection();
+
+                return false;
+            }
+        }
+
         public bool removeData(String login)
         {
             DataTable table = new DataTable();
@@ -146,7 +175,7 @@ namespace SQLApp
             }
         }
 
-        public List<string[]> getData()
+        public List<string[]> getDataUsers()
         {
             MySqlCommand command = new MySqlCommand("SELECT * FROM users ORDER BY id", connection);
 
@@ -189,9 +218,11 @@ namespace SQLApp
             {
                 if (reader.Read())
                 {
-                    data.Add(new string[2]);
-                    data[i][0] = reader[4].ToString();
-                    data[i][1] = reader[6].ToString();
+                    data.Add(new string[4]);
+                    data[i][0] = reader[3].ToString();
+                    data[i][1] = reader[4].ToString();
+                    data[i][2] = reader[5].ToString();
+                    data[i][3] = reader[6].ToString();
                 }
             }
 

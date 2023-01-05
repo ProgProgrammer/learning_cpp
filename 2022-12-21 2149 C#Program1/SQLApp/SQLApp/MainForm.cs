@@ -23,7 +23,7 @@ namespace SQLApp
         private void loadData()
         {
             DB db = new DB("admin", "12345");
-            List<string[]> data = db.getData();
+            List<string[]> data = db.getDataUsers();
 
             foreach (string[] s in data)
             {

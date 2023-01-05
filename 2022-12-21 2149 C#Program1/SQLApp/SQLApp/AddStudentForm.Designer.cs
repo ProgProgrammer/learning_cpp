@@ -73,7 +73,7 @@
             this.facultyCombo.Name = "facultyCombo";
             this.facultyCombo.Size = new System.Drawing.Size(227, 21);
             this.facultyCombo.TabIndex = 12;
-            this.facultyCombo.Leave += new System.EventHandler(this.facultyCombo_Leave);
+            this.facultyCombo.Enter += new System.EventHandler(this.facultyCombo_Enter);
             // 
             // surnameStudent
             // 
