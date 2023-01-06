@@ -23,17 +23,6 @@ namespace SQLApp
         {
             InitializeComponent();
             comboBoxes();
-
-            this.numberStudent.Text = num_student;
-            this.numberStudent.ForeColor = Color.Gray;
-            this.nameStudent.Text = name_student;
-            this.nameStudent.ForeColor = Color.Gray;
-            this.surnameStudent.Text = surname_student;
-            this.surnameStudent.ForeColor = Color.Gray;
-            this.facultyCombo.Text = "Факультет";
-            this.facultyCombo.ForeColor = Color.Gray;
-            this.groupCombo.Text = "Группа";
-            this.groupCombo.ForeColor = Color.Gray;
         }
 
         private void comboBoxes()
@@ -104,8 +93,8 @@ namespace SQLApp
             String group_combo = this.groupCombo.Text;
 
             if (infoStudent.number_student.Length >= 8 && infoStudent.name_student.Length > 1
-                && infoStudent.surname_student.Length > 1 && faculty_combo.Length > 0
-                && group_combo.Length > 0)
+                && infoStudent.surname_student.Length > 1 && faculty_combo.Length > 10
+                && group_combo.Length > 3)
             {
                 this.numberStudent.BackColor = Color.White;
                 this.nameStudent.BackColor = Color.White;
@@ -136,9 +125,59 @@ namespace SQLApp
                 if (db.registrationStudent(infoStudent))
                 {
                     this.Hide();
-                    MainForm mainForm = new MainForm();
-                    mainForm.Show();
                 }
+            }
+
+
+            if (infoStudent.number_student.Length >= 8)
+            {
+                this.numberStudent.BackColor = Color.White;
+            }
+            
+            if (infoStudent.name_student.Length > 1)
+            {
+                this.nameStudent.BackColor = Color.White;
+            }
+            
+            if (infoStudent.surname_student.Length > 1)
+            {
+                this.surnameStudent.BackColor = Color.White;
+            }
+            
+            if (faculty_combo.Length > 10)
+            {
+                this.facultyCombo.BackColor = Color.White;
+            }
+            
+            if (group_combo.Length > 3)
+            {
+                this.groupCombo.BackColor = Color.White;
+            }
+
+
+            if (infoStudent.number_student.Length < 8)
+            {
+                this.numberStudent.BackColor = Color.FromArgb(243, 0, 33);
+            }
+            
+            if (infoStudent.name_student.Length < 2)
+            {
+                this.nameStudent.BackColor = Color.FromArgb(243, 0, 33);
+            }
+            
+            if (infoStudent.surname_student.Length < 2)
+            {
+                this.surnameStudent.BackColor = Color.FromArgb(243, 0, 33);
+            }
+            
+            if (faculty_combo.Length <= 10)
+            {
+                this.facultyCombo.BackColor = Color.FromArgb(243, 0, 33);
+            }
+            
+            if (group_combo.Length <= 2)
+            {
+                this.groupCombo.BackColor = Color.FromArgb(243, 0, 33);
             }
         }
 
@@ -160,60 +199,6 @@ namespace SQLApp
             {
                 this.Left += e.X - lastPoint.X;
                 this.Top += e.Y - lastPoint.Y;
-            }
-        }
-
-        private void numberStudent_Enter(object sender, EventArgs e)
-        {
-            if (numberStudent.Text == num_student)
-            {
-                numberStudent.Text = "";
-                numberStudent.ForeColor = Color.Black;
-            }
-        }
-
-        private void numberStudent_Leave(object sender, EventArgs e)
-        {
-            if (numberStudent.Text == "")
-            {
-                numberStudent.Text = num_student;
-                numberStudent.ForeColor = Color.Gray;
-            }
-        }
-
-        private void nameStudent_Enter(object sender, EventArgs e)
-        {
-            if (nameStudent.Text == name_student)
-            {
-                nameStudent.Text = "";
-                nameStudent.ForeColor = Color.Black;
-            }
-        }
-
-        private void nameStudent_Leave(object sender, EventArgs e)
-        {
-            if (nameStudent.Text == "")
-            {
-                nameStudent.Text = name_student;
-                nameStudent.ForeColor = Color.Gray;
-            }
-        }
-
-        private void surnameStudent_Enter(object sender, EventArgs e)
-        {
-            if (surnameStudent.Text == surname_student)
-            {
-                surnameStudent.Text = "";
-                surnameStudent.ForeColor = Color.Black;
-            }
-        }
-
-        private void surnameStudent_Leave(object sender, EventArgs e)
-        {
-            if (surnameStudent.Text == "")
-            {
-                surnameStudent.Text = surname_student;
-                surnameStudent.ForeColor = Color.Gray;
             }
         }
 

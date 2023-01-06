@@ -38,6 +38,11 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.closeButton = new System.Windows.Forms.Label();
             this.panel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -45,6 +50,11 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(104)))), ((int)(((byte)(156)))), ((int)(((byte)(210)))));
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.groupCombo);
             this.panel1.Controls.Add(this.facultyCombo);
             this.panel1.Controls.Add(this.surnameStudent);
@@ -60,7 +70,7 @@
             // groupCombo
             // 
             this.groupCombo.FormattingEnabled = true;
-            this.groupCombo.Location = new System.Drawing.Point(321, 218);
+            this.groupCombo.Location = new System.Drawing.Point(321, 238);
             this.groupCombo.Name = "groupCombo";
             this.groupCombo.Size = new System.Drawing.Size(227, 21);
             this.groupCombo.TabIndex = 13;
@@ -77,29 +87,25 @@
             // 
             // surnameStudent
             // 
-            this.surnameStudent.Location = new System.Drawing.Point(188, 270);
+            this.surnameStudent.Location = new System.Drawing.Point(188, 302);
             this.surnameStudent.Multiline = true;
             this.surnameStudent.Name = "surnameStudent";
             this.surnameStudent.Size = new System.Drawing.Size(227, 31);
             this.surnameStudent.TabIndex = 11;
-            this.surnameStudent.Enter += new System.EventHandler(this.surnameStudent_Enter);
-            this.surnameStudent.Leave += new System.EventHandler(this.surnameStudent_Leave);
             // 
             // nameStudent
             // 
-            this.nameStudent.Location = new System.Drawing.Point(53, 218);
+            this.nameStudent.Location = new System.Drawing.Point(53, 238);
             this.nameStudent.Multiline = true;
             this.nameStudent.Name = "nameStudent";
             this.nameStudent.Size = new System.Drawing.Size(227, 31);
             this.nameStudent.TabIndex = 8;
-            this.nameStudent.Enter += new System.EventHandler(this.nameStudent_Enter);
-            this.nameStudent.Leave += new System.EventHandler(this.nameStudent_Leave);
             // 
             // addButton
             // 
             this.addButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addButton.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.addButton.Location = new System.Drawing.Point(200, 339);
+            this.addButton.Location = new System.Drawing.Point(201, 354);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(201, 42);
             this.addButton.TabIndex = 5;
@@ -114,8 +120,6 @@
             this.numberStudent.Name = "numberStudent";
             this.numberStudent.Size = new System.Drawing.Size(227, 31);
             this.numberStudent.TabIndex = 2;
-            this.numberStudent.Enter += new System.EventHandler(this.numberStudent_Enter);
-            this.numberStudent.Leave += new System.EventHandler(this.numberStudent_Leave);
             // 
             // panel2
             // 
@@ -159,6 +163,51 @@
             this.panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_MouseDown);
             this.panel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel_MouseMove);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(53, 149);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(96, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Student ID number";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(56, 219);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Name";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(321, 149);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(41, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Faculty";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(321, 219);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Group";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(188, 283);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Surname";
+            // 
             // AddStudentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -189,5 +238,10 @@
         private System.Windows.Forms.TextBox surnameStudent;
         private System.Windows.Forms.ComboBox groupCombo;
         private System.Windows.Forms.ComboBox facultyCombo;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
