@@ -3,6 +3,7 @@ using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -178,11 +179,11 @@ namespace SQLApp
         public List<string[]> getDataUsers()
         {
             MySqlCommand command = new MySqlCommand("SELECT * FROM users ORDER BY id", connection);
+            List<string[]> data = new List<string[]>();
 
             openConnection();
 
             MySqlDataReader reader = command.ExecuteReader();
-            List<string[]> data = new List<string[]>();
 
             while (reader.Read())
             {
@@ -191,6 +192,32 @@ namespace SQLApp
                 data[data.Count - 1][0] = reader[1].ToString();
                 data[data.Count - 1][1] = reader[3].ToString();
                 data[data.Count - 1][2] = reader[4].ToString();
+            }
+
+            reader.Close();
+            closeConnection();
+
+            return data;
+        }
+
+        public List<string[]> getDataStudents()
+        {
+            MySqlCommand command = new MySqlCommand("SELECT * FROM students ORDER BY id", connection);
+            List<string[]> data = new List<string[]>();
+
+            openConnection();
+
+            MySqlDataReader reader = command.ExecuteReader();
+            int num_cell_data = reader.FieldCount - 1;
+
+            while (reader.Read())
+            {
+                data.Add(new string[num_cell_data]);
+
+                for (int i = 0; i < num_cell_data; i++)
+                {
+                    data[data.Count - 1][i] = reader[i + 1].ToString();
+                }
             }
 
             reader.Close();
@@ -208,7 +235,6 @@ namespace SQLApp
             closeConnection();
 
             List<string[]> data = new List<string[]>();
-
             MySqlCommand command = new MySqlCommand("SELECT * FROM faculties_groups JOIN faculties ON faculties_groups.num_faculty = faculties.id JOIN groups ON faculties_groups.num_group = groups.id", connection);
 
             openConnection();

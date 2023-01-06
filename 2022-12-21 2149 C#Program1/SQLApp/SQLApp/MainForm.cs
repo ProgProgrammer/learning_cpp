@@ -17,10 +17,49 @@ namespace SQLApp
         {
             InitializeComponent();
 
-            loadData();
+            loadDataStudents();
         }
 
-        private void loadData()
+        private void loadDataStudents()
+        {
+            DB db = new DB("admin", "12345");
+            List<string[]> data_students = db.getDataStudents();
+            List<string[]> data_faculty_groups = db.getFacultiesGroups();
+            List<string[]> data = new List<string[]>();
+
+            for (int i = 0; i < data_students.Count; i++)
+            {
+                data.Add(new string[5]);
+                
+                for (int a = 0; a < data[i].Length; a++)
+                {
+                    data[i][a] = data_students[i][a];
+                }
+            }
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                for (int a = 0; a < data_faculty_groups.Count; a++)
+                {
+                    if (data[i][3] == data_faculty_groups[a][0])
+                    {
+                        data[i][3] = data_faculty_groups[a][1];
+                    }
+
+                    if (data[i][4] == data_faculty_groups[a][2])
+                    {
+                        data[i][4] = data_faculty_groups[a][3];
+                    }
+                }
+            }
+
+            foreach (string[] s in data)
+            {
+                dataGridView1.Rows.Add(s);
+            }
+        }
+
+        /*private void loadDataUsers()
         {
             DB db = new DB("admin", "12345");
             List<string[]> data = db.getDataUsers();
@@ -29,19 +68,19 @@ namespace SQLApp
             {
                 dataGridView1.Rows.Add(s);
             }
-        }
+        }*/
 
         private void closeButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void changeUserToolStripMenuItem_Click(object sender, EventArgs e)
+        /*private void changeUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
             LoginForm loginForm = new LoginForm();
             loginForm.Show();
-        }
+        }*/
 
         private void propertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -69,7 +108,7 @@ namespace SQLApp
 
         }
 
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        /*private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int column = dataGridView1.CurrentCell.ColumnIndex;
             int index = dataGridView1.CurrentCell.RowIndex;
@@ -80,7 +119,7 @@ namespace SQLApp
             {
                 dataGridView1.Rows.RemoveAt(index);
             }
-        }
+        }*/
 
         Point lastPoint;
 
