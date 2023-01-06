@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MySqlX.XDevAPI.Relational;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,7 +25,7 @@ namespace SQLApp
         private void loadDataStudents()
         {
             DB db = new DB("admin", "12345");
-            List<string[]> data_students = db.getDataStudents();
+            List<string[]> data_students = db.getStudents();
             List<string[]> data_faculty_groups = db.getFacultiesGroups();
             List<string[]> data = new List<string[]>();
 
@@ -108,18 +110,30 @@ namespace SQLApp
 
         }
 
-        /*private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int column = dataGridView1.CurrentCell.ColumnIndex;
-            int index = dataGridView1.CurrentCell.RowIndex;
-            string id = dataGridView1[column, index].Value.ToString();
+            int column = dataGridView1.CurrentCell.ColumnIndex;         // номер колонки
+            int index = dataGridView1.CurrentCell.RowIndex;             // номер строки
+            string id = dataGridView1[column, index].Value.ToString();  // номер студенческого билета
             DB db = new DB("admin", "12345");
 
-            if (db.removeData(id))
+            if (db.removeStudent(id))                // метод удаления студента из базы данных
             {
-                dataGridView1.Rows.RemoveAt(index);
+                dataGridView1.Rows.RemoveAt(index);  // удаление студента из таблицы
             }
-        }*/
+        }
+
+        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int rows_count = dataGridView1.Rows.Count - 2;
+
+            for (int i = rows_count; i >= 0; --i)
+            {
+                dataGridView1.Rows.RemoveAt(i);
+            }
+
+            loadDataStudents();
+        }
 
         Point lastPoint;
 

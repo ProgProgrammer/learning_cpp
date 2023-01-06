@@ -122,10 +122,12 @@ namespace SQLApp
                     }
                 }
 
-                if (db.registrationStudent(infoStudent))
+                db.registrationStudent(infoStudent);
+
+                /*if (db.registrationStudent(infoStudent))
                 {
-                    this.Hide();
-                }
+                    this.Hide();  // скрывает окно
+                }*/
             }
 
 

@@ -128,32 +128,55 @@ namespace SQLApp
         {
             DataTable table = new DataTable();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand command = new MySqlCommand("INSERT INTO students(student_number, name, surname, num_faculty, num_group) VALUES(@student_number, @name, @surname, @num_faculty, @num_group)", connection);
+            MySqlCommand command = new MySqlCommand("SELECT * FROM students WHERE student_number = @student_number", connection);
             command.Parameters.Add("@student_number", MySqlDbType.VarChar).Value = infoStudent.number_student;
-            command.Parameters.Add("@name", MySqlDbType.VarChar).Value = infoStudent.name_student;
-            command.Parameters.Add("@surname", MySqlDbType.VarChar).Value = infoStudent.surname_student;
-            command.Parameters.Add("@num_faculty", MySqlDbType.VarChar).Value = infoStudent.faculty_combo;
-            command.Parameters.Add("@num_group", MySqlDbType.VarChar).Value = infoStudent.group_combo;
 
-            openConnection();
-
-            if (command.ExecuteNonQuery() == 1)
+            if (userExistCheck(table, adapter, command))
             {
-                MessageBox.Show("User added.");
-                closeConnection();
-
-                return true;
-            }
-            else
-            {
-                MessageBox.Show("User has not been added.");
-                closeConnection();
+                MessageBox.Show("A student with this student ID number already exists in the database. Add another student ID number.");
 
                 return false;
             }
+
+            List<string[]> list_faculties_groups = getFacultiesGroups();
+
+            for (int i = 0; i < list_faculties_groups.Count; ++i)
+            {
+                if (list_faculties_groups[i][0] == infoStudent.faculty_combo
+                    && list_faculties_groups[i][2] == infoStudent.group_combo)  // проверка на то, есть ли переданная группа в переданном факультете или нет
+                {
+                    command = new MySqlCommand("INSERT INTO students(student_number, name, surname, num_faculty, num_group) VALUES(@student_number, @name, @surname, @num_faculty, @num_group)", connection);
+                    command.Parameters.Add("@student_number", MySqlDbType.VarChar).Value = infoStudent.number_student;
+                    command.Parameters.Add("@name", MySqlDbType.VarChar).Value = infoStudent.name_student;
+                    command.Parameters.Add("@surname", MySqlDbType.VarChar).Value = infoStudent.surname_student;
+                    command.Parameters.Add("@num_faculty", MySqlDbType.VarChar).Value = infoStudent.faculty_combo;
+                    command.Parameters.Add("@num_group", MySqlDbType.VarChar).Value = infoStudent.group_combo;
+
+                    openConnection();
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        MessageBox.Show("Student added.");
+                        closeConnection();
+
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Student has not been added.");
+                        closeConnection();
+
+                        return false;
+                    }
+                }
+            }
+
+            MessageBox.Show("This faculty does not have such a group.");
+
+            return false;
         }
 
-        public bool removeData(String login)
+        public bool removeUser(String login)
         {
             DataTable table = new DataTable();
             MySqlCommand command = new MySqlCommand("DELETE FROM users WHERE login = @login", connection);
@@ -176,7 +199,30 @@ namespace SQLApp
             }
         }
 
-        public List<string[]> getDataUsers()
+        public bool removeStudent(String student_id)
+        {
+            DataTable table = new DataTable();
+            MySqlCommand command = new MySqlCommand("DELETE FROM students WHERE student_number = @student_id", connection);
+            command.Parameters.Add("@student_id", MySqlDbType.VarChar).Value = student_id;
+
+            openConnection();
+
+            if (command.ExecuteNonQuery() == 1)
+            {
+                closeConnection();
+
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Student has not been deleted.");
+                closeConnection();
+
+                return false;
+            }
+        }
+
+        public List<string[]> getUsers()
         {
             MySqlCommand command = new MySqlCommand("SELECT * FROM users ORDER BY id", connection);
             List<string[]> data = new List<string[]>();
@@ -200,7 +246,7 @@ namespace SQLApp
             return data;
         }
 
-        public List<string[]> getDataStudents()
+        public List<string[]> getStudents()
         {
             MySqlCommand command = new MySqlCommand("SELECT * FROM students ORDER BY id", connection);
             List<string[]> data = new List<string[]>();
@@ -245,10 +291,10 @@ namespace SQLApp
                 if (reader.Read())
                 {
                     data.Add(new string[4]);
-                    data[i][0] = reader[3].ToString();
-                    data[i][1] = reader[4].ToString();
-                    data[i][2] = reader[5].ToString();
-                    data[i][3] = reader[6].ToString();
+                    data[i][0] = reader[3].ToString();  // id факультета
+                    data[i][1] = reader[4].ToString();  // название факультета
+                    data[i][2] = reader[5].ToString();  // id группы
+                    data[i][3] = reader[6].ToString();  // название группы
                 }
             }
 
