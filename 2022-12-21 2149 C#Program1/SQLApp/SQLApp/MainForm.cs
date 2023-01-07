@@ -29,19 +29,19 @@ namespace SQLApp
             List<string[]> data_faculty_groups = db.getFacultiesGroups();
             List<string[]> data = new List<string[]>();
 
-            for (int i = 0; i < data_students.Count; i++)
+            for (int i = 0; i < data_students.Count; ++i)
             {
                 data.Add(new string[5]);
                 
-                for (int a = 0; a < data[i].Length; a++)
+                for (int a = 0; a < data[i].Length; ++a)
                 {
                     data[i][a] = data_students[i][a];
                 }
             }
 
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < data.Count; ++i)
             {
-                for (int a = 0; a < data_faculty_groups.Count; a++)
+                for (int a = 0; a < data_faculty_groups.Count; ++a)
                 {
                     if (data[i][3] == data_faculty_groups[a][0])
                     {

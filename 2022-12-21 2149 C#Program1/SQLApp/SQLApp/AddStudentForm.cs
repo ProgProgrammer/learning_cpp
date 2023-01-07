@@ -31,16 +31,16 @@ namespace SQLApp
 
             data_groups = db.getFacultiesGroups();
 
-            for (int i = 0; i < data_groups.Count; i++)
+            for (int i = 0; i < data_groups.Count; ++i)
             {
                 this.list_faculties.Add(new string[2]);
                 this.list_faculties[i][0] = this.data_groups[i][0];
                 this.list_faculties[i][1] = this.data_groups[i][1];
             }
 
-            for (int i = 0; i < this.list_faculties.Count; i++)
+            for (int i = 0; i < this.list_faculties.Count; ++i)
             {
-                for (int a = i + 1; a < this.list_faculties.Count; a++)
+                for (int a = i + 1; a < this.list_faculties.Count; ++a)
                 {
                     if (this.list_faculties[i][1] == this.list_faculties[a][1])
                     {
@@ -49,7 +49,7 @@ namespace SQLApp
                 }
             }
 
-            for (int i = 0; i < list_faculties.Count(); i++)
+            for (int i = 0; i < list_faculties.Count(); ++i)
             {
                 facultyCombo.Items.Add(list_faculties[i][1]);
             }
@@ -65,7 +65,7 @@ namespace SQLApp
             this.groupCombo.Items.Clear();
             string faculty = facultyCombo.Text;
 
-            for (int i = 0; i < data_groups.Count; i++)
+            for (int i = 0; i < data_groups.Count; ++i)
             {
                 if (data_groups[i][1] == faculty)
                 {
@@ -104,7 +104,7 @@ namespace SQLApp
 
                 DB db = new DB("admin", "12345");
 
-                for (int i = 0; i < list_faculties.Count; i++)
+                for (int i = 0; i < list_faculties.Count; ++i)
                 {
                     if (list_faculties[i][1] == faculty_combo)
                     {
@@ -113,7 +113,7 @@ namespace SQLApp
                     }
                 }
 
-                for (int i = 0; i < data_groups.Count; i++)
+                for (int i = 0; i < data_groups.Count; ++i)
                 {
                     if (data_groups[i][3] == group_combo)
                     {

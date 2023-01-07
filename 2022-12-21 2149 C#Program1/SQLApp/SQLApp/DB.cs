@@ -260,7 +260,7 @@ namespace SQLApp
             {
                 data.Add(new string[num_cell_data]);
 
-                for (int i = 0; i < num_cell_data; i++)
+                for (int i = 0; i < num_cell_data; ++i)
                 {
                     data[data.Count - 1][i] = reader[i + 1].ToString();
                 }
@@ -281,20 +281,22 @@ namespace SQLApp
             closeConnection();
 
             List<string[]> data = new List<string[]>();
-            MySqlCommand command = new MySqlCommand("SELECT * FROM faculties_groups JOIN faculties ON faculties_groups.num_faculty = faculties.id JOIN groups ON faculties_groups.num_group = groups.id", connection);
+            MySqlCommand command = new MySqlCommand("SELECT faculties.id, faculties.name, groups.id, groups.name FROM faculties_groups JOIN faculties ON faculties_groups.num_faculty = faculties.id JOIN groups ON faculties_groups.num_group = groups.id", connection);
 
             openConnection();
             MySqlDataReader reader = command.ExecuteReader();
+            int num_cell_data = reader.FieldCount;
 
-            for (int i = 0; i < numRowsGroups; i++)
+            for (int i = 0; i < numRowsGroups; ++i)
             {
                 if (reader.Read())
                 {
-                    data.Add(new string[4]);
-                    data[i][0] = reader[3].ToString();  // id факультета
-                    data[i][1] = reader[4].ToString();  // название факультета
-                    data[i][2] = reader[5].ToString();  // id группы
-                    data[i][3] = reader[6].ToString();  // название группы
+                    data.Add(new string[num_cell_data]);
+
+                    for (int a = 0; a < num_cell_data; ++a)
+                    {
+                        data[data.Count - 1][a] = reader[a].ToString();
+                    }
                 }
             }
 
