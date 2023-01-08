@@ -14,9 +14,6 @@ namespace SQLApp
 {
     public partial class AddStudentForm : Form
     {
-        private string num_student = "№ зачетной книжки";
-        private string name_student = "Имя студента";
-        private string surname_student = "Фамилия студента";
         private List<string[]> list_faculties = new List<string[]>();
         private List<string[]> data_groups;
         public AddStudentForm()
