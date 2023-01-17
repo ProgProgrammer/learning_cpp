@@ -202,7 +202,6 @@ namespace SQLApp
         public bool removeStudent(String student_id)
         {
             String table_name = "students";
-            //MySqlCommand command = new MySqlCommand($"DELETE FROM students WHERE student_number = @student_id", connection);
             MySqlCommand command = new MySqlCommand($"DELETE FROM `{@table_name}` WHERE student_number = @student_id", connection);
             command.Parameters.Add("@table_name", MySqlDbType.VarChar).Value = table_name;
             command.Parameters.Add("@student_id", MySqlDbType.VarChar).Value = student_id;
