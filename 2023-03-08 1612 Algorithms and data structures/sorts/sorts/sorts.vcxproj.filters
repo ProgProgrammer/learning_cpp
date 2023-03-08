@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="classes\sorts.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="classes\sorts.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\i_sorts.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="classes">
+      <UniqueIdentifier>{14913b15-1b43-467b-92f2-c297c837bb1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="interface">
+      <UniqueIdentifier>{be60035a-55f8-4d35-926c-828592fb7e01}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
