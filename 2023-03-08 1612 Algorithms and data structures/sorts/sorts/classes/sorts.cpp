@@ -34,7 +34,7 @@ void sorts::RadixSort::startLoop(std::vector<int> arr, const int count)
         {
             int a = velichRazr(arr[i], id, count);
             dop_arr[arr_col[a]][a] = arr[i];
-            arr_col[a]++;
+            ++arr_col[a];
         }
 
         int temp = 0;
@@ -44,7 +44,7 @@ void sorts::RadixSort::startLoop(std::vector<int> arr, const int count)
             for (int j = 0; j < arr_col[i]; ++j)
             {
                 arr[temp] = dop_arr[j][i];
-                temp++;
+                ++temp;
             }
         }
     }
