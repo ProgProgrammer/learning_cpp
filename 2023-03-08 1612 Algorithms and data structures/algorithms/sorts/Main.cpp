@@ -1,5 +1,6 @@
 ﻿#include "iostream"
 #include <vector>
+#include <memory>
 #include <time.h>
 #include "classes/sorts.h"
 
@@ -36,51 +37,53 @@ int main()
     clock_t start;
     clock_t end;
 
-    sorts::RadixSort radix_object;
+    std::shared_ptr<ISorts> radix_object = std::make_shared<sorts::RadixSort>();
     start = clock();
-    radix_object.startLoop(arr_min, min_count);
+    radix_object->startLoop(arr_min, min_count);
     end = clock();
     std::cout << "Radix minimum sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
     start = clock();
-    radix_object.startLoop(arr_mid, mid_count);
+    radix_object->startLoop(arr_mid, mid_count);
     end = clock();
     std::cout << "Radix middle sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
     start = clock();
-    radix_object.startLoop(arr_max, max_count);
+    radix_object->startLoop(arr_max, max_count);
     end = clock();
     std::cout << "Radix maximum sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
-    sorts::SelectionSort selection_sort;
+
+    std::shared_ptr<ISorts> selection_sort = std::make_shared<sorts::SelectionSort>();
     start = clock();
-    selection_sort.startLoop(arr_min, min_count);
+    selection_sort->startLoop(arr_min, min_count);
     end = clock();
     std::cout << std::endl << "Selection minimum sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
     start = clock();
-    selection_sort.startLoop(arr_mid, mid_count);
+    selection_sort->startLoop(arr_mid, mid_count);
     end = clock();
     std::cout << "Selection middle sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
     start = clock();
-    selection_sort.startLoop(arr_max, max_count);
+    selection_sort->startLoop(arr_max, max_count);
     end = clock();
     std::cout << "Selection maximum sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
-    sorts::HeapSort heap_sort;
+
+    std::shared_ptr<ISorts> heap_sort = std::make_shared<sorts::HeapSort>();
     start = clock();
-    heap_sort.startLoop(arr_min, min_count);
+    heap_sort->startLoop(arr_min, min_count);
     end = clock();
     std::cout << std::endl << "Heap minimum sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
     start = clock();
-    heap_sort.startLoop(arr_mid, mid_count);
+    heap_sort->startLoop(arr_mid, mid_count);
     end = clock();
     std::cout << "Heap middle sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 
     start = clock();
-    heap_sort.startLoop(arr_max, max_count);
+    heap_sort->startLoop(arr_max, max_count);
     end = clock();
     std::cout << "Heap maximum sorting completed in " << elapsedTime(start, end) << " seconds." << std::endl;
 }
