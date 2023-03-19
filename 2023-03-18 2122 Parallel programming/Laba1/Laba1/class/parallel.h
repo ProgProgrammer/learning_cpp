@@ -4,8 +4,6 @@
 class Parallel
 {
 private:
-    clock_t start;
-    clock_t end;
     double elapsedTime(clock_t start, clock_t end)
     {
         return (double)(end - start) / CLOCKS_PER_SEC;
