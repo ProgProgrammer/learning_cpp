@@ -1,49 +1,9 @@
-﻿#include <iostream>
-#include <omp.h>
-#include <time.h>
+#include "parallel.h"
+#include <iostream>
 #include <vector>
+#include <omp.h>
 
-int count;
-int its_me;
-
-void first_task()  // Написать многопоточную программу, используя директивы OpenMP
-{
-    std::cout << "10 threads:" << std::endl;
-#pragma omp parallel num_threads(10)
-    {
-        count = omp_get_num_threads();
-        its_me = omp_get_thread_num();
-        printf("Hello, OpenMP! I am %d of %d\n", its_me, count);
-    }
-    std::cout << std::endl << "1 thread:" << std::endl;
-#pragma omp parallel num_threads(1)
-    {
-        count = omp_get_num_threads();
-        its_me = omp_get_thread_num();
-        printf("Hello, OpenMP! I am %d of %d\n", its_me, count);
-    }
-    std::cout << std::endl << "5 threads:" << std::endl;
-#pragma omp parallel num_threads(5)
-    {
-        count = omp_get_num_threads();
-        its_me = omp_get_thread_num();
-        printf("Hello, OpenMP! I am %d of %d\n", its_me, count);
-    }
-    std::cout << std::endl << "10 threads:" << std::endl;
-#pragma omp parallel num_threads(10)
-    {
-        count = omp_get_num_threads();
-        its_me = omp_get_thread_num();
-        printf("Hello, OpenMP! I am %d of %d\n", its_me, count);
-    }
-}
-
-double elapsedTime(clock_t start, clock_t end)
-{
-    return (double)(end - start) / CLOCKS_PER_SEC;
-}
-
-void second_task()
+void Parallel::two_task()
 {
     const int count = 100000000;
     std::vector<int> arr;
@@ -96,7 +56,7 @@ void second_task()
             for (int i = 50000000; i < count; ++i)
             {
                 result_part_two += arr[i];
-            }            
+            }
         }
     }
     end = clock();
@@ -118,10 +78,4 @@ void second_task()
     end = clock();
     std::cout << "Result = " << result << std::endl;
     std::cout << "Atomic option = " << elapsedTime(start, end) << std::endl << std::endl;
-}
-
-int main()
-{
-    //first_task();
-    second_task();
 }

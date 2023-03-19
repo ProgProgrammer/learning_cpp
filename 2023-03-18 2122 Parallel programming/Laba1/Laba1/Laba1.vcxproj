@@ -128,7 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Laba1.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="class\parallel_one_task.cpp" />
+    <ClCompile Include="class\parallel_three_task.cpp" />
+    <ClCompile Include="class\parallel_two_task.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="class\parallel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
