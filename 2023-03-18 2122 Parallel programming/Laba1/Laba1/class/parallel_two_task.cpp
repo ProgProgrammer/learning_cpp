@@ -69,7 +69,7 @@ void Parallel::two_task()
 #pragma omp parallel shared (result, arr) private (i)
     {
 #pragma omp for
-        for (int i = 0; i < count; ++i)
+        for (i = 0; i < count; ++i)
         {
 #pragma omp atomic
             result += arr[i];
@@ -78,4 +78,32 @@ void Parallel::two_task()
     end = clock();
     std::cout << "Result = " << result << std::endl;
     std::cout << "Atomic option = " << elapsedTime(start, end) << std::endl << std::endl;
+
+    result = 0;
+    start = clock();
+#pragma omp parallel for num_threads(4)
+        for (int i = 0; i < count; ++i)
+        {
+#pragma omp critical
+            {
+                result += arr[i];
+            }
+        }
+    end = clock();
+    std::cout << "Result = " << result << std::endl;
+    std::cout << "Critical option = " << elapsedTime(start, end) << std::endl << std::endl;
+
+    result = 0;
+    start = clock();
+#pragma omp parallel for num_threads(4)
+        for (int i = 0; i < count; ++i)
+        {
+#pragma omp critical
+            {
+                result += arr[i];
+            }
+        }
+    end = clock();
+    std::cout << "Result = " << result << std::endl;
+    std::cout << "Doubling algorithm option = " << elapsedTime(start, end) << std::endl << std::endl;
 }
