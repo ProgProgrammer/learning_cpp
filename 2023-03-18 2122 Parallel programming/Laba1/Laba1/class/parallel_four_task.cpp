@@ -29,7 +29,7 @@ void Parallel::four_task()
     {
         result += min_arr[i];
     }
-    std::cout << "Minimum result = " << result << std::endl;
+    std::cout << "Static minimum result = " << result << std::endl;
 
     result = 0;
 #pragma omp parallel for schedule(dynamic)
@@ -37,7 +37,7 @@ void Parallel::four_task()
     {
         result += min_arr[i];
     }
-    std::cout << "Minimum result = " << result << std::endl;
+    std::cout << "Dynamic minimum result = " << result << std::endl;
 
     result = 0;
 #pragma omp parallel for schedule(guided)
@@ -46,7 +46,7 @@ void Parallel::four_task()
         result += min_arr[i];
     }
     end = clock();
-    std::cout << "Minimum result = " << result << std::endl;
+    std::cout << "Guided minimum result = " << result << std::endl;
     std::cout << "Time = " << elapsedTime(start, end) << std::endl << std::endl;
     
     result = 0;
@@ -56,7 +56,7 @@ void Parallel::four_task()
     {
         result += max_arr[i];
     }
-    std::cout << "Maximum result = " << result << std::endl;
+    std::cout << "Static maximum result = " << result << std::endl;
 
     result = 0;
 #pragma omp parallel for schedule(dynamic)
@@ -64,7 +64,7 @@ void Parallel::four_task()
     {
         result += max_arr[i];
     }
-    std::cout << "Maximum result = " << result << std::endl;
+    std::cout << "Dynamic maximum result = " << result << std::endl;
 
     result = 0;
 #pragma omp parallel for schedule(guided)
@@ -73,6 +73,6 @@ void Parallel::four_task()
         result += max_arr[i];
     }
     end = clock();
-    std::cout << "Maximum result = " << result << std::endl;
+    std::cout << "Guided maximum result = " << result << std::endl;
     std::cout << "Time = " << elapsedTime(start, end) << std::endl << std::endl;
 }

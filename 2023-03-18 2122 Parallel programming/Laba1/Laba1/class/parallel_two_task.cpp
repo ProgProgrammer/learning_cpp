@@ -100,7 +100,9 @@ void Parallel::two_task()
     start = clock();
 #pragma omp parallel for reduction(+:result)	
     for (int i = 0; i < count; i++)
+    {
         result += arr[i];
+    }
     end = clock();
     std::cout << "Result = " << result << std::endl;
     std::cout << "Time doubling algorithm option = " << elapsedTime(start, end) << std::endl << std::endl;

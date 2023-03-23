@@ -26,5 +26,7 @@ public:
         three_task();
         std::cout << std::endl << "Four Task:" << std::endl;
         four_task();
+        std::cout << std::endl << "Five Task:" << std::endl;
+        five_task();
     }
 };
