@@ -6,23 +6,28 @@
 void Parallel::two_task()
 {
     const int count = 100000000;
-    std::vector<int> arr;
+    std::vector<float> arr;
+    float num = 1.15;
 
     for (int i = 0; i < count; ++i)
     {
-        arr.push_back(i);
+        ++num;
+        arr.push_back(num);
     }
 
     clock_t start;
     clock_t end;
 
-    int result = 0;
+    float result = 0;
     start = clock();
     for (int i = 0; i < count; ++i)
     {
         result += arr[i];
     }
     end = clock();
+    std::ios_base::fmtflags orig = std::cout.setf(std::ios_base::fixed,
+        std::ios_base::floatfield);
+    std::streamsize prec = std::cout.precision(20);
     std::cout << "Result = " << result << std::endl;
     std::cout << "Sequential option = " << elapsedTime(start, end) << std::endl << std::endl;
 
@@ -37,9 +42,8 @@ void Parallel::two_task()
     std::cout << "Result = " << result << std::endl;
     std::cout << "Reduction option = " << elapsedTime(start, end) << std::endl << std::endl;
 
-    result = 0;
-    int result_part_one = 0;
-    int result_part_two = 0;
+    float result_part_one = 0;
+    float result_part_two = 0;
     start = clock();
 #pragma omp parallel sections num_threads(2)
     {
@@ -95,14 +99,9 @@ void Parallel::two_task()
 
     result = 0;
     start = clock();
-#pragma omp parallel for num_threads(4)
-        for (int i = 0; i < count; ++i)
-        {
-#pragma omp critical
-            {
-                result += arr[i];
-            }
-        }
+#pragma omp parallel for reduction(+:result)	
+    for (int i = 0; i < count; i++)
+        result += arr[i];
     end = clock();
     std::cout << "Result = " << result << std::endl;
     std::cout << "Doubling algorithm option = " << elapsedTime(start, end) << std::endl << std::endl;

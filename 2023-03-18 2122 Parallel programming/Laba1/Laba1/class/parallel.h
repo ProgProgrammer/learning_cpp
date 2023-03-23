@@ -13,4 +13,5 @@ public:
     void one_task();
     void two_task();
     void three_task();
+    void four_task();
 };

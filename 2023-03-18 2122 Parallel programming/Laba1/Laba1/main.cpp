@@ -10,4 +10,6 @@ int main()
     obj.two_task();
     std::cout << std::endl << "Three Task:" << std::endl;
     obj.three_task();
+    std::cout << std::endl << "Four Task:" << std::endl;
+    obj.four_task();
 }
