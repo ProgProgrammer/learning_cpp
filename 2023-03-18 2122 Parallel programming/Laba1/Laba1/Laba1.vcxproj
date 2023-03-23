@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="class\parallel_five_task.cpp" />
     <ClCompile Include="class\parallel_four_task.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="class\parallel_one_task.cpp" />

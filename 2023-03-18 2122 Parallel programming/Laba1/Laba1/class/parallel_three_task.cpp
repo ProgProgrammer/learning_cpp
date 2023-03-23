@@ -1,5 +1,4 @@
 #include "parallel.h"
-#include <iostream>
 #include <vector>
 #include <omp.h>
 

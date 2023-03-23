@@ -1,5 +1,4 @@
 #include "parallel.h"
-#include <iostream>
 #include <omp.h>
 
 void Parallel::one_task()

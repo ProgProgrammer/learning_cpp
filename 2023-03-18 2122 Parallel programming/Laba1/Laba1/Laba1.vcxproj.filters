@@ -30,6 +30,9 @@
     <ClCompile Include="class\parallel_four_task.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="class\parallel_five_task.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="class\parallel.h">
