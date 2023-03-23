@@ -29,7 +29,7 @@ void Parallel::two_task()
         std::ios_base::floatfield);
     std::streamsize prec = std::cout.precision(20);
     std::cout << "Result = " << result << std::endl;
-    std::cout << "Sequential option = " << elapsedTime(start, end) << std::endl << std::endl;
+    std::cout << "Time sequential option = " << elapsedTime(start, end) << std::endl << std::endl;
 
     result = 0;
     start = clock();
@@ -40,7 +40,7 @@ void Parallel::two_task()
     }
     end = clock();
     std::cout << "Result = " << result << std::endl;
-    std::cout << "Reduction option = " << elapsedTime(start, end) << std::endl << std::endl;
+    std::cout << "Time reduction option = " << elapsedTime(start, end) << std::endl << std::endl;
 
     float result_part_one = 0;
     float result_part_two = 0;
@@ -65,7 +65,7 @@ void Parallel::two_task()
     }
     end = clock();
     std::cout << "Result = " << result_part_one + result_part_two << std::endl;
-    std::cout << "Sections option = " << elapsedTime(start, end) << std::endl << std::endl;
+    std::cout << "Time sections option = " << elapsedTime(start, end) << std::endl << std::endl;
 
     result = 0;
     int i;
@@ -81,7 +81,7 @@ void Parallel::two_task()
     }
     end = clock();
     std::cout << "Result = " << result << std::endl;
-    std::cout << "Atomic option = " << elapsedTime(start, end) << std::endl << std::endl;
+    std::cout << "Time atomic option = " << elapsedTime(start, end) << std::endl << std::endl;
 
     result = 0;
     start = clock();
@@ -95,7 +95,7 @@ void Parallel::two_task()
         }
     end = clock();
     std::cout << "Result = " << result << std::endl;
-    std::cout << "Critical option = " << elapsedTime(start, end) << std::endl << std::endl;
+    std::cout << "Time critical option = " << elapsedTime(start, end) << std::endl << std::endl;
 
     result = 0;
     start = clock();
@@ -104,5 +104,5 @@ void Parallel::two_task()
         result += arr[i];
     end = clock();
     std::cout << "Result = " << result << std::endl;
-    std::cout << "Doubling algorithm option = " << elapsedTime(start, end) << std::endl << std::endl;
+    std::cout << "Time doubling algorithm option = " << elapsedTime(start, end) << std::endl << std::endl;
 }
