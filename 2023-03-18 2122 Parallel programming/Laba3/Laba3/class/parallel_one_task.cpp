@@ -1,7 +1,7 @@
+#include "parallel.h"
 #include <iostream>
-#include "mpi.h"
 
-int main(int argc, char** argv)
+void Parallel::oneTask(int argc, char** argv)
 {
 	int rank, size;
 
@@ -13,6 +13,4 @@ int main(int argc, char** argv)
 	MPI_Finalize();
 
 	printf("Process: %d, size: %d\n", rank, size);
-
-	return 0;
 }

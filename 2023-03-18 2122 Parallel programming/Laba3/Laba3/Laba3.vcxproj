@@ -24,7 +24,7 @@
     <ProjectGuid>{03575bf3-1ee4-478e-8364-222f2e576174}</ProjectGuid>
     <RootNamespace>Laba3</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Task1</ProjectName>
+    <ProjectName>Laba3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -134,7 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Task1.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="class\parallel_one_task.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="class\parallel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
