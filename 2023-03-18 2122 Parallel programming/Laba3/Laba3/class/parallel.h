@@ -1,12 +1,15 @@
 #include "mpi.h"
+#include <iostream>
 
 class Parallel
 {
 private:
-    void oneTask(int argc, char** argv);
+    void oneTask(const int argc, char** argv);
+    void twoTask(const int argc, char** argv);
 public:
-    void startLoop(int argc, char** argv)
+    void startLoop(const int argc, char** argv)
     {
-        oneTask(argc, argv);
+        //oneTask(argc, argv);
+        twoTask(argc, argv);
     }
 };

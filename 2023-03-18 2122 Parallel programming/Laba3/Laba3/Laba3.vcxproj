@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="class\parallel_two_task.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="class\parallel_one_task.cpp" />
   </ItemGroup>

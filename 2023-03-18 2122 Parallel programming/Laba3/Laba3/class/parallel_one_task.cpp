@@ -1,7 +1,6 @@
 #include "parallel.h"
-#include <iostream>
 
-void Parallel::oneTask(int argc, char** argv)
+void Parallel::oneTask(const int argc, char** argv)
 {
 	int rank, size;
 
