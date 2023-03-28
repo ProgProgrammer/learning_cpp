@@ -24,6 +24,9 @@
     <ClCompile Include="class\parallel_two_task.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="class\parallel_three_task.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="class\parallel.h">
