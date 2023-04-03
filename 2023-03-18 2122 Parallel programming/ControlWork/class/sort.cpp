@@ -5,7 +5,7 @@ std::vector<std::vector<int>> Sort::sort(std::vector<int> arr, int parts)
 {
     int first = 0;
     int count = arr.size();
-    int last = arr.size() / 25;
+    int last = arr.size() / parts;
     int num_part_arr = last;
     std::vector<int> arr_part;
     std::vector<std::vector<int>> arr_result;
