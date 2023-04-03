@@ -10,7 +10,7 @@ std::vector<std::vector<int>> Sort::sort(std::vector<int> arr, int parts)
     std::vector<int> arr_part;
     std::vector<std::vector<int>> arr_result;
 
-    /*for (int i = first; i < count; ++i)
+    for (int i = first; i < count; ++i)
     {
         arr_part.push_back(arr[i]);
 
@@ -22,9 +22,7 @@ std::vector<std::vector<int>> Sort::sort(std::vector<int> arr, int parts)
             first = last;
             last += num_part_arr;
         }
-    }*/
-
-    std::sort(arr.begin(), arr.end());
+    }
 
     return arr_result;
 }
