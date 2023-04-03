@@ -1,45 +1,30 @@
 #include "sort.h"
-
-std::vector<int> Sort::hoarasort(std::vector<int> arr, int first, int last)
-{
-    int i = first, j = last;
-    double tmp, x = arr[(first + last) / 2];
-
-    do {
-        while (arr[i] < x)
-            i++;
-        while (arr[j] > x)
-            j--;
-
-        if (i <= j)
-        {
-            if (i < j)
-            {
-                tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-            }
-            i++;
-            j--;
-        }
-    } while (i <= j);
-
-    if (i < last)
-        hoarasort(arr, i, last);
-    if (first < j)
-        hoarasort(arr, first, j);
-    if (i == last)
-    {
-        return arr;
-    }
-}
+#include <algorithm>  // sort
 
 std::vector<std::vector<int>> Sort::sort(std::vector<int> arr, int parts)
 {
     int first = 0;
+    int count = arr.size();
     int last = arr.size() / 25;
+    int num_part_arr = last;
+    std::vector<int> arr_part;
     std::vector<std::vector<int>> arr_result;
-    arr_result.push_back(hoarasort(arr, first, last));
+
+    /*for (int i = first; i < count; ++i)
+    {
+        arr_part.push_back(arr[i]);
+
+        if (i == last - 1)
+        {
+            std::sort(arr_part.begin(), arr_part.end());  // сортировка
+            arr_result.push_back(arr_part);
+            arr_part.clear();
+            first = last;
+            last += num_part_arr;
+        }
+    }*/
+
+    std::sort(arr.begin(), arr.end());
 
     return arr_result;
 }
