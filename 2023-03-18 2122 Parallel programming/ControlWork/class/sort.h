@@ -1,12 +1,19 @@
 #pragma once
 #include <vector>
+#include <iterator>
+
 
 class Sort
 {
 private:
-    std::vector<std::vector<int>> sort(std::vector<int> arr, int parts);
-    std::vector<int> arrUnion(std::vector<std::vector<int>> arr);
+    using It = std::vector<int>::iterator;
+    std::vector<int> getRandomVector(int size);
+    void printVector(It begin, It end);
+    void printVector(std::vector<int>& vec);
+    std::vector<std::pair<It, It>> getSliceIterators(std::vector<int>& vec, size_t sliceCount);
+    std::vector<int> getArr(std::vector<int> arr_left, std::vector<int> arr_right);
+    std::vector<int> getArrUnion(std::vector<std::pair<It, It>>& vec);
 
 public:
-    std::vector<int> startLoop(std::vector<int> arr, int parts);
+    void startLoop(std::vector<int>& arr, size_t parts, int size);
 };
