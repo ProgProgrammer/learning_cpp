@@ -3,8 +3,8 @@
 int main()
 {
     std::vector<int> arr;
-    int parts = 4;
-    int size = 210000;
+    int parts = 25;
+    int size = 131072000;
     Sort sort;
     sort.startLoop(arr, parts, size);
 }

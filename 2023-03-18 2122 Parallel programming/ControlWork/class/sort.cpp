@@ -91,6 +91,7 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
                 arr_right.push_back(item);
             }
 
+            //getArr(arr_left, arr_right, middle_arr);
             arr_threads.push_back(std::thread(&Sort::getArr, Sort(), arr_left, arr_right, std::ref(middle_arr)));
             arr_left.clear();
             arr_right.clear();
@@ -104,6 +105,12 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
             }
         }
 
+        if (arr_size % 2 != 0 && count == arr_size)
+        {
+            //getArr(arr_left, arr_right, middle_arr);
+            arr_threads.push_back(std::thread(&Sort::getArr, Sort(), arr_left, arr_right, std::ref(middle_arr)));
+        }
+
         ++count;
     }
 
@@ -115,6 +122,39 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
         }
     }
 
+    int middle_count = middle_arr.size();
+    arr_threads.clear();  // очистка вектора потоков
+    arr_left.clear();
+
+    while (middle_arr.size() > 1)
+    {
+        std::vector<std::vector<int>> arr;
+
+        for (int i = 0; i < middle_count; i += 2)
+        {
+            if (middle_arr.size() % 2 != 0 && i == middle_count - 1)
+            {
+                arr_threads.push_back(std::thread(&Sort::getArr, Sort(), arr_left, middle_arr[i], std::ref(arr)));
+            }
+            else
+            {
+                arr_threads.push_back(std::thread(&Sort::getArr, Sort(), middle_arr[i], middle_arr[i + 1], std::ref(arr)));
+            }
+        }
+
+        for (int i = 0; i < arr_threads.size(); i++)
+        {
+            if (arr_threads[i].joinable())  // для проверки существования потока
+            {
+                arr_threads[i].join();  // ожидание завершения потока
+            }
+        }
+
+        arr_threads.clear();
+        middle_arr = arr;
+        middle_count = middle_arr.size();
+    }
+
     for (int i = 0; i < middle_arr.size(); ++i)
     {
         for (int a = 0; a < middle_arr[i].size(); ++a)
@@ -122,8 +162,6 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
             result_arr.push_back(middle_arr[i][a]);
         }
     }
-
-    std::sort(result_arr.begin(), result_arr.end());
 
     return result_arr;
 }
@@ -133,11 +171,11 @@ void Sort::startLoop(std::vector<int>& arr, size_t parts, int size)
     auto vec = getRandomVector(size);
     size_t threadCount = parts;
     auto sliceIterators = getSliceIterators(vec, threadCount);
-    std::cout << "\n\nBounds size = " << sliceIterators.size();
-    std::cout << "\n\nResult:\n";
+    std::cout << "Threads size = " << sliceIterators.size();
     clock_t start = clock();
     std::vector<int> arr_result = getArrUnion(sliceIterators);
     clock_t end = clock();
 
-    std::cout << std::endl << (double)(end - start) / CLOCKS_PER_SEC << std::endl;
+    std::cout << std::endl << arr_result.size();
+    std::cout << std::endl << "Time: " << (double)(end - start) / CLOCKS_PER_SEC << "s." << std::endl;
 }
