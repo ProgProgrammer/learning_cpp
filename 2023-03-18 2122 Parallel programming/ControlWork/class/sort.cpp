@@ -68,7 +68,7 @@ std::vector<int> Sort::getArr(std::vector<int> arr_left, std::vector<int> arr_ri
     return arr;
 }
 
-std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
+std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t parts, int size)
 {
     std::vector<int> result_arr;
     std::vector<int> arr_left;
@@ -100,9 +100,11 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
             }
         }
 
-        if (arr_size == count && arr_size % 2 != 0)
+        if (arr_size == count && size % 2 != 0)
         {
-            middle_arr.push_back(getArr(middle_arr[middle_arr.size() - 1], arr_right));
+            std::vector<int> arr;
+            middle_arr.push_back(getArr(arr, arr_right));
+            break;
         }
 
         ++count;
@@ -143,7 +145,7 @@ void Sort::startLoop(std::vector<int>& arr, size_t parts, int size)
     std::sort(sliceIterators.begin(), sliceIterators.end());
     std::cout << "\n\nResult:\n";
 
-    std::vector<int> arr_result = getArrUnion(sliceIterators);
+    std::vector<int> arr_result = getArrUnion(sliceIterators, parts, size);
     printVector(arr_result);
 
     std::cout << std::endl;
