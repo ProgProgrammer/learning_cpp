@@ -70,7 +70,7 @@ void Sort::getArr(std::vector<int> arr_left, std::vector<int> arr_right, std::ve
     middle_arr.push_back(arr);
 }
 
-std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t parts)
+std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
 {
     std::vector<int> result_arr;
     std::vector<int> arr_left;
@@ -91,7 +91,7 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
                 arr_right.push_back(item);
             }
 
-            arr_threads.push_back(std::thread(getArr, arr_left, arr_right, std::ref(middle_arr)));
+            arr_threads.push_back(std::thread(&Sort::getArr, Sort(), arr_left, arr_right, std::ref(middle_arr)));
             arr_left.clear();
             arr_right.clear();
         }
@@ -107,7 +107,7 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
         ++count;
     }
 
-    for (int i = 0; i < parts; i++)
+    for (int i = 0; i < arr_threads.size(); i++)
     {
         if (arr_threads[i].joinable())  // для проверки существования потока
         {
@@ -131,28 +131,13 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
 void Sort::startLoop(std::vector<int>& arr, size_t parts, int size)
 {
     auto vec = getRandomVector(size);
-    //std::cout << "Before:\n";
-    //printVector(vec);
     size_t threadCount = parts;
     auto sliceIterators = getSliceIterators(vec, threadCount);
     std::cout << "\n\nBounds size = " << sliceIterators.size();
-
-    /*for (auto& slice : sliceIterators)
-    {
-        std::cout << "\n\n Bound:\n";
-        std::sort(slice.first, slice.second);
-        //printVector(slice.first, slice.second);
-    }
-
-    std::cout << "\n\nAfter:\n";
-    //printVector(vec);
-    std::cout << std::endl;
-    std::sort(sliceIterators.begin(), sliceIterators.end());*/
     std::cout << "\n\nResult:\n";
     clock_t start = clock();
-    std::vector<int> arr_result = getArrUnion(sliceIterators, parts);
+    std::vector<int> arr_result = getArrUnion(sliceIterators);
     clock_t end = clock();
-    //printVector(arr_result);
 
     std::cout << std::endl << (double)(end - start) / CLOCKS_PER_SEC << std::endl;
 }
