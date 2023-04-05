@@ -1,7 +1,9 @@
 #include "sort.h"
+#include "omp.h"
 #include <algorithm>
 #include <iostream>
 #include <thread>
+#include <ctime>
 
 
 using It = std::vector<int>::iterator;
@@ -49,7 +51,7 @@ std::vector<std::pair<It, It>> Sort::getSliceIterators(std::vector<int>& vec, si
     return bounds;
 }
 
-std::vector<int> Sort::getArr(std::vector<int> arr_left, std::vector<int> arr_right)
+void Sort::getArr(std::vector<int> arr_left, std::vector<int> arr_right, std::vector<std::vector<int>>& middle_arr)
 {
     std::vector<int> arr;
 
@@ -65,10 +67,10 @@ std::vector<int> Sort::getArr(std::vector<int> arr_left, std::vector<int> arr_ri
 
     std::sort(arr.begin(), arr.end());
 
-    return arr;
+    middle_arr.push_back(arr);
 }
 
-std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t parts, int size)
+std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t parts)
 {
     std::vector<int> result_arr;
     std::vector<int> arr_left;
@@ -76,6 +78,8 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
     std::vector<std::vector<int>> middle_arr;
     int arr_size = vec.size();
     int count = 1;
+
+    std::vector<std::thread> arr_threads;  // массив потоков
 
     for (auto& slice : vec)
     {
@@ -87,7 +91,7 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
                 arr_right.push_back(item);
             }
 
-            middle_arr.push_back(getArr(arr_left, arr_right));
+            arr_threads.push_back(std::thread(getArr, arr_left, arr_right, std::ref(middle_arr)));
             arr_left.clear();
             arr_right.clear();
         }
@@ -100,17 +104,16 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
             }
         }
 
-        if (arr_size == count && size % 2 != 0)
-        {
-            std::vector<int> arr;
-            middle_arr.push_back(getArr(arr, arr_right));
-            break;
-        }
-
         ++count;
     }
 
-    std::sort(middle_arr.begin(), middle_arr.end());
+    for (int i = 0; i < parts; i++)
+    {
+        if (arr_threads[i].joinable())  // для проверки существования потока
+        {
+            arr_threads[i].join();  // ожидание завершения потока
+        }
+    }
 
     for (int i = 0; i < middle_arr.size(); ++i)
     {
@@ -120,33 +123,36 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec, size_t p
         }
     }
 
+    std::sort(result_arr.begin(), result_arr.end());
+
     return result_arr;
 }
 
 void Sort::startLoop(std::vector<int>& arr, size_t parts, int size)
 {
     auto vec = getRandomVector(size);
-    std::cout << "Before:\n";
-    printVector(vec);
+    //std::cout << "Before:\n";
+    //printVector(vec);
     size_t threadCount = parts;
     auto sliceIterators = getSliceIterators(vec, threadCount);
     std::cout << "\n\nBounds size = " << sliceIterators.size();
 
-    for (auto& slice : sliceIterators)
+    /*for (auto& slice : sliceIterators)
     {
         std::cout << "\n\n Bound:\n";
         std::sort(slice.first, slice.second);
-        printVector(slice.first, slice.second);
+        //printVector(slice.first, slice.second);
     }
 
     std::cout << "\n\nAfter:\n";
-    printVector(vec);
+    //printVector(vec);
     std::cout << std::endl;
-    std::sort(sliceIterators.begin(), sliceIterators.end());
+    std::sort(sliceIterators.begin(), sliceIterators.end());*/
     std::cout << "\n\nResult:\n";
+    clock_t start = clock();
+    std::vector<int> arr_result = getArrUnion(sliceIterators, parts);
+    clock_t end = clock();
+    //printVector(arr_result);
 
-    std::vector<int> arr_result = getArrUnion(sliceIterators, parts, size);
-    printVector(arr_result);
-
-    std::cout << std::endl;
+    std::cout << std::endl << (double)(end - start) / CLOCKS_PER_SEC << std::endl;
 }
