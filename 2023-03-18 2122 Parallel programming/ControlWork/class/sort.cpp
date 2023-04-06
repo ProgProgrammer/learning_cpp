@@ -70,7 +70,7 @@ void Sort::getArr(std::vector<int> arr_left, std::vector<int> arr_right, std::ve
     middle_arr.push_back(arr);
 }
 
-std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
+std::vector<std::vector<int>> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
 {
     std::vector<int> result_arr;
     std::vector<int> arr_left;
@@ -91,7 +91,6 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
                 arr_right.push_back(item);
             }
 
-            //getArr(arr_left, arr_right, middle_arr);
             arr_threads.push_back(std::thread(&Sort::getArr, Sort(), arr_left, arr_right, std::ref(middle_arr)));
             arr_left.clear();
             arr_right.clear();
@@ -107,7 +106,6 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
 
         if (arr_size % 2 != 0 && count == arr_size)
         {
-            //getArr(arr_left, arr_right, middle_arr);
             arr_threads.push_back(std::thread(&Sort::getArr, Sort(), arr_left, arr_right, std::ref(middle_arr)));
         }
 
@@ -155,15 +153,7 @@ std::vector<int> Sort::getArrUnion(std::vector<std::pair<It, It>>& vec)
         middle_count = middle_arr.size();
     }
 
-    for (int i = 0; i < middle_arr.size(); ++i)
-    {
-        for (int a = 0; a < middle_arr[i].size(); ++a)
-        {
-            result_arr.push_back(middle_arr[i][a]);
-        }
-    }
-
-    return result_arr;
+    return middle_arr;
 }
 
 void Sort::startLoop(std::vector<int>& arr, size_t parts, int size)
@@ -171,11 +161,11 @@ void Sort::startLoop(std::vector<int>& arr, size_t parts, int size)
     auto vec = getRandomVector(size);
     size_t threadCount = parts;
     auto sliceIterators = getSliceIterators(vec, threadCount);
-    std::cout << "Threads size = " << sliceIterators.size();
+    std::cout << "Number of array parts = " << sliceIterators.size();
     clock_t start = clock();
-    std::vector<int> arr_result = getArrUnion(sliceIterators);
+    std::vector<std::vector<int>> arr_result = getArrUnion(sliceIterators);
     clock_t end = clock();
 
-    std::cout << std::endl << arr_result.size();
+    std::cout << std::endl << arr_result[0].size();
     std::cout << std::endl << "Time: " << (double)(end - start) / CLOCKS_PER_SEC << "s." << std::endl;
 }
